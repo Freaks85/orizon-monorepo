@@ -11,7 +11,7 @@ const apps = [
         icon: ShieldCheck,
         color: '#00ff9d',
         features: ['Relevés de températures', 'Traçabilité DLC', 'Nettoyage & hygiène', 'Alertes en temps réel'],
-        href: 'https://kitchen.orizonapp.com',
+        href: 'https://kitchen-orizonapp.vercel.app',
         available: true
     },
     {
@@ -20,7 +20,7 @@ const apps = [
         icon: CalendarRange,
         color: '#00ff9d',
         features: ['Page de réservation', 'Gestion des salles', 'Services personnalisés', 'Notifications'],
-        href: 'https://reservation.orizonapp.com',
+        href: 'https://reservation-orizonapp.vercel.app',
         available: true
     },
     {
@@ -56,7 +56,7 @@ export default function HomePage() {
                             Tarifs
                         </a>
                         <Link
-                            href="https://kitchen.orizonapp.com/login"
+                            href="https://kitchen-orizonapp.vercel.app/login"
                             className="px-4 py-2 bg-[#00ff9d] text-black font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-white transition-colors"
                         >
                             Se connecter
@@ -92,7 +92,7 @@ export default function HomePage() {
                                 <ArrowRight className="h-4 w-4" />
                             </a>
                             <Link
-                                href="https://kitchen.orizonapp.com/signup"
+                                href="https://kitchen-orizonapp.vercel.app/signup"
                                 className="px-8 py-4 bg-white/5 border border-white/10 text-white font-bold text-sm uppercase tracking-widest rounded-lg hover:bg-white/10 transition-colors"
                             >
                                 Essai gratuit 7 jours
@@ -191,7 +191,7 @@ export default function HomePage() {
                         Essayez gratuitement pendant 7 jours. Aucune carte bancaire requise.
                     </p>
                     <Link
-                        href="https://kitchen.orizonapp.com/signup"
+                        href="https://kitchen-orizonapp.vercel.app/signup"
                         className="inline-flex items-center gap-2 px-8 py-4 bg-[#00ff9d] text-black font-bold text-sm uppercase tracking-widest rounded-lg hover:bg-white transition-colors"
                     >
                         Créer mon compte
