@@ -44,3 +44,4 @@ coverage
 nul
 
 .vercel
+.env*.local
