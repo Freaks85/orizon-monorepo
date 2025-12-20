@@ -4,9 +4,10 @@
   --background: #050505;
   --foreground: #ededed;
 
-  /* Command Center Palette */
-  --color-neon-green: #00ff9d;
-  --color-neon-green-dim: #00cc7d;
+  /* Command Center Palette - Orange Theme */
+  --color-neon-orange: #ff6b00;
+  --color-neon-orange-dim: #cc5500;
+  --color-neon-orange-light: #ff8533;
   --color-dark-gunmetal: #0a0a0a;
   --color-rich-black: #050505;
   --color-steel-gray: #94a3b8;
@@ -19,8 +20,9 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
-  --color-neon-green: var(--color-neon-green);
-  --color-neon-green-dim: var(--color-neon-green-dim);
+  --color-neon-orange: var(--color-neon-orange);
+  --color-neon-orange-dim: var(--color-neon-orange-dim);
+  --color-neon-orange-light: var(--color-neon-orange-light);
   --color-dark-gunmetal: var(--color-dark-gunmetal);
   --color-rich-black: var(--color-rich-black);
 
@@ -68,6 +70,6 @@ body {
 }
 
 ::selection {
-  background: rgba(0, 255, 157, 0.3);
+  background: rgba(255, 107, 0, 0.3);
   color: white;
 }
