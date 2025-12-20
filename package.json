@@ -1,6 +1,10 @@
 {
   "name": "orizon",
   "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "dev": "turbo run dev",
     "dev:kitchen": "turbo run dev --filter=@orizon/kitchen",
@@ -15,7 +19,6 @@
     "turbo": "^2.3.3",
     "typescript": "^5.7.2"
   },
-  "packageManager": "pnpm@9.15.0",
   "engines": {
     "node": ">=18"
   }
