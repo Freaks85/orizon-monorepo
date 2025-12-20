@@ -1,6 +1,0 @@
-{
-  "buildCommand": "cd apps/kitchen && npm run build",
-  "installCommand": "npm install",
-  "framework": "nextjs",
-  "outputDirectory": "apps/kitchen/.next"
-}
