@@ -1,0 +1,6 @@
+{
+  "buildCommand": "pnpm turbo build --filter=@orizon/kitchen",
+  "installCommand": "npm install -g pnpm && pnpm install",
+  "framework": "nextjs",
+  "outputDirectory": "apps/kitchen/.next"
+}
