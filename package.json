@@ -1,0 +1,22 @@
+{
+  "name": "orizon",
+  "private": true,
+  "scripts": {
+    "dev": "turbo run dev",
+    "dev:kitchen": "turbo run dev --filter=@orizon/kitchen",
+    "dev:reservation": "turbo run dev --filter=@orizon/reservation",
+    "dev:landing": "turbo run dev --filter=@orizon/landing",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "clean": "turbo run clean",
+    "db:migrate": "supabase db push"
+  },
+  "devDependencies": {
+    "turbo": "^2.3.3",
+    "typescript": "^5.7.2"
+  },
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=18"
+  }
+}

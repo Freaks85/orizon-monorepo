@@ -1,0 +1,84 @@
+@import "tailwindcss";
+
+:root {
+  --background: #050505;
+  --foreground: #ededed;
+
+  /* Command Center Palette */
+  --color-neon-green: #00ff9d;
+  --color-neon-green-dim: #00cc7d;
+  --color-dark-gunmetal: #0a0a0a;
+  --color-rich-black: #050505;
+  --color-steel-gray: #94a3b8;
+
+  /* Grid Line Color */
+  --color-grid-line: rgba(255, 255, 255, 0.05);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-neon-green: var(--color-neon-green);
+  --color-neon-green-dim: var(--color-neon-green-dim);
+  --color-dark-gunmetal: var(--color-dark-gunmetal);
+  --color-rich-black: var(--color-rich-black);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-oswald), ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+/* Custom Utilities */
+.bg-grid-pattern {
+  background-size: 40px 40px;
+  background-image: linear-gradient(to right, var(--color-grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-grid-line) 1px, transparent 1px);
+}
+
+.text-stroke {
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.2);
+  color: transparent;
+}
+
+.text-stroke-green {
+  -webkit-text-stroke: 1px var(--color-neon-green);
+  color: transparent;
+}
+
+.glass-hud {
+  background: rgba(10, 10, 10, 0.6);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Selection */
+::selection {
+  background: rgba(0, 255, 157, 0.3);
+  color: white;
+}

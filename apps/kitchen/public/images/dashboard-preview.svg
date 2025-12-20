@@ -1,0 +1,207 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" fill="none">
+  <!-- Background -->
+  <rect width="1600" height="1000" fill="#050505"/>
+
+  <!-- Grid pattern -->
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#grid)"/>
+
+  <!-- Sidebar -->
+  <rect x="0" y="0" width="80" height="1000" fill="#0a0a0a" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+
+  <!-- Sidebar logo -->
+  <circle cx="40" cy="40" r="16" fill="#00ff9d" opacity="0.9"/>
+  <text x="40" y="45" font-family="Arial" font-size="12" fill="#050505" text-anchor="middle" font-weight="bold">OK</text>
+
+  <!-- Sidebar icons -->
+  <rect x="24" y="100" width="32" height="32" rx="4" fill="rgba(0,255,157,0.1)" stroke="#00ff9d" stroke-width="1"/>
+  <rect x="24" y="150" width="32" height="32" rx="4" fill="rgba(255,255,255,0.05)"/>
+  <rect x="24" y="200" width="32" height="32" rx="4" fill="rgba(255,255,255,0.05)"/>
+  <rect x="24" y="250" width="32" height="32" rx="4" fill="rgba(255,255,255,0.05)"/>
+  <rect x="24" y="300" width="32" height="32" rx="4" fill="rgba(255,255,255,0.05)"/>
+  <rect x="24" y="350" width="32" height="32" rx="4" fill="rgba(255,255,255,0.05)"/>
+
+  <!-- Settings icon at bottom -->
+  <rect x="24" y="920" width="32" height="32" rx="4" fill="rgba(255,255,255,0.05)"/>
+
+  <!-- Top Navigation Bar -->
+  <rect x="80" y="0" width="1520" height="60" fill="#0a0a0a" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+
+  <!-- Search bar -->
+  <rect x="100" y="15" width="300" height="30" rx="4" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)"/>
+  <text x="120" y="35" font-family="Arial" font-size="12" fill="rgba(255,255,255,0.3)">Rechercher...</text>
+
+  <!-- Top right buttons -->
+  <rect x="1400" y="15" width="80" height="30" rx="4" fill="#00ff9d"/>
+  <text x="1440" y="35" font-family="Arial" font-size="11" fill="#050505" text-anchor="middle" font-weight="bold">+ Nouveau</text>
+
+  <!-- Notification bell -->
+  <circle cx="1510" cy="30" r="15" fill="rgba(255,255,255,0.05)"/>
+  <circle cx="1518" cy="22" r="5" fill="#00ff9d"/>
+
+  <!-- User avatar -->
+  <circle cx="1560" cy="30" r="15" fill="rgba(0,255,157,0.2)" stroke="#00ff9d" stroke-width="1"/>
+
+  <!-- Main Content Area -->
+  <!-- Page Title -->
+  <text x="120" y="110" font-family="Arial" font-size="24" fill="white" font-weight="bold">Tableau de Bord</text>
+  <text x="120" y="130" font-family="Arial" font-size="12" fill="rgba(255,255,255,0.5)">Vue d'ensemble de vos performances</text>
+
+  <!-- Stats Cards Row -->
+  <g>
+    <!-- Card 1 -->
+    <rect x="120" y="160" width="280" height="120" rx="4" fill="#0a0a0a" stroke="rgba(255,255,255,0.1)"/>
+    <text x="140" y="190" font-family="Arial" font-size="11" fill="rgba(255,255,255,0.5)">CONFORMITE HACCP</text>
+    <text x="140" y="230" font-family="Arial" font-size="32" fill="#00ff9d" font-weight="bold">98.5%</text>
+    <text x="140" y="260" font-family="Arial" font-size="10" fill="#00ff9d">+2.3% vs mois dernier</text>
+
+    <!-- Card 2 -->
+    <rect x="420" y="160" width="280" height="120" rx="4" fill="#0a0a0a" stroke="rgba(255,255,255,0.1)"/>
+    <text x="440" y="190" font-family="Arial" font-size="11" fill="rgba(255,255,255,0.5)">ALERTES ACTIVES</text>
+    <text x="440" y="230" font-family="Arial" font-size="32" fill="#ff6b6b" font-weight="bold">3</text>
+    <text x="440" y="260" font-family="Arial" font-size="10" fill="rgba(255,255,255,0.5)">2 critiques, 1 warning</text>
+
+    <!-- Card 3 -->
+    <rect x="720" y="160" width="280" height="120" rx="4" fill="#0a0a0a" stroke="rgba(255,255,255,0.1)"/>
+    <text x="740" y="190" font-family="Arial" font-size="11" fill="rgba(255,255,255,0.5)">RELEVES DU JOUR</text>
+    <text x="740" y="230" font-family="Arial" font-size="32" fill="white" font-weight="bold">127</text>
+    <text x="740" y="260" font-family="Arial" font-size="10" fill="rgba(255,255,255,0.5)">Sur 130 planifies</text>
+
+    <!-- Card 4 -->
+    <rect x="1020" y="160" width="280" height="120" rx="4" fill="#0a0a0a" stroke="rgba(255,255,255,0.1)"/>
+    <text x="1040" y="190" font-family="Arial" font-size="11" fill="rgba(255,255,255,0.5)">TEMPERATURE MOY.</text>
+    <text x="1040" y="230" font-family="Arial" font-size="32" fill="white" font-weight="bold">4.2°C</text>
+    <text x="1040" y="260" font-family="Arial" font-size="10" fill="#00ff9d">Dans les normes</text>
+  </g>
+
+  <!-- Main Chart Area -->
+  <rect x="120" y="310" width="880" height="380" rx="4" fill="#0a0a0a" stroke="rgba(255,255,255,0.1)"/>
+  <text x="140" y="345" font-family="Arial" font-size="14" fill="white" font-weight="bold">Evolution des Performances</text>
+  <text x="140" y="365" font-family="Arial" font-size="10" fill="rgba(255,255,255,0.5)">7 derniers jours</text>
+
+  <!-- Chart Grid Lines -->
+  <line x1="180" y1="400" x2="180" y2="650" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+  <line x1="280" y1="400" x2="280" y2="650" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+  <line x1="380" y1="400" x2="380" y2="650" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+  <line x1="480" y1="400" x2="480" y2="650" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+  <line x1="580" y1="400" x2="580" y2="650" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+  <line x1="680" y1="400" x2="680" y2="650" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+  <line x1="780" y1="400" x2="780" y2="650" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+  <line x1="880" y1="400" x2="880" y2="650" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+
+  <!-- Horizontal lines -->
+  <line x1="180" y1="450" x2="950" y2="450" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+  <line x1="180" y1="500" x2="950" y2="500" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+  <line x1="180" y1="550" x2="950" y2="550" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+  <line x1="180" y1="600" x2="950" y2="600" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+  <line x1="180" y1="650" x2="950" y2="650" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+
+  <!-- Chart Area Fill -->
+  <defs>
+    <linearGradient id="chartGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#00ff9d" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#00ff9d" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Chart Line Path -->
+  <path d="M180,580 Q230,560 280,540 T380,490 T480,510 T580,460 T680,440 T780,420 T880,430 T950,410"
+        stroke="#00ff9d" stroke-width="2" fill="none"/>
+
+  <!-- Chart Area -->
+  <path d="M180,580 Q230,560 280,540 T380,490 T480,510 T580,460 T680,440 T780,420 T880,430 T950,410 L950,650 L180,650 Z"
+        fill="url(#chartGradient)"/>
+
+  <!-- Chart Points -->
+  <circle cx="280" cy="540" r="4" fill="#00ff9d"/>
+  <circle cx="380" cy="490" r="4" fill="#00ff9d"/>
+  <circle cx="480" cy="510" r="4" fill="#00ff9d"/>
+  <circle cx="580" cy="460" r="4" fill="#00ff9d"/>
+  <circle cx="680" cy="440" r="4" fill="#00ff9d"/>
+  <circle cx="780" cy="420" r="4" fill="#00ff9d"/>
+  <circle cx="880" cy="430" r="4" fill="#00ff9d"/>
+
+  <!-- X-axis labels -->
+  <text x="180" y="670" font-family="Arial" font-size="9" fill="rgba(255,255,255,0.4)" text-anchor="middle">Lun</text>
+  <text x="280" y="670" font-family="Arial" font-size="9" fill="rgba(255,255,255,0.4)" text-anchor="middle">Mar</text>
+  <text x="380" y="670" font-family="Arial" font-size="9" fill="rgba(255,255,255,0.4)" text-anchor="middle">Mer</text>
+  <text x="480" y="670" font-family="Arial" font-size="9" fill="rgba(255,255,255,0.4)" text-anchor="middle">Jeu</text>
+  <text x="580" y="670" font-family="Arial" font-size="9" fill="rgba(255,255,255,0.4)" text-anchor="middle">Ven</text>
+  <text x="680" y="670" font-family="Arial" font-size="9" fill="rgba(255,255,255,0.4)" text-anchor="middle">Sam</text>
+  <text x="780" y="670" font-family="Arial" font-size="9" fill="rgba(255,255,255,0.4)" text-anchor="middle">Dim</text>
+
+  <!-- Right Panel - Alerts -->
+  <rect x="1020" y="310" width="280" height="380" rx="4" fill="#0a0a0a" stroke="rgba(255,255,255,0.1)"/>
+  <text x="1040" y="345" font-family="Arial" font-size="14" fill="white" font-weight="bold">Alertes Recentes</text>
+
+  <!-- Alert items -->
+  <rect x="1035" y="370" width="250" height="60" rx="4" fill="rgba(255,107,107,0.1)" stroke="rgba(255,107,107,0.3)"/>
+  <circle cx="1055" cy="400" r="6" fill="#ff6b6b"/>
+  <text x="1070" y="395" font-family="Arial" font-size="11" fill="white">Chambre froide #2</text>
+  <text x="1070" y="415" font-family="Arial" font-size="9" fill="rgba(255,255,255,0.5)">Temperature: 8.2°C - Critique</text>
+
+  <rect x="1035" y="445" width="250" height="60" rx="4" fill="rgba(255,107,107,0.1)" stroke="rgba(255,107,107,0.3)"/>
+  <circle cx="1055" cy="475" r="6" fill="#ff6b6b"/>
+  <text x="1070" y="470" font-family="Arial" font-size="11" fill="white">DLC Produit #847</text>
+  <text x="1070" y="490" font-family="Arial" font-size="9" fill="rgba(255,255,255,0.5)">Expire dans 2 heures</text>
+
+  <rect x="1035" y="520" width="250" height="60" rx="4" fill="rgba(255,193,7,0.1)" stroke="rgba(255,193,7,0.3)"/>
+  <circle cx="1055" cy="550" r="6" fill="#ffc107"/>
+  <text x="1070" y="545" font-family="Arial" font-size="11" fill="white">Nettoyage Zone B</text>
+  <text x="1070" y="565" font-family="Arial" font-size="9" fill="rgba(255,255,255,0.5)">En retard de 30 min</text>
+
+  <!-- View all alerts button -->
+  <rect x="1035" y="600" width="250" height="35" rx="4" fill="transparent" stroke="rgba(0,255,157,0.3)"/>
+  <text x="1160" y="622" font-family="Arial" font-size="11" fill="#00ff9d" text-anchor="middle">Voir toutes les alertes</text>
+
+  <!-- Bottom Stats Row -->
+  <g>
+    <!-- Quick actions -->
+    <rect x="120" y="720" width="430" height="120" rx="4" fill="#0a0a0a" stroke="rgba(255,255,255,0.1)"/>
+    <text x="140" y="755" font-family="Arial" font-size="14" fill="white" font-weight="bold">Actions Rapides</text>
+
+    <rect x="140" y="775" width="120" height="50" rx="4" fill="rgba(0,255,157,0.1)" stroke="rgba(0,255,157,0.3)"/>
+    <text x="200" y="805" font-family="Arial" font-size="10" fill="#00ff9d" text-anchor="middle">+ Releve Temp.</text>
+
+    <rect x="275" y="775" width="120" height="50" rx="4" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)"/>
+    <text x="335" y="805" font-family="Arial" font-size="10" fill="rgba(255,255,255,0.7)" text-anchor="middle">+ Reception</text>
+
+    <rect x="410" y="775" width="120" height="50" rx="4" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)"/>
+    <text x="470" y="805" font-family="Arial" font-size="10" fill="rgba(255,255,255,0.7)" text-anchor="middle">+ Nettoyage</text>
+
+    <!-- Recent activity -->
+    <rect x="570" y="720" width="430" height="120" rx="4" fill="#0a0a0a" stroke="rgba(255,255,255,0.1)"/>
+    <text x="590" y="755" font-family="Arial" font-size="14" fill="white" font-weight="bold">Activite Recente</text>
+
+    <text x="590" y="785" font-family="Arial" font-size="10" fill="rgba(255,255,255,0.7)">14:32 - Releve temperature Chambre #1 : 3.8°C</text>
+    <text x="590" y="805" font-family="Arial" font-size="10" fill="rgba(255,255,255,0.5)">14:28 - Reception validee - Fournisseur Metro</text>
+    <text x="590" y="825" font-family="Arial" font-size="10" fill="rgba(255,255,255,0.5)">14:15 - Nettoyage Zone A complete</text>
+
+    <!-- Team status -->
+    <rect x="1020" y="720" width="280" height="120" rx="4" fill="#0a0a0a" stroke="rgba(255,255,255,0.1)"/>
+    <text x="1040" y="755" font-family="Arial" font-size="14" fill="white" font-weight="bold">Equipe Active</text>
+
+    <circle cx="1060" cy="790" r="12" fill="rgba(0,255,157,0.2)" stroke="#00ff9d"/>
+    <text x="1080" y="795" font-family="Arial" font-size="10" fill="white">Marie D. - Cuisine</text>
+    <circle cx="1265" cy="790" r="4" fill="#00ff9d"/>
+
+    <circle cx="1060" cy="820" r="12" fill="rgba(0,255,157,0.2)" stroke="#00ff9d"/>
+    <text x="1080" y="825" font-family="Arial" font-size="10" fill="white">Thomas L. - Stock</text>
+    <circle cx="1265" cy="820" r="4" fill="#00ff9d"/>
+  </g>
+
+  <!-- Subtle glow effect on neon green elements -->
+  <defs>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+</svg>
