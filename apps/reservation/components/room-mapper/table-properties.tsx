@@ -53,7 +53,7 @@ export function TableProperties({ table, onUpdate }: TablePropertiesProps) {
                     value={tableNumber}
                     onChange={(e) => setTableNumber(e.target.value)}
                     onBlur={() => handleUpdate('table_number', tableNumber)}
-                    className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white font-mono text-sm focus:outline-none focus:ring-2 focus:ring-[#00ff9d]/50"
+                    className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white font-mono text-sm focus:outline-none focus:ring-2 focus:ring-[#ff6b00]/50"
                 />
             </div>
 
@@ -84,7 +84,7 @@ export function TableProperties({ table, onUpdate }: TablePropertiesProps) {
                             setCapacity(val);
                             handleUpdate('capacity', val);
                         }}
-                        className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white font-mono text-sm text-center focus:outline-none focus:ring-2 focus:ring-[#00ff9d]/50"
+                        className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white font-mono text-sm text-center focus:outline-none focus:ring-2 focus:ring-[#ff6b00]/50"
                     />
                     <button
                         onClick={() => {
@@ -114,7 +114,7 @@ export function TableProperties({ table, onUpdate }: TablePropertiesProps) {
                             }}
                             className={`flex flex-col items-center gap-1 p-3 rounded-lg border transition-all ${
                                 shape === value
-                                    ? 'bg-[#00ff9d]/10 border-[#00ff9d]/50 text-[#00ff9d]'
+                                    ? 'bg-[#ff6b00]/10 border-[#ff6b00]/50 text-[#ff6b00]'
                                     : 'bg-white/5 border-white/10 text-slate-400 hover:border-white/20'
                             }`}
                         >

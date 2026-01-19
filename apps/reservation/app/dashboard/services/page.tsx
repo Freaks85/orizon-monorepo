@@ -161,7 +161,7 @@ export default function ServicesPage() {
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-[60vh]">
-                <div className="h-12 w-12 border-2 border-[#00ff9d] border-t-transparent rounded-full animate-spin" />
+                <div className="h-12 w-12 border-2 border-[#ff6b00] border-t-transparent rounded-full animate-spin" />
             </div>
         );
     }
@@ -181,7 +181,7 @@ export default function ServicesPage() {
 
                 <button
                     onClick={() => openModal()}
-                    className="flex items-center gap-2 px-4 py-2.5 bg-[#00ff9d] text-black font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-white transition-colors"
+                    className="flex items-center gap-2 px-4 py-2.5 bg-[#ff6b00] text-black font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-white transition-colors"
                 >
                     <Plus className="h-4 w-4" />
                     Nouveau service
@@ -204,7 +204,7 @@ export default function ServicesPage() {
                     </p>
                     <button
                         onClick={() => openModal()}
-                        className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#00ff9d] text-black font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-white transition-colors"
+                        className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#ff6b00] text-black font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-white transition-colors"
                     >
                         <Plus className="h-4 w-4" />
                         Créer un service
@@ -218,18 +218,18 @@ export default function ServicesPage() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.1 }}
-                            className="bg-[#0a0a0a] border border-white/10 rounded-xl p-6 group hover:border-[#00ff9d]/30 transition-colors"
+                            className="bg-[#0a0a0a] border border-white/10 rounded-xl p-6 group hover:border-[#ff6b00]/30 transition-colors"
                         >
                             <div className="flex items-start justify-between mb-4">
                                 <div className="flex items-center gap-3">
-                                    <div className="p-2 bg-[#00ff9d]/10 rounded-lg">
-                                        <Clock className="h-5 w-5 text-[#00ff9d]" />
+                                    <div className="p-2 bg-[#ff6b00]/10 rounded-lg">
+                                        <Clock className="h-5 w-5 text-[#ff6b00]" />
                                     </div>
                                     <div>
                                         <h3 className="font-display text-lg font-bold text-white uppercase tracking-wider">
                                             {service.name}
                                         </h3>
-                                        <p className="text-[#00ff9d] text-sm font-mono">
+                                        <p className="text-[#ff6b00] text-sm font-mono">
                                             {formatTime(service.start_time)} - {formatTime(service.end_time)}
                                         </p>
                                     </div>
@@ -249,7 +249,7 @@ export default function ServicesPage() {
                                         key={day.value}
                                         className={`px-2 py-1 rounded text-[10px] font-mono uppercase ${
                                             service.days_of_week.includes(day.value)
-                                                ? 'bg-[#00ff9d]/10 text-[#00ff9d]'
+                                                ? 'bg-[#ff6b00]/10 text-[#ff6b00]'
                                                 : 'bg-white/5 text-slate-600'
                                         }`}
                                     >
@@ -310,7 +310,7 @@ export default function ServicesPage() {
                                             value={name}
                                             onChange={(e) => setName(e.target.value)}
                                             required
-                                            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[#00ff9d]/50 font-mono text-sm"
+                                            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[#ff6b00]/50 font-mono text-sm"
                                             placeholder="Ex: Déjeuner, Dîner..."
                                         />
                                     </div>
@@ -325,7 +325,7 @@ export default function ServicesPage() {
                                                 value={startTime}
                                                 onChange={(e) => setStartTime(e.target.value)}
                                                 required
-                                                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-[#00ff9d]/50 font-mono text-sm"
+                                                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-[#ff6b00]/50 font-mono text-sm"
                                             />
                                         </div>
                                         <div>
@@ -337,7 +337,7 @@ export default function ServicesPage() {
                                                 value={endTime}
                                                 onChange={(e) => setEndTime(e.target.value)}
                                                 required
-                                                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-[#00ff9d]/50 font-mono text-sm"
+                                                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-[#ff6b00]/50 font-mono text-sm"
                                             />
                                         </div>
                                     </div>
@@ -352,7 +352,7 @@ export default function ServicesPage() {
                                             max={500}
                                             value={maxCovers}
                                             onChange={(e) => setMaxCovers(parseInt(e.target.value) || 20)}
-                                            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-[#00ff9d]/50 font-mono text-sm"
+                                            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-[#ff6b00]/50 font-mono text-sm"
                                         />
                                     </div>
 
@@ -368,7 +368,7 @@ export default function ServicesPage() {
                                                     onClick={() => toggleDay(day.value)}
                                                     className={`px-3 py-2 rounded-lg text-xs font-mono uppercase transition-colors ${
                                                         daysOfWeek.includes(day.value)
-                                                            ? 'bg-[#00ff9d] text-black'
+                                                            ? 'bg-[#ff6b00] text-black'
                                                             : 'bg-white/5 text-slate-400 hover:bg-white/10'
                                                     }`}
                                                 >
@@ -389,7 +389,7 @@ export default function ServicesPage() {
                                         <button
                                             type="submit"
                                             disabled={saving || !name.trim()}
-                                            className="flex-1 px-4 py-2.5 bg-[#00ff9d] text-black font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-white transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                                            className="flex-1 px-4 py-2.5 bg-[#ff6b00] text-black font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-white transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                                         >
                                             {saving ? (
                                                 <div className="h-4 w-4 border-2 border-black border-t-transparent rounded-full animate-spin" />

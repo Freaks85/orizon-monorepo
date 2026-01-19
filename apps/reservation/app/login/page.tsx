@@ -53,12 +53,12 @@ export default function LoginPage() {
                 {/* Logo */}
                 <div className="text-center mb-8">
                     <div className="inline-flex items-center gap-3 mb-4">
-                        <div className="border border-[#00ff9d]/30 p-2 bg-[#00ff9d]/5 rounded-xl">
-                            <CalendarRange className="h-8 w-8 text-[#00ff9d]" />
+                        <div className="border border-[#ff6b00]/30 p-2 bg-[#ff6b00]/5 rounded-xl">
+                            <CalendarRange className="h-8 w-8 text-[#ff6b00]" />
                         </div>
                     </div>
                     <h1 className="font-display text-2xl font-bold tracking-widest text-white uppercase">
-                        Orizon<span className="text-[#00ff9d]">Reservation</span>
+                        Orizon<span className="text-[#ff6b00]">Reservation</span>
                     </h1>
                     <p className="text-slate-500 text-sm font-mono mt-2">
                         Connectez-vous à votre espace
@@ -88,7 +88,7 @@ export default function LoginPage() {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
-                                className="w-full bg-white/5 border border-white/10 rounded-lg pl-10 pr-4 py-3 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[#00ff9d]/50 focus:border-[#00ff9d]/50 font-mono text-sm"
+                                className="w-full bg-white/5 border border-white/10 rounded-lg pl-10 pr-4 py-3 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[#ff6b00]/50 focus:border-[#ff6b00]/50 font-mono text-sm"
                                 placeholder="votre@email.com"
                             />
                         </div>
@@ -105,7 +105,7 @@ export default function LoginPage() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
-                                className="w-full bg-white/5 border border-white/10 rounded-lg pl-10 pr-12 py-3 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[#00ff9d]/50 focus:border-[#00ff9d]/50 font-mono text-sm"
+                                className="w-full bg-white/5 border border-white/10 rounded-lg pl-10 pr-12 py-3 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[#ff6b00]/50 focus:border-[#ff6b00]/50 font-mono text-sm"
                                 placeholder="••••••••"
                             />
                             <button
@@ -121,7 +121,7 @@ export default function LoginPage() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full bg-[#00ff9d] text-black font-bold text-xs uppercase tracking-widest py-4 rounded-lg hover:bg-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                        className="w-full bg-[#ff6b00] text-black font-bold text-xs uppercase tracking-widest py-4 rounded-lg hover:bg-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                     >
                         {loading ? (
                             <div className="h-4 w-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
@@ -134,7 +134,7 @@ export default function LoginPage() {
                 {/* Footer */}
                 <p className="text-center text-slate-500 text-sm font-mono mt-6">
                     Pas encore de compte ?{' '}
-                    <Link href="/signup" className="text-[#00ff9d] hover:underline">
+                    <Link href="/signup" className="text-[#ff6b00] hover:underline">
                         Créer un compte
                     </Link>
                 </p>

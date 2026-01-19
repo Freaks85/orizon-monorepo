@@ -26,7 +26,7 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
         return (
             <div className="min-h-screen bg-[#050505] flex items-center justify-center">
                 <div className="flex flex-col items-center gap-4">
-                    <div className="h-12 w-12 border-2 border-[#00ff9d] border-t-transparent rounded-full animate-spin" />
+                    <div className="h-12 w-12 border-2 border-[#ff6b00] border-t-transparent rounded-full animate-spin" />
                     <p className="text-slate-500 font-mono text-sm uppercase tracking-wider">
                         Chargement...
                     </p>

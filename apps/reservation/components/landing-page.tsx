@@ -13,7 +13,9 @@ import {
     AlertCircle,
     Sparkles,
     Bell,
-    Zap
+    Zap,
+    Activity,
+    X
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRef } from 'react';
@@ -25,25 +27,25 @@ const features = [
         icon: LayoutGrid,
         title: "Editeur de salles",
         description: "Creez visuellement vos plans de salle avec notre editeur drag & drop. Placez tables et zones en quelques clics.",
-        color: "#ff6b00"
+        id: "01"
     },
     {
         icon: CalendarRange,
         title: "Reservations 24/7",
         description: "Vos clients reservent en ligne a toute heure. Plus d'appels manques, plus de carnet papier.",
-        color: "#ff6b00"
+        id: "02"
     },
     {
         icon: Palette,
         title: "Page personnalisable",
         description: "Une page de reservation a votre image. Logo, couleurs, horaires - tout est configurable.",
-        color: "#ff6b00"
+        id: "03"
     },
     {
         icon: Clock,
         title: "Services flexibles",
         description: "Definissez vos services (dejeuner, diner) avec creneaux et capacites personnalises.",
-        color: "#ff6b00"
+        id: "04"
     }
 ];
 
@@ -53,274 +55,225 @@ const marqueeItems = [
     "Multi-salles",
     "Reservations illimitees",
     "Notifications temps reel",
-    "Editeur graphique",
-    "Zero commission",
-    "Page personnalisable",
-    "Multi-salles",
-    "Reservations illimitees"
+    "Editeur graphique"
 ];
 
-export function LandingPage() {
-    const featuresRef = useRef<HTMLDivElement>(null);
+// --- Hero Section ---
+const Hero = () => {
+    const containerRef = useRef(null);
     const { scrollYProgress } = useScroll({
-        target: featuresRef,
-        offset: ["start end", "end start"]
+        target: containerRef,
+        offset: ["start start", "end start"]
     });
 
-    const x = useTransform(scrollYProgress, [0, 1], ["0%", "-50%"]);
+    const scale = useTransform(scrollYProgress, [0, 1], [1, 1.5]);
+    const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+    const yText = useTransform(scrollYProgress, [0, 1], [0, 200]);
 
     return (
-        <div className="min-h-screen bg-[#050505]">
-            <Header />
+        <section ref={containerRef} className="relative h-[150vh] bg-rich-black overflow-hidden">
+            {/* Background Grid */}
+            <div className="absolute inset-0 bg-grid-pattern opacity-20 pointer-events-none"></div>
 
-            {/* Hero Section */}
-            <section className="pt-32 pb-20 px-6 bg-grid-pattern relative overflow-hidden">
-                {/* Gradient orbs */}
-                <div className="absolute top-20 left-1/4 w-96 h-96 bg-[#ff6b00]/20 rounded-full blur-[128px] pointer-events-none" />
-                <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-[#ff6b00]/10 rounded-full blur-[96px] pointer-events-none" />
+            {/* Sticky Container */}
+            <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden">
 
-                <div className="max-w-7xl mx-auto text-center relative z-10">
+                {/* Main Title */}
+                <motion.div
+                    style={{ scale, opacity, y: yText }}
+                    className="relative z-20 text-center px-4"
+                >
                     <motion.div
-                        initial={{ opacity: 0, y: 30 }}
+                        initial={{ opacity: 0, y: 50 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8 }}
+                        transition={{ duration: 1, delay: 0.2 }}
+                        className="mb-6 flex justify-center"
                     >
-                        <span className="inline-block px-4 py-1.5 bg-[#ff6b00]/10 border border-[#ff6b00]/20 rounded-full text-[#ff6b00] text-xs font-mono uppercase tracking-wider mb-6">
+                        <span className="border border-neon-orange/50 text-neon-orange px-4 py-1 text-[10px] font-bold tracking-[0.3em] uppercase bg-neon-orange/5">
                             Gestion des reservations
                         </span>
-
-                        <h1 className="font-display text-5xl md:text-7xl font-bold text-white uppercase tracking-wider mb-6">
-                            Reservez. Gerez.<br />
-                            <span className="text-[#ff6b00]">Simplifiez.</span>
-                        </h1>
-
-                        <p className="text-xl text-slate-400 max-w-2xl mx-auto mb-10">
-                            La solution complete de reservation en ligne pour votre restaurant.
-                            Fini les appels manques et le carnet papier.
-                        </p>
-
-                        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                            <Link
-                                href="/signup"
-                                className="px-8 py-4 bg-[#ff6b00] text-black font-bold text-sm uppercase tracking-widest rounded-lg hover:bg-[#ff8533] transition-colors flex items-center gap-2"
-                            >
-                                Essai gratuit 7 jours
-                                <ArrowRight className="h-4 w-4" />
-                            </Link>
-                            <a
-                                href="#features"
-                                className="px-8 py-4 bg-white/5 border border-white/10 text-white font-bold text-sm uppercase tracking-widest rounded-lg hover:bg-white/10 transition-colors"
-                            >
-                                Decouvrir
-                            </a>
-                        </div>
                     </motion.div>
 
-                    {/* Stats */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.3, duration: 0.8 }}
-                        className="mt-20 grid grid-cols-3 gap-8 max-w-3xl mx-auto"
-                    >
-                        {[
-                            { value: "0%", label: "Commission" },
-                            { value: "24/7", label: "Disponible" },
-                            { value: "2min", label: "Configuration" }
-                        ].map((stat) => (
-                            <div key={stat.label} className="text-center">
-                                <div className="text-3xl md:text-4xl font-display font-bold text-[#ff6b00] mb-1">
-                                    {stat.value}
-                                </div>
-                                <div className="text-sm text-slate-500 font-mono uppercase tracking-wider">
-                                    {stat.label}
-                                </div>
-                            </div>
-                        ))}
-                    </motion.div>
+                    <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[1.15] font-bold uppercase tracking-tight text-center">
+                        <span className="block text-white/70">Reservez.</span>
+                        <span className="block text-white text-6xl sm:text-7xl md:text-8xl lg:text-9xl my-2 md:my-4 drop-shadow-[0_0_30px_rgba(255,107,0,0.3)]">Gerez.</span>
+                        <span className="block text-stroke text-white/70">Simplifiez.</span>
+                    </h1>
+
+                    <p className="mt-8 text-slate-400 text-sm md:text-base max-w-xl mx-auto font-mono tracking-wide">
+                        La solution complete de reservation en ligne pour votre restaurant
+                    </p>
+                </motion.div>
+
+                {/* Background Image */}
+                <div className="absolute inset-0 z-10 opacity-30 mix-blend-overlay">
+                    <div className="w-full h-full bg-[url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center grayscale contrast-125 brightness-50"></div>
                 </div>
-            </section>
 
-            {/* Marquee */}
-            <section className="py-6 border-y border-white/5 overflow-hidden bg-[#0a0a0a]">
+                {/* Scroll Indicator */}
                 <motion.div
-                    className="flex gap-8 whitespace-nowrap"
-                    animate={{ x: [0, -1000] }}
-                    transition={{
-                        x: {
-                            repeat: Infinity,
-                            repeatType: "loop",
-                            duration: 20,
-                            ease: "linear"
-                        }
-                    }}
+                    style={{ opacity }}
+                    className="absolute bottom-12 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2"
                 >
-                    {marqueeItems.map((item, index) => (
-                        <span key={index} className="flex items-center gap-8">
-                            <span className="text-sm font-mono uppercase tracking-wider text-slate-400">
-                                {item}
+                    <span className="text-[10px] uppercase tracking-[0.2em] text-slate-500">Scroll to discover</span>
+                    <div className="w-[1px] h-12 bg-gradient-to-b from-neon-orange to-transparent"></div>
+                </motion.div>
+            </div>
+        </section>
+    );
+};
+
+// --- Marquee Section ---
+const Marquee = () => {
+    return (
+        <div className="bg-neon-orange py-4 overflow-hidden flex whitespace-nowrap border-y border-black">
+            <motion.div
+                animate={{ x: [0, -1000] }}
+                transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
+                className="flex gap-12 items-center"
+            >
+                {[...Array(10)].map((_, i) => (
+                    <span key={i} className="text-black font-display font-bold text-4xl uppercase tracking-wider flex items-center gap-12">
+                        {marqueeItems.map((item, j) => (
+                            <span key={j} className="flex items-center gap-12">
+                                {item} <span className="w-3 h-3 bg-black rotate-45"></span>
                             </span>
-                            <span className="w-2 h-2 bg-[#ff6b00] rounded-full" />
-                        </span>
-                    ))}
-                </motion.div>
-            </section>
+                        ))}
+                    </span>
+                ))}
+            </motion.div>
+        </div>
+    );
+};
 
-            {/* Features Section */}
-            <section id="features" ref={featuresRef} className="py-24 px-6 overflow-hidden">
-                <div className="max-w-7xl mx-auto mb-16">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="text-center"
-                    >
-                        <h2 className="font-display text-4xl font-bold text-white uppercase tracking-wider mb-4">
-                            Tout ce dont vous avez besoin
-                        </h2>
-                        <p className="text-slate-400 max-w-xl mx-auto">
-                            Une suite complete d'outils pour gerer vos reservations efficacement
-                        </p>
-                    </motion.div>
-                </div>
+// --- Comparison Section ---
+const Comparison = () => {
+    return (
+        <section className="py-32 bg-rich-black relative border-t border-white/10">
+            <div className="max-w-7xl mx-auto px-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 border border-white/10">
 
-                {/* Horizontal scroll cards */}
-                <motion.div
-                    style={{ x }}
-                    className="flex gap-6 pl-6"
-                >
-                    {features.map((feature, index) => (
-                        <motion.div
-                            key={feature.title}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: index * 0.1 }}
-                            className="flex-shrink-0 w-80 bg-[#0a0a0a] border border-white/10 rounded-2xl p-8 hover:border-[#ff6b00]/30 transition-colors"
-                        >
-                            <div
-                                className="w-14 h-14 rounded-xl flex items-center justify-center mb-6"
-                                style={{ backgroundColor: `${feature.color}15` }}
-                            >
-                                <feature.icon className="h-7 w-7" style={{ color: feature.color }} />
-                            </div>
-                            <h3 className="font-display text-xl font-bold text-white uppercase tracking-wider mb-3">
-                                {feature.title}
-                            </h3>
-                            <p className="text-slate-400 text-sm leading-relaxed">
-                                {feature.description}
-                            </p>
-                        </motion.div>
-                    ))}
-                </motion.div>
-            </section>
-
-            {/* Comparison Section */}
-            <section id="comparison" className="py-24 px-6 bg-[#0a0a0a] border-y border-white/5">
-                <div className="max-w-7xl mx-auto">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="text-center mb-16"
-                    >
-                        <h2 className="font-display text-4xl font-bold text-white uppercase tracking-wider mb-4">
-                            Avant / Apres
-                        </h2>
-                        <p className="text-slate-400 max-w-xl mx-auto">
-                            Decouvrez la difference avec OrizonReservation
-                        </p>
-                    </motion.div>
-
-                    <div className="grid md:grid-cols-2 gap-8">
-                        {/* Le Chaos */}
-                        <motion.div
-                            initial={{ opacity: 0, x: -30 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            className="bg-[#050505] border border-red-500/20 rounded-2xl p-8"
-                        >
-                            <div className="flex items-center gap-3 mb-6">
-                                <div className="w-12 h-12 bg-red-500/10 rounded-xl flex items-center justify-center">
-                                    <AlertCircle className="h-6 w-6 text-red-500" />
-                                </div>
-                                <h3 className="font-display text-2xl font-bold text-red-500 uppercase tracking-wider">
-                                    Le Chaos
-                                </h3>
-                            </div>
-                            <ul className="space-y-4">
-                                {[
-                                    { icon: Phone, text: "Telephone qui sonne sans arret" },
-                                    { icon: BookOpen, text: "Carnet papier illisible" },
-                                    { icon: AlertCircle, text: "Reservations oubliees" },
-                                    { icon: Users, text: "Clients mecontents" }
-                                ].map((item) => (
-                                    <li key={item.text} className="flex items-center gap-3 text-slate-400">
-                                        <item.icon className="h-5 w-5 text-red-500/50" />
-                                        <span>{item.text}</span>
-                                    </li>
-                                ))}
-                            </ul>
-                        </motion.div>
-
-                        {/* L'Ordre */}
-                        <motion.div
-                            initial={{ opacity: 0, x: 30 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            className="bg-[#050505] border border-[#ff6b00]/20 rounded-2xl p-8"
-                        >
-                            <div className="flex items-center gap-3 mb-6">
-                                <div className="w-12 h-12 bg-[#ff6b00]/10 rounded-xl flex items-center justify-center">
-                                    <Sparkles className="h-6 w-6 text-[#ff6b00]" />
-                                </div>
-                                <h3 className="font-display text-2xl font-bold text-[#ff6b00] uppercase tracking-wider">
-                                    L'Ordre
-                                </h3>
-                            </div>
-                            <ul className="space-y-4">
-                                {[
-                                    { icon: CalendarRange, text: "Reservations automatiques 24/7" },
-                                    { icon: LayoutGrid, text: "Vue claire de toutes vos tables" },
-                                    { icon: Bell, text: "Notifications en temps reel" },
-                                    { icon: Zap, text: "Gestion sereine et efficace" }
-                                ].map((item) => (
-                                    <li key={item.text} className="flex items-center gap-3 text-slate-400">
-                                        <item.icon className="h-5 w-5 text-[#ff6b00]" />
-                                        <span>{item.text}</span>
-                                    </li>
-                                ))}
-                            </ul>
-                        </motion.div>
+                    {/* Old World */}
+                    <div className="p-12 border-b lg:border-b-0 lg:border-r border-white/10 relative group overflow-hidden">
+                        <div className="absolute inset-0 bg-red-900/5 group-hover:bg-red-900/10 transition-colors duration-500"></div>
+                        <h3 className="font-display text-4xl text-slate-600 mb-8 uppercase line-through decoration-red-500/50 decoration-2">Le Chaos</h3>
+                        <ul className="space-y-6">
+                            {['Telephone qui sonne sans arret', 'Carnet papier illisible', 'Reservations oubliees', 'Clients mecontents'].map((item, i) => (
+                                <li key={i} className="flex items-center gap-4 text-slate-600 font-mono text-sm uppercase tracking-wider">
+                                    <X className="h-4 w-4 text-red-900" /> {item}
+                                </li>
+                            ))}
+                        </ul>
                     </div>
-                </div>
-            </section>
 
-            {/* CTA Section */}
-            <section className="py-24 px-6">
-                <div className="max-w-4xl mx-auto text-center">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
+                    {/* New World */}
+                    <div className="p-12 relative group overflow-hidden">
+                        <div className="absolute inset-0 bg-neon-orange/5 group-hover:bg-neon-orange/10 transition-colors duration-500"></div>
+                        <div className="absolute top-0 left-0 w-full h-[1px] bg-neon-orange/50 shadow-[0_0_10px_rgba(255,107,0,0.5)] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
+
+                        <h3 className="font-display text-4xl text-white mb-8 uppercase flex items-center gap-4">
+                            L'Ordre <Activity className="h-6 w-6 text-neon-orange animate-pulse" />
+                        </h3>
+                        <ul className="space-y-6">
+                            {['Reservations automatiques 24/7', 'Vue claire de toutes vos tables', 'Notifications en temps reel', 'Gestion sereine et efficace'].map((item, i) => (
+                                <li key={i} className="flex items-center gap-4 text-white font-mono text-sm uppercase tracking-wider">
+                                    <span className="text-neon-orange">0{i + 1}</span> {item}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    );
+};
+
+// --- Horizontal Scroll Features ---
+const HorizontalFeatures = () => {
+    const targetRef = useRef(null);
+    const { scrollYProgress } = useScroll({
+        target: targetRef,
+    });
+
+    const x = useTransform(scrollYProgress, [0, 1], ["0%", "-75%"]);
+
+    return (
+        <section ref={targetRef} className="relative h-[300vh] bg-dark-gunmetal">
+            <div className="sticky top-0 h-screen flex items-center overflow-hidden">
+                <div className="absolute top-12 left-12 z-10">
+                    <h2 className="font-display text-6xl text-white uppercase opacity-20">Fonctionnalites</h2>
+                </div>
+
+                <motion.div style={{ x }} className="flex gap-12 px-24">
+                    {features.map((feature, i) => (
+                        <div key={i} className="w-[80vw] md:w-[600px] h-[60vh] bg-rich-black border border-white/10 p-12 flex flex-col justify-between relative group hover:border-neon-orange/50 transition-colors duration-500">
+                            <div className="absolute top-0 right-0 p-6 font-mono text-6xl text-white/5 font-bold group-hover:text-neon-orange/10 transition-colors">
+                                {feature.id}
+                            </div>
+
+                            <div>
+                                <div className="mb-8 p-4 border border-white/10 inline-block rounded-none group-hover:bg-neon-orange/10 transition-colors">
+                                    <feature.icon className="h-12 w-12 text-neon-orange" />
+                                </div>
+                                <h3 className="font-display text-5xl text-white uppercase mb-6">{feature.title}</h3>
+                                <p className="font-mono text-slate-400 uppercase tracking-wider leading-relaxed border-l-2 border-neon-orange pl-6">
+                                    {feature.description}
+                                </p>
+                            </div>
+
+                            <div className="flex justify-between items-end border-t border-white/10 pt-8">
+                                <span className="text-xs font-mono text-neon-orange uppercase tracking-widest">Status: Active</span>
+                                <div className="h-2 w-2 bg-neon-orange animate-ping"></div>
+                            </div>
+                        </div>
+                    ))}
+                </motion.div>
+            </div>
+        </section>
+    );
+};
+
+// --- CTA Section ---
+const CTASection = () => {
+    return (
+        <section className="py-32 px-6 bg-rich-black border-t border-white/10">
+            <div className="max-w-4xl mx-auto text-center">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                >
+                    <h2 className="font-display text-5xl md:text-6xl font-bold text-white uppercase tracking-wider mb-6">
+                        Pret a simplifier vos reservations ?
+                    </h2>
+                    <p className="text-slate-400 text-lg mb-10 font-mono">
+                        Essayez gratuitement pendant 7 jours. Aucune carte bancaire requise.
+                    </p>
+                    <Link
+                        href="/signup"
+                        className="inline-flex items-center gap-3 px-10 py-5 bg-neon-orange text-black font-bold text-sm uppercase tracking-widest hover:bg-neon-orange-light transition-colors"
                     >
-                        <h2 className="font-display text-4xl font-bold text-white uppercase tracking-wider mb-4">
-                            Pret a simplifier vos reservations ?
-                        </h2>
-                        <p className="text-slate-400 mb-8">
-                            Essayez gratuitement pendant 7 jours. Aucune carte bancaire requise.
-                        </p>
-                        <Link
-                            href="/signup"
-                            className="inline-flex items-center gap-2 px-8 py-4 bg-[#ff6b00] text-black font-bold text-sm uppercase tracking-widest rounded-lg hover:bg-[#ff8533] transition-colors"
-                        >
-                            Commencer maintenant
-                            <ArrowRight className="h-4 w-4" />
-                        </Link>
-                    </motion.div>
-                </div>
-            </section>
+                        Commencer maintenant
+                        <ArrowRight className="h-5 w-5" />
+                    </Link>
+                </motion.div>
+            </div>
+        </section>
+    );
+};
 
+export function LandingPage() {
+    return (
+        <div className="bg-rich-black min-h-screen text-white selection:bg-neon-orange selection:text-black">
+            <Header />
+            <main>
+                <Hero />
+                <Marquee />
+                <Comparison />
+                <HorizontalFeatures />
+                <CTASection />
+            </main>
             <Footer />
         </div>
     );

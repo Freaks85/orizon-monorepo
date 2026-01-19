@@ -109,6 +109,32 @@ export default function RoomEditorPage() {
 
     const handleTableUpdate = useCallback(async (tableId: string, updates: Partial<Table>) => {
         try {
+            // Si on change la capacité ou la forme, recalculer la taille
+            const table = tables.find(t => t.id === tableId);
+            if (table) {
+                const capacity = updates.capacity ?? table.capacity;
+                const shape = updates.shape ?? table.shape;
+
+                // Calculer la taille selon capacité
+                let width = 1, height = 1;
+                if (shape === 'rectangle') {
+                    if (capacity <= 4) { width = 2; height = 1; }
+                    else if (capacity <= 6) { width = 3; height = 1; }
+                    else if (capacity <= 8) { width = 3; height = 2; }
+                    else { width = 4; height = 2; }
+                } else {
+                    if (capacity <= 2) { width = 1; height = 1; }
+                    else if (capacity <= 4) { width = 2; height = 2; }
+                    else if (capacity <= 6) { width = 2; height = 2; }
+                    else { width = 3; height = 3; }
+                }
+
+                if (updates.capacity || updates.shape) {
+                    updates.width = width;
+                    updates.height = height;
+                }
+            }
+
             const { error } = await supabase
                 .from('tables')
                 .update(updates)
@@ -122,7 +148,7 @@ export default function RoomEditorPage() {
         } catch (error) {
             console.error('Error updating table:', error);
         }
-    }, []);
+    }, [tables]);
 
     const handleTableDelete = useCallback(async (tableId: string) => {
         try {
@@ -175,7 +201,7 @@ export default function RoomEditorPage() {
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-[60vh]">
-                <div className="h-12 w-12 border-2 border-[#00ff9d] border-t-transparent rounded-full animate-spin" />
+                <div className="h-12 w-12 border-2 border-[#ff6b00] border-t-transparent rounded-full animate-spin" />
             </div>
         );
     }
@@ -209,7 +235,7 @@ export default function RoomEditorPage() {
                     onClick={() => setShowSettings(!showSettings)}
                     className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${
                         showSettings
-                            ? 'bg-[#00ff9d] text-black'
+                            ? 'bg-[#ff6b00] text-black'
                             : 'bg-white/5 text-white border border-white/10 hover:bg-white/10'
                     }`}
                 >
@@ -254,7 +280,7 @@ export default function RoomEditorPage() {
                                     type="text"
                                     value={roomName}
                                     onChange={(e) => setRoomName(e.target.value)}
-                                    className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white font-mono text-sm focus:outline-none focus:ring-2 focus:ring-[#00ff9d]/50"
+                                    className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white font-mono text-sm focus:outline-none focus:ring-2 focus:ring-[#ff6b00]/50"
                                 />
                             </div>
 
@@ -269,7 +295,7 @@ export default function RoomEditorPage() {
                                         max={20}
                                         value={gridWidth}
                                         onChange={(e) => setGridWidth(parseInt(e.target.value) || 10)}
-                                        className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white font-mono text-sm focus:outline-none focus:ring-2 focus:ring-[#00ff9d]/50"
+                                        className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white font-mono text-sm focus:outline-none focus:ring-2 focus:ring-[#ff6b00]/50"
                                     />
                                 </div>
                                 <div>
@@ -282,7 +308,7 @@ export default function RoomEditorPage() {
                                         max={20}
                                         value={gridHeight}
                                         onChange={(e) => setGridHeight(parseInt(e.target.value) || 8)}
-                                        className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white font-mono text-sm focus:outline-none focus:ring-2 focus:ring-[#00ff9d]/50"
+                                        className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white font-mono text-sm focus:outline-none focus:ring-2 focus:ring-[#ff6b00]/50"
                                     />
                                 </div>
                             </div>
@@ -290,7 +316,7 @@ export default function RoomEditorPage() {
                             <button
                                 onClick={handleSaveRoomSettings}
                                 disabled={saving}
-                                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-[#00ff9d] text-black font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-white transition-colors disabled:opacity-50"
+                                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-[#ff6b00] text-black font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-white transition-colors disabled:opacity-50"
                             >
                                 {saving ? (
                                     <div className="h-4 w-4 border-2 border-black border-t-transparent rounded-full animate-spin" />

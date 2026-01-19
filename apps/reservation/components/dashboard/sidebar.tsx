@@ -8,7 +8,7 @@ import {
     Table2,
     Clock,
     CalendarCheck,
-    Globe,
+    BookOpen,
     Settings,
     LogOut,
     CalendarRange,
@@ -20,11 +20,11 @@ import { supabase } from '@/lib/supabase';
 
 const menuItems = [
     { icon: LayoutDashboard, label: 'Dashboard', href: '/dashboard' },
+    { icon: CalendarCheck, label: 'Reservations', href: '/dashboard/reservations' },
+    { icon: BookOpen, label: 'Cahier Resa', href: '/dashboard/cahier' },
     { icon: Table2, label: 'Salles', href: '/dashboard/rooms' },
     { icon: Clock, label: 'Services', href: '/dashboard/services' },
-    { icon: CalendarCheck, label: 'Réservations', href: '/dashboard/reservations' },
-    { icon: Globe, label: 'Page publique', href: '/dashboard/settings/page-builder' },
-    { icon: Settings, label: 'Paramètres', href: '/dashboard/settings', adminOnly: true },
+    { icon: Settings, label: 'Parametres', href: '/dashboard/settings' },
 ];
 
 interface SidebarProps {
@@ -52,8 +52,8 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
             {/* Logo */}
             <div className="h-16 flex items-center border-b border-white/10 px-4 overflow-hidden">
                 <div className="flex items-center gap-3 min-w-max">
-                    <div className="border border-[#00ff9d]/30 p-1.5 bg-[#00ff9d]/5 rounded-lg">
-                        <CalendarRange className="h-6 w-6 text-[#00ff9d]" />
+                    <div className="border border-[#ff6b00]/30 p-1.5 bg-[#ff6b00]/5 rounded-lg">
+                        <CalendarRange className="h-6 w-6 text-[#ff6b00]" />
                     </div>
                     <motion.div
                         initial={false}
@@ -65,7 +65,7 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
                         className="overflow-hidden whitespace-nowrap"
                     >
                         <span className="font-display font-bold text-lg tracking-widest text-white uppercase">
-                            Orizon<span className="text-[#00ff9d]">Reservation</span>
+                            Orizon<span className="text-[#ff6b00]">Reservation</span>
                         </span>
                     </motion.div>
                 </div>
@@ -83,12 +83,12 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
                             onClick={handleLinkClick}
                             className={`flex items-center gap-3 h-12 px-3 rounded-xl transition-all duration-200 group relative overflow-hidden ${
                                 isActive
-                                    ? 'bg-gradient-to-r from-[#00ff9d]/20 to-[#00ff9d]/5 text-[#00ff9d] border-l-2 border-[#00ff9d]'
+                                    ? 'bg-gradient-to-r from-[#ff6b00]/20 to-[#ff6b00]/5 text-[#ff6b00] border-l-2 border-[#ff6b00]'
                                     : 'text-slate-400 hover:text-white hover:bg-white/5'
                             }`}
                         >
                             <div className={`flex-shrink-0 w-6 h-6 flex items-center justify-center ${
-                                isActive ? 'text-[#00ff9d]' : 'text-slate-500 group-hover:text-white'
+                                isActive ? 'text-[#ff6b00]' : 'text-slate-500 group-hover:text-white'
                             }`}>
                                 <item.icon className="h-5 w-5" />
                             </div>
@@ -106,7 +106,7 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
                             {isActive && (
                                 <motion.div
                                     layoutId="activeSidebarIndicator"
-                                    className="absolute right-2 w-1.5 h-1.5 rounded-full bg-[#00ff9d] shadow-[0_0_10px_#00ff9d]"
+                                    className="absolute right-2 w-1.5 h-1.5 rounded-full bg-[#ff6b00] shadow-[0_0_10px_#ff6b00]"
                                     initial={false}
                                     transition={{ type: "spring", stiffness: 500, damping: 30 }}
                                 />
@@ -143,11 +143,11 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
         <>
             <div className="h-16 flex items-center justify-between px-4 border-b border-white/10">
                 <div className="flex items-center gap-3">
-                    <div className="border border-[#00ff9d]/30 p-1.5 bg-[#00ff9d]/5 rounded-lg">
-                        <CalendarRange className="h-5 w-5 text-[#00ff9d]" />
+                    <div className="border border-[#ff6b00]/30 p-1.5 bg-[#ff6b00]/5 rounded-lg">
+                        <CalendarRange className="h-5 w-5 text-[#ff6b00]" />
                     </div>
                     <span className="font-display font-bold text-lg tracking-widest text-white uppercase">
-                        Orizon<span className="text-[#00ff9d]">Reservation</span>
+                        Orizon<span className="text-[#ff6b00]">Reservation</span>
                     </span>
                 </div>
                 <button
@@ -169,14 +169,14 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
                             onClick={handleLinkClick}
                             className={`flex items-center gap-4 px-4 py-3 rounded-xl transition-all group relative overflow-hidden ${
                                 isActive
-                                    ? 'bg-gradient-to-r from-[#00ff9d]/20 to-[#00ff9d]/5 text-[#00ff9d] border-l-2 border-[#00ff9d]'
+                                    ? 'bg-gradient-to-r from-[#ff6b00]/20 to-[#ff6b00]/5 text-[#ff6b00] border-l-2 border-[#ff6b00]'
                                     : 'text-slate-400 hover:text-white hover:bg-white/5'
                             }`}
                         >
-                            <item.icon className={`h-5 w-5 flex-shrink-0 ${isActive ? 'text-[#00ff9d]' : 'text-slate-500 group-hover:text-white'}`} />
+                            <item.icon className={`h-5 w-5 flex-shrink-0 ${isActive ? 'text-[#ff6b00]' : 'text-slate-500 group-hover:text-white'}`} />
                             <span className="font-mono text-sm uppercase tracking-wider font-bold">{item.label}</span>
                             {isActive && (
-                                <ChevronRight className="h-4 w-4 ml-auto text-[#00ff9d]" />
+                                <ChevronRight className="h-4 w-4 ml-auto text-[#ff6b00]" />
                             )}
                         </Link>
                     );

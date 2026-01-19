@@ -27,9 +27,9 @@ export function TopNav({ onMenuClick }: TopNavProps) {
 
                 {/* Mobile logo */}
                 <div className="flex items-center gap-2 md:hidden">
-                    <CalendarRange className="h-5 w-5 text-[#00ff9d]" />
+                    <CalendarRange className="h-5 w-5 text-[#ff6b00]" />
                     <span className="font-display font-bold text-sm tracking-widest text-white uppercase">
-                        Orizon<span className="text-[#00ff9d]">Resa</span>
+                        Orizon<span className="text-[#ff6b00]">Resa</span>
                     </span>
                 </div>
             </div>
@@ -66,7 +66,7 @@ export function TopNav({ onMenuClick }: TopNavProps) {
                                             }}
                                             className={`w-full px-4 py-3 text-left text-sm font-mono uppercase tracking-wider transition-colors ${
                                                 r.id === restaurant?.id
-                                                    ? 'bg-[#00ff9d]/10 text-[#00ff9d]'
+                                                    ? 'bg-[#ff6b00]/10 text-[#ff6b00]'
                                                     : 'text-slate-400 hover:bg-white/5 hover:text-white'
                                             }`}
                                         >
@@ -82,7 +82,7 @@ export function TopNav({ onMenuClick }: TopNavProps) {
                 {/* Notifications */}
                 <button className="relative p-2 text-slate-400 hover:text-white transition-colors">
                     <Bell className="h-5 w-5" />
-                    <span className="absolute top-1 right-1 w-2 h-2 bg-[#00ff9d] rounded-full"></span>
+                    <span className="absolute top-1 right-1 w-2 h-2 bg-[#ff6b00] rounded-full"></span>
                 </button>
             </div>
         </header>

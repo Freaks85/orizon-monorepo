@@ -3,9 +3,9 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Calendar, Clock, Users, Phone, Mail, User, Check, MapPin } from 'lucide-react';
+import { Calendar, Clock, Users, Phone, Mail, User, Check, MapPin, ChevronLeft, ChevronRight, CalendarDays, X } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
-import { format, addDays, isBefore, startOfDay } from 'date-fns';
+import { format, addDays, isBefore, startOfDay, isToday, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, subMonths, addMonths } from 'date-fns';
 import { fr } from 'date-fns/locale';
 
 interface ReservationSettings {
@@ -66,6 +66,8 @@ export default function PublicBookingPage() {
     const [notes, setNotes] = useState('');
     const [submitting, setSubmitting] = useState(false);
     const [success, setSuccess] = useState(false);
+    const [showCalendar, setShowCalendar] = useState(false);
+    const [calendarMonth, setCalendarMonth] = useState(new Date());
 
     useEffect(() => {
         fetchData();
@@ -128,21 +130,68 @@ export default function PublicBookingPage() {
         return dates;
     };
 
-    const getAvailableServices = (date: Date) => {
+    // Retourne tous les services du jour avec leur statut de disponibilité
+    const getServicesWithStatus = (date: Date) => {
         const dayOfWeek = date.getDay();
-        return services.filter(s => s.days_of_week.includes(dayOfWeek));
+        const now = new Date();
+        const currentHour = now.getHours();
+        const currentMinutes = now.getMinutes();
+
+        return services.map(service => {
+            // Vérifier le jour de la semaine
+            const isOpenThisDay = service.days_of_week.includes(dayOfWeek);
+
+            if (!isOpenThisDay) {
+                return { service, available: false, reason: 'Fermé ce jour' };
+            }
+
+            // Si c'est aujourd'hui, vérifier si le service n'est pas déjà passé
+            if (isToday(date)) {
+                const [endHour, endMin] = service.end_time.split(':').map(Number);
+                if (currentHour > endHour || (currentHour === endHour && currentMinutes >= endMin)) {
+                    return { service, available: false, reason: 'Service terminé' };
+                }
+
+                // Vérifier s'il reste des créneaux disponibles
+                const [startHour, startMin] = service.start_time.split(':').map(Number);
+                if (currentHour > startHour || (currentHour === startHour && currentMinutes > startMin)) {
+                    return { service, available: true, reason: 'En cours' };
+                }
+            }
+
+            return { service, available: true, reason: null };
+        });
     };
 
-    const getTimeSlots = (service: Service) => {
+    const getAvailableServices = (date: Date) => {
+        return getServicesWithStatus(date)
+            .filter(s => s.available)
+            .map(s => s.service);
+    };
+
+    const getTimeSlots = (service: Service, date: Date | null) => {
         const slots: string[] = [];
         const [startHour, startMin] = service.start_time.split(':').map(Number);
         const [endHour, endMin] = service.end_time.split(':').map(Number);
+
+        const now = new Date();
+        const currentHour = now.getHours();
+        const currentMinutes = now.getMinutes();
+        const isTodayDate = date && isToday(date);
 
         let hour = startHour;
         let min = startMin;
 
         while (hour < endHour || (hour === endHour && min < endMin)) {
-            slots.push(`${hour.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}`);
+            const timeSlot = `${hour.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}`;
+
+            // Si c'est aujourd'hui, ne pas afficher les créneaux passés
+            const isPassed = isTodayDate && (hour < currentHour || (hour === currentHour && min <= currentMinutes));
+
+            if (!isPassed) {
+                slots.push(timeSlot);
+            }
+
             min += 30;
             if (min >= 60) {
                 min = 0;
@@ -186,7 +235,7 @@ export default function PublicBookingPage() {
     if (loading) {
         return (
             <div className="min-h-screen bg-[#050505] flex items-center justify-center">
-                <div className="h-12 w-12 border-2 border-[#00ff9d] border-t-transparent rounded-full animate-spin" />
+                <div className="h-12 w-12 border-2 border-[#ff6b00] border-t-transparent rounded-full animate-spin" />
             </div>
         );
     }
@@ -319,8 +368,8 @@ export default function PublicBookingPage() {
                                 <label className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-3">
                                     Choisir une date
                                 </label>
-                                <div className="grid grid-cols-4 md:grid-cols-7 gap-2 max-h-48 overflow-y-auto">
-                                    {getAvailableDates().slice(0, 14).map((date) => {
+                                <div className="grid grid-cols-4 md:grid-cols-7 gap-2">
+                                    {getAvailableDates().slice(0, 6).map((date) => {
                                         const isSelected = selectedDate && format(date, 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd');
                                         const hasServices = getAvailableServices(date).length > 0;
 
@@ -352,7 +401,29 @@ export default function PublicBookingPage() {
                                             </button>
                                         );
                                     })}
+                                    {/* Bouton Autre jour */}
+                                    <button
+                                        onClick={() => {
+                                            setCalendarMonth(new Date());
+                                            setShowCalendar(true);
+                                        }}
+                                        className="p-3 rounded-lg text-center transition-all bg-white/5 text-white hover:bg-white/10 border border-dashed border-white/20 hover:border-white/40"
+                                    >
+                                        <CalendarDays className="h-5 w-5 mx-auto mb-1 opacity-70" />
+                                        <div className="text-[10px] uppercase">
+                                            Autre
+                                        </div>
+                                    </button>
                                 </div>
+                                {/* Afficher la date sélectionnée si c'est une date du calendrier */}
+                                {selectedDate && !getAvailableDates().slice(0, 6).some(d => isSameDay(d, selectedDate)) && (
+                                    <div
+                                        className="mt-3 px-4 py-2 rounded-lg text-center text-sm"
+                                        style={{ backgroundColor: `${settings.primary_color}20`, color: settings.primary_color }}
+                                    >
+                                        {format(selectedDate, 'EEEE d MMMM', { locale: fr })}
+                                    </div>
+                                )}
                             </div>
 
                             {selectedDate && (
@@ -361,26 +432,49 @@ export default function PublicBookingPage() {
                                         Choisir un service
                                     </label>
                                     <div className="grid grid-cols-2 gap-3">
-                                        {getAvailableServices(selectedDate).map((service) => (
-                                            <button
-                                                key={service.id}
-                                                onClick={() => setSelectedService(service)}
-                                                className={`p-4 rounded-lg text-left transition-all ${
-                                                    selectedService?.id === service.id
-                                                        ? 'text-black'
-                                                        : 'bg-white/5 text-white hover:bg-white/10'
-                                                }`}
-                                                style={{
-                                                    backgroundColor: selectedService?.id === service.id ? settings.primary_color : undefined
-                                                }}
-                                            >
-                                                <div className="font-bold">{service.name}</div>
-                                                <div className="text-sm opacity-70">
-                                                    {service.start_time.slice(0, 5)} - {service.end_time.slice(0, 5)}
-                                                </div>
-                                            </button>
+                                        {getServicesWithStatus(selectedDate).map(({ service, available, reason }) => (
+                                            <div key={service.id} className="relative group">
+                                                <button
+                                                    onClick={() => available && setSelectedService(service)}
+                                                    disabled={!available}
+                                                    className={`w-full p-4 rounded-lg text-left transition-all ${
+                                                        !available
+                                                            ? 'bg-white/5 text-slate-600 cursor-not-allowed'
+                                                            : selectedService?.id === service.id
+                                                            ? 'text-black'
+                                                            : 'bg-white/5 text-white hover:bg-white/10'
+                                                    }`}
+                                                    style={{
+                                                        backgroundColor: available && selectedService?.id === service.id ? settings.primary_color : undefined
+                                                    }}
+                                                >
+                                                    <div className="font-bold">{service.name}</div>
+                                                    <div className="text-sm opacity-70">
+                                                        {service.start_time.slice(0, 5)} - {service.end_time.slice(0, 5)}
+                                                    </div>
+                                                    {!available && (
+                                                        <div className="mt-2 text-xs text-red-400 flex items-center gap-1">
+                                                            <Clock className="h-3 w-3" />
+                                                            {reason}
+                                                        </div>
+                                                    )}
+                                                </button>
+                                                {/* Tooltip au survol pour mobile */}
+                                                {!available && (
+                                                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-black border border-white/20 rounded-lg text-xs text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                                                        {reason === 'Service terminé' && 'Ce service est déjà passé pour aujourd\'hui'}
+                                                        {reason === 'Fermé ce jour' && 'Le restaurant est fermé ce jour pour ce service'}
+                                                        <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-black" />
+                                                    </div>
+                                                )}
+                                            </div>
                                         ))}
                                     </div>
+                                    {getServicesWithStatus(selectedDate).every(s => !s.available) && (
+                                        <p className="text-center text-slate-500 text-sm mt-4">
+                                            Aucun service disponible pour cette date. Essayez une autre date.
+                                        </p>
+                                    )}
                                 </div>
                             )}
 
@@ -410,7 +504,7 @@ export default function PublicBookingPage() {
                                     Choisir une heure
                                 </label>
                                 <div className="grid grid-cols-4 gap-2">
-                                    {getTimeSlots(selectedService).map((time) => (
+                                    {getTimeSlots(selectedService, selectedDate).map((time) => (
                                         <button
                                             key={time}
                                             onClick={() => setSelectedTime(time)}
@@ -562,6 +656,144 @@ export default function PublicBookingPage() {
                     )}
                 </div>
             </main>
+
+            {/* Modal Calendrier */}
+            {showCalendar && settings && (
+                <>
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setShowCalendar(false)}
+                        className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50"
+                    />
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-sm mx-4"
+                    >
+                        <div
+                            className="rounded-2xl p-6 border border-white/10"
+                            style={{ backgroundColor: settings.secondary_color }}
+                        >
+                            {/* Header */}
+                            <div className="flex items-center justify-between mb-6">
+                                <h3 className="text-lg font-bold text-white">Choisir une date</h3>
+                                <button
+                                    onClick={() => setShowCalendar(false)}
+                                    className="p-2 text-slate-400 hover:text-white transition-colors"
+                                >
+                                    <X className="h-5 w-5" />
+                                </button>
+                            </div>
+
+                            {/* Month Navigation */}
+                            <div className="flex items-center justify-between mb-4">
+                                <button
+                                    onClick={() => setCalendarMonth(subMonths(calendarMonth, 1))}
+                                    disabled={isSameMonth(calendarMonth, new Date())}
+                                    className="p-2 text-slate-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                                >
+                                    <ChevronLeft className="h-5 w-5" />
+                                </button>
+                                <span className="text-white font-bold capitalize">
+                                    {format(calendarMonth, 'MMMM yyyy', { locale: fr })}
+                                </span>
+                                <button
+                                    onClick={() => setCalendarMonth(addMonths(calendarMonth, 1))}
+                                    className="p-2 text-slate-400 hover:text-white transition-colors"
+                                >
+                                    <ChevronRight className="h-5 w-5" />
+                                </button>
+                            </div>
+
+                            {/* Days of week */}
+                            <div className="grid grid-cols-7 gap-1 mb-2">
+                                {['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'].map(day => (
+                                    <div key={day} className="text-center text-xs text-slate-500 font-mono py-2">
+                                        {day}
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Calendar Grid */}
+                            <div className="grid grid-cols-7 gap-1">
+                                {(() => {
+                                    const monthStart = startOfMonth(calendarMonth);
+                                    const monthEnd = endOfMonth(calendarMonth);
+                                    const days = eachDayOfInterval({ start: monthStart, end: monthEnd });
+                                    const today = startOfDay(new Date());
+
+                                    // Padding pour commencer au bon jour de la semaine
+                                    const startDay = monthStart.getDay();
+                                    const paddingDays = startDay === 0 ? 6 : startDay - 1;
+
+                                    return (
+                                        <>
+                                            {Array.from({ length: paddingDays }).map((_, i) => (
+                                                <div key={`pad-${i}`} className="aspect-square" />
+                                            ))}
+                                            {days.map(day => {
+                                                const isPast = isBefore(day, today);
+                                                const isDisabled = isPast;
+                                                const hasServices = !isDisabled && getAvailableServices(day).length > 0;
+                                                const isSelected = selectedDate && isSameDay(day, selectedDate);
+                                                const isTodayDate = isToday(day);
+
+                                                return (
+                                                    <button
+                                                        key={day.toISOString()}
+                                                        onClick={() => {
+                                                            if (!isDisabled && hasServices) {
+                                                                setSelectedDate(day);
+                                                                setSelectedService(null);
+                                                                setShowCalendar(false);
+                                                            }
+                                                        }}
+                                                        disabled={isDisabled || !hasServices}
+                                                        className={`aspect-square rounded-lg flex items-center justify-center text-sm font-bold transition-all ${
+                                                            isSelected
+                                                                ? 'text-black'
+                                                                : isDisabled
+                                                                ? 'text-slate-700 cursor-not-allowed'
+                                                                : !hasServices
+                                                                ? 'text-slate-600 cursor-not-allowed'
+                                                                : 'text-white hover:bg-white/10'
+                                                        } ${
+                                                            isTodayDate && !isSelected ? 'ring-1 ring-white/30' : ''
+                                                        }`}
+                                                        style={{
+                                                            backgroundColor: isSelected ? settings.primary_color : undefined
+                                                        }}
+                                                    >
+                                                        {format(day, 'd')}
+                                                    </button>
+                                                );
+                                            })}
+                                        </>
+                                    );
+                                })()}
+                            </div>
+
+                            {/* Legend */}
+                            <div className="flex items-center justify-center gap-4 mt-4 text-xs text-slate-500">
+                                <div className="flex items-center gap-1">
+                                    <div className="w-3 h-3 rounded-full ring-1 ring-white/30" />
+                                    <span>Aujourd'hui</span>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                    <div
+                                        className="w-3 h-3 rounded-full"
+                                        style={{ backgroundColor: settings.primary_color }}
+                                    />
+                                    <span>Sélectionné</span>
+                                </div>
+                            </div>
+                        </div>
+                    </motion.div>
+                </>
+            )}
         </div>
     );
 }

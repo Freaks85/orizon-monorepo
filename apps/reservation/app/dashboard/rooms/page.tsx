@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Table2, Edit2, Trash2, MoreVertical } from 'lucide-react';
+import { Plus, Table2, Trash2, LayoutGrid } from 'lucide-react';
 import { useRestaurant } from '@/contexts/restaurant-context';
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
@@ -109,7 +109,7 @@ export default function RoomsPage() {
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-[60vh]">
-                <div className="h-12 w-12 border-2 border-[#00ff9d] border-t-transparent rounded-full animate-spin" />
+                <div className="h-12 w-12 border-2 border-[#ff6b00] border-t-transparent rounded-full animate-spin" />
             </div>
         );
     }
@@ -129,7 +129,7 @@ export default function RoomsPage() {
 
                 <button
                     onClick={() => setShowCreateModal(true)}
-                    className="flex items-center gap-2 px-4 py-2.5 bg-[#00ff9d] text-black font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-white transition-colors"
+                    className="flex items-center gap-2 px-4 py-2.5 bg-[#ff6b00] text-black font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-white transition-colors"
                 >
                     <Plus className="h-4 w-4" />
                     Nouvelle salle
@@ -152,7 +152,7 @@ export default function RoomsPage() {
                     </p>
                     <button
                         onClick={() => setShowCreateModal(true)}
-                        className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#00ff9d] text-black font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-white transition-colors"
+                        className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#ff6b00] text-black font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-white transition-colors"
                     >
                         <Plus className="h-4 w-4" />
                         Créer une salle
@@ -166,12 +166,12 @@ export default function RoomsPage() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.1 }}
-                            className="bg-[#0a0a0a] border border-white/10 rounded-xl p-6 group hover:border-[#00ff9d]/30 transition-colors"
+                            className="bg-[#0a0a0a] border border-white/10 rounded-xl p-6 group hover:border-[#ff6b00]/30 transition-colors"
                         >
                             <div className="flex items-start justify-between mb-4">
                                 <div className="flex items-center gap-3">
-                                    <div className="p-2 bg-[#00ff9d]/10 rounded-lg">
-                                        <Table2 className="h-5 w-5 text-[#00ff9d]" />
+                                    <div className="p-2 bg-[#ff6b00]/10 rounded-lg">
+                                        <Table2 className="h-5 w-5 text-[#ff6b00]" />
                                     </div>
                                     <div>
                                         <h3 className="font-display text-lg font-bold text-white uppercase tracking-wider">
@@ -197,10 +197,10 @@ export default function RoomsPage() {
 
                             <Link
                                 href={`/dashboard/rooms/${room.id}`}
-                                className="flex items-center justify-center gap-2 w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white font-bold text-xs uppercase tracking-widest hover:bg-white/10 hover:border-[#00ff9d]/30 transition-colors"
+                                className="flex items-center justify-center gap-2 w-full px-4 py-2.5 bg-[#ff6b00]/10 border border-[#ff6b00]/30 rounded-lg text-[#ff6b00] font-bold text-xs uppercase tracking-widest hover:bg-[#ff6b00]/20 transition-colors"
                             >
-                                <Edit2 className="h-4 w-4" />
-                                Modifier
+                                <LayoutGrid className="h-4 w-4" />
+                                Gerer les tables
                             </Link>
                         </motion.div>
                     ))}
@@ -239,7 +239,7 @@ export default function RoomsPage() {
                                             value={newRoomName}
                                             onChange={(e) => setNewRoomName(e.target.value)}
                                             required
-                                            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[#00ff9d]/50 focus:border-[#00ff9d]/50 font-mono text-sm"
+                                            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[#ff6b00]/50 focus:border-[#ff6b00]/50 font-mono text-sm"
                                             placeholder="Ex: Salle principale, Terrasse..."
                                         />
                                     </div>
@@ -255,7 +255,7 @@ export default function RoomsPage() {
                                         <button
                                             type="submit"
                                             disabled={creating || !newRoomName.trim()}
-                                            className="flex-1 px-4 py-2.5 bg-[#00ff9d] text-black font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                                            className="flex-1 px-4 py-2.5 bg-[#ff6b00] text-black font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                                         >
                                             {creating ? (
                                                 <div className="h-4 w-4 border-2 border-black border-t-transparent rounded-full animate-spin" />

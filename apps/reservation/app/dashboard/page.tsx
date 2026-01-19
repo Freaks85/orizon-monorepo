@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { CalendarCheck, Clock, Users, Table2, TrendingUp, AlertCircle } from 'lucide-react';
+import { CalendarCheck, Clock, Users, Table2, Settings, AlertCircle } from 'lucide-react';
 import { useRestaurant } from '@/contexts/restaurant-context';
 import { supabase } from '@/lib/supabase';
 import { format } from 'date-fns';
@@ -98,8 +98,8 @@ export default function DashboardPage() {
             label: "Réservations aujourd'hui",
             value: stats.todayReservations,
             icon: CalendarCheck,
-            color: 'text-[#00ff9d]',
-            bgColor: 'bg-[#00ff9d]/10'
+            color: 'text-[#ff6b00]',
+            bgColor: 'bg-[#ff6b00]/10'
         },
         {
             label: 'En attente',
@@ -127,7 +127,7 @@ export default function DashboardPage() {
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-[60vh]">
-                <div className="h-12 w-12 border-2 border-[#00ff9d] border-t-transparent rounded-full animate-spin" />
+                <div className="h-12 w-12 border-2 border-[#ff6b00] border-t-transparent rounded-full animate-spin" />
             </div>
         );
     }
@@ -179,38 +179,38 @@ export default function DashboardPage() {
                     <div className="grid grid-cols-2 gap-3">
                         <Link
                             href="/dashboard/rooms"
-                            className="flex flex-col items-center gap-2 p-4 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 hover:border-[#00ff9d]/30 transition-all group"
+                            className="flex flex-col items-center gap-2 p-4 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 hover:border-[#ff6b00]/30 transition-all group"
                         >
-                            <Table2 className="h-6 w-6 text-slate-400 group-hover:text-[#00ff9d] transition-colors" />
+                            <Table2 className="h-6 w-6 text-slate-400 group-hover:text-[#ff6b00] transition-colors" />
                             <span className="text-xs font-mono uppercase tracking-wider text-slate-400 group-hover:text-white">
                                 Gérer les salles
                             </span>
                         </Link>
                         <Link
                             href="/dashboard/services"
-                            className="flex flex-col items-center gap-2 p-4 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 hover:border-[#00ff9d]/30 transition-all group"
+                            className="flex flex-col items-center gap-2 p-4 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 hover:border-[#ff6b00]/30 transition-all group"
                         >
-                            <Clock className="h-6 w-6 text-slate-400 group-hover:text-[#00ff9d] transition-colors" />
+                            <Clock className="h-6 w-6 text-slate-400 group-hover:text-[#ff6b00] transition-colors" />
                             <span className="text-xs font-mono uppercase tracking-wider text-slate-400 group-hover:text-white">
                                 Services
                             </span>
                         </Link>
                         <Link
                             href="/dashboard/reservations"
-                            className="flex flex-col items-center gap-2 p-4 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 hover:border-[#00ff9d]/30 transition-all group"
+                            className="flex flex-col items-center gap-2 p-4 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 hover:border-[#ff6b00]/30 transition-all group"
                         >
-                            <CalendarCheck className="h-6 w-6 text-slate-400 group-hover:text-[#00ff9d] transition-colors" />
+                            <CalendarCheck className="h-6 w-6 text-slate-400 group-hover:text-[#ff6b00] transition-colors" />
                             <span className="text-xs font-mono uppercase tracking-wider text-slate-400 group-hover:text-white">
                                 Réservations
                             </span>
                         </Link>
                         <Link
-                            href="/dashboard/settings/page-builder"
-                            className="flex flex-col items-center gap-2 p-4 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 hover:border-[#00ff9d]/30 transition-all group"
+                            href="/dashboard/settings"
+                            className="flex flex-col items-center gap-2 p-4 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 hover:border-[#ff6b00]/30 transition-all group"
                         >
-                            <TrendingUp className="h-6 w-6 text-slate-400 group-hover:text-[#00ff9d] transition-colors" />
+                            <Settings className="h-6 w-6 text-slate-400 group-hover:text-[#ff6b00] transition-colors" />
                             <span className="text-xs font-mono uppercase tracking-wider text-slate-400 group-hover:text-white">
-                                Page publique
+                                Paramètres
                             </span>
                         </Link>
                     </div>
@@ -224,7 +224,7 @@ export default function DashboardPage() {
                         </h2>
                         <Link
                             href="/dashboard/reservations"
-                            className="text-xs font-mono uppercase tracking-wider text-[#00ff9d] hover:underline"
+                            className="text-xs font-mono uppercase tracking-wider text-[#ff6b00] hover:underline"
                         >
                             Voir tout
                         </Link>
@@ -252,7 +252,7 @@ export default function DashboardPage() {
                                     </div>
                                     <span className={`px-2 py-1 rounded-full text-[10px] font-mono uppercase ${
                                         reservation.status === 'confirmed'
-                                            ? 'bg-[#00ff9d]/10 text-[#00ff9d]'
+                                            ? 'bg-[#ff6b00]/10 text-[#ff6b00]'
                                             : reservation.status === 'pending'
                                             ? 'bg-yellow-500/10 text-yellow-500'
                                             : 'bg-red-500/10 text-red-500'
@@ -272,11 +272,11 @@ export default function DashboardPage() {
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="bg-[#00ff9d]/5 border border-[#00ff9d]/20 rounded-xl p-6"
+                    className="bg-[#ff6b00]/5 border border-[#ff6b00]/20 rounded-xl p-6"
                 >
                     <div className="flex items-start gap-4">
-                        <div className="p-2 bg-[#00ff9d]/10 rounded-lg">
-                            <AlertCircle className="h-6 w-6 text-[#00ff9d]" />
+                        <div className="p-2 bg-[#ff6b00]/10 rounded-lg">
+                            <AlertCircle className="h-6 w-6 text-[#ff6b00]" />
                         </div>
                         <div>
                             <h3 className="font-display text-lg font-bold text-white uppercase tracking-wider mb-1">
@@ -287,7 +287,7 @@ export default function DashboardPage() {
                             </p>
                             <Link
                                 href="/dashboard/rooms"
-                                className="inline-flex items-center gap-2 px-4 py-2 bg-[#00ff9d] text-black font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-white transition-colors"
+                                className="inline-flex items-center gap-2 px-4 py-2 bg-[#ff6b00] text-black font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-white transition-colors"
                             >
                                 <Table2 className="h-4 w-4" />
                                 Créer ma première salle

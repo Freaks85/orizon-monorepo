@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useState, useCallback } from 'react';
-import { motion } from 'framer-motion';
-import { Plus, Trash2, Circle, Square, RectangleHorizontal } from 'lucide-react';
+import React, { useState, useCallback, useRef } from 'react';
+import { Plus, Trash2, GripVertical } from 'lucide-react';
 
 interface Table {
     id: string;
@@ -35,6 +34,25 @@ interface GridEditorProps {
     onTableSelect: (id: string | null) => void;
 }
 
+// Taille visuelle en pixels selon la capacité
+function getTablePixelSize(capacity: number, shape: string, cellSize: number): { width: number; height: number } {
+    const baseSize = cellSize - 12;
+
+    if (shape === 'rectangle') {
+        if (capacity <= 4) return { width: cellSize * 2 - 12, height: baseSize };
+        if (capacity <= 6) return { width: cellSize * 2.5 - 12, height: baseSize };
+        if (capacity <= 8) return { width: cellSize * 3 - 12, height: cellSize * 1.5 - 12 };
+        return { width: cellSize * 3.5 - 12, height: cellSize * 2 - 12 };
+    }
+
+    // Pour carré et rond - taille proportionnelle
+    if (capacity <= 2) return { width: baseSize, height: baseSize };
+    if (capacity <= 4) return { width: baseSize * 1.3, height: baseSize * 1.3 };
+    if (capacity <= 6) return { width: baseSize * 1.6, height: baseSize * 1.6 };
+    if (capacity <= 8) return { width: baseSize * 1.9, height: baseSize * 1.9 };
+    return { width: baseSize * 2.2, height: baseSize * 2.2 };
+}
+
 export function GridEditor({
     room,
     tables,
@@ -45,7 +63,10 @@ export function GridEditor({
     onTableSelect
 }: GridEditorProps) {
     const [placementMode, setPlacementMode] = useState(false);
-    const gridCellSize = 60;
+    const [draggingId, setDraggingId] = useState<string | null>(null);
+    const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+    const gridRef = useRef<HTMLDivElement>(null);
+    const gridCellSize = 70;
 
     const handleCellClick = useCallback((x: number, y: number) => {
         if (placementMode) {
@@ -63,7 +84,7 @@ export function GridEditor({
                     position_y: y,
                     width: 1,
                     height: 1,
-                    shape: 'square'
+                    shape: 'round'
                 });
                 setPlacementMode(false);
             }
@@ -72,30 +93,66 @@ export function GridEditor({
         }
     }, [placementMode, tables, room.id, onTableAdd, onTableSelect]);
 
-    const handleTableDragEnd = useCallback((tableId: string, event: any, info: any) => {
+    const handleMouseDown = useCallback((e: React.MouseEvent, tableId: string) => {
+        e.preventDefault();
+        e.stopPropagation();
+
         const table = tables.find(t => t.id === tableId);
-        if (!table) return;
+        if (!table || !gridRef.current) return;
 
-        const newX = Math.round((table.position_x * gridCellSize + info.offset.x) / gridCellSize);
-        const newY = Math.round((table.position_y * gridCellSize + info.offset.y) / gridCellSize);
+        const gridRect = gridRef.current.getBoundingClientRect();
+        const tableX = table.position_x * gridCellSize;
+        const tableY = table.position_y * gridCellSize;
 
-        const x = Math.max(0, Math.min(newX, room.grid_width - 1));
-        const y = Math.max(0, Math.min(newY, room.grid_height - 1));
+        setDraggingId(tableId);
+        setDragOffset({
+            x: e.clientX - gridRect.left - tableX,
+            y: e.clientY - gridRect.top - tableY
+        });
+        onTableSelect(tableId);
+    }, [tables, gridCellSize, onTableSelect]);
 
-        const isOccupied = tables.some(
-            t => t.id !== tableId && t.position_x === x && t.position_y === y
-        );
+    const handleMouseMove = useCallback((e: React.MouseEvent) => {
+        if (!draggingId || !gridRef.current) return;
 
-        if (!isOccupied) {
-            onTableUpdate(tableId, { position_x: x, position_y: y });
+        const gridRect = gridRef.current.getBoundingClientRect();
+        const x = e.clientX - gridRect.left - dragOffset.x;
+        const y = e.clientY - gridRect.top - dragOffset.y;
+
+        // Calculer la position en grille
+        const gridX = Math.round(x / gridCellSize);
+        const gridY = Math.round(y / gridCellSize);
+
+        // Limiter aux bords
+        const clampedX = Math.max(0, Math.min(gridX, room.grid_width - 1));
+        const clampedY = Math.max(0, Math.min(gridY, room.grid_height - 1));
+
+        const table = tables.find(t => t.id === draggingId);
+        if (table && (table.position_x !== clampedX || table.position_y !== clampedY)) {
+            // Vérifier si la position est libre
+            const isOccupied = tables.some(
+                t => t.id !== draggingId && t.position_x === clampedX && t.position_y === clampedY
+            );
+
+            if (!isOccupied) {
+                onTableUpdate(draggingId, { position_x: clampedX, position_y: clampedY });
+            }
         }
-    }, [room, tables, onTableUpdate, gridCellSize]);
+    }, [draggingId, dragOffset, gridCellSize, room, tables, onTableUpdate]);
+
+    const handleMouseUp = useCallback(() => {
+        setDraggingId(null);
+    }, []);
+
+    const handleMouseLeave = useCallback(() => {
+        setDraggingId(null);
+    }, []);
 
     const getShapeClass = (shape: string) => {
         switch (shape) {
             case 'round': return 'rounded-full';
-            case 'rectangle': return 'rounded-lg';
-            default: return 'rounded-lg';
+            case 'rectangle': return 'rounded-xl';
+            default: return 'rounded-xl';
         }
     };
 
@@ -107,7 +164,7 @@ export function GridEditor({
                     onClick={() => setPlacementMode(!placementMode)}
                     className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${
                         placementMode
-                            ? 'bg-[#00ff9d] text-black'
+                            ? 'bg-[#ff6b00] text-black'
                             : 'bg-white/5 text-white border border-white/10 hover:bg-white/10'
                     }`}
                 >
@@ -129,43 +186,38 @@ export function GridEditor({
                 )}
 
                 <div className="ml-auto text-xs text-slate-500 font-mono">
-                    {tables.length} table{tables.length !== 1 ? 's' : ''} | Grille {room.grid_width}x{room.grid_height}
+                    {tables.length} table{tables.length !== 1 ? 's' : ''} | Glissez pour deplacer
                 </div>
             </div>
 
             {/* Grid */}
             <div className="flex-1 overflow-auto p-6 bg-[#050505]">
                 <div
-                    className="relative bg-[#0a0a0a] border border-white/10 rounded-xl overflow-hidden"
+                    ref={gridRef}
+                    className="relative bg-[#0a0a0a] border border-white/10 rounded-xl select-none"
                     style={{
                         width: room.grid_width * gridCellSize,
                         height: room.grid_height * gridCellSize,
                     }}
+                    onMouseMove={handleMouseMove}
+                    onMouseUp={handleMouseUp}
+                    onMouseLeave={handleMouseLeave}
                 >
-                    {/* Grid lines */}
-                    <div
-                        className="absolute inset-0 pointer-events-none"
-                        style={{
-                            backgroundSize: `${gridCellSize}px ${gridCellSize}px`,
-                            backgroundImage: `
-                                linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
-                                linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px)
-                            `
-                        }}
-                    />
-
-                    {/* Clickable cells */}
+                    {/* Grid cells */}
                     {Array.from({ length: room.grid_width * room.grid_height }).map((_, i) => {
                         const x = i % room.grid_width;
                         const y = Math.floor(i / room.grid_width);
                         const isOccupied = tables.some(t => t.position_x === x && t.position_y === y);
+                        const isDragTarget = draggingId && !isOccupied;
 
                         return (
                             <div
                                 key={`cell-${x}-${y}`}
-                                className={`absolute transition-colors ${
+                                className={`absolute border border-white/5 transition-colors ${
                                     placementMode && !isOccupied
-                                        ? 'cursor-pointer hover:bg-[#00ff9d]/20'
+                                        ? 'cursor-pointer hover:bg-[#ff6b00]/20 hover:border-[#ff6b00]/50'
+                                        : isDragTarget
+                                        ? 'bg-white/5'
                                         : ''
                                 }`}
                                 style={{
@@ -180,39 +232,63 @@ export function GridEditor({
                     })}
 
                     {/* Tables */}
-                    {tables.map((table) => (
-                        <motion.div
-                            key={table.id}
-                            drag
-                            dragMomentum={false}
-                            dragElastic={0}
-                            onDragEnd={(e, info) => handleTableDragEnd(table.id, e, info)}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                onTableSelect(table.id);
-                            }}
-                            className={`absolute cursor-move flex items-center justify-center text-xs font-bold transition-all ${
-                                getShapeClass(table.shape)
-                            } ${
-                                selectedTableId === table.id
-                                    ? 'bg-[#00ff9d] text-black ring-2 ring-[#00ff9d] ring-offset-2 ring-offset-[#0a0a0a] z-20'
-                                    : 'bg-white/10 text-white border border-white/20 hover:border-[#00ff9d]/50'
-                            }`}
-                            style={{
-                                left: table.position_x * gridCellSize + 4,
-                                top: table.position_y * gridCellSize + 4,
-                                width: table.width * gridCellSize - 8,
-                                height: table.height * gridCellSize - 8,
-                            }}
-                            whileHover={{ scale: 1.02 }}
-                            whileDrag={{ scale: 1.1, zIndex: 50 }}
-                        >
-                            <div className="text-center">
-                                <div className="font-mono text-sm">{table.table_number}</div>
-                                <div className="text-[10px] opacity-70">{table.capacity} pers.</div>
+                    {tables.map((table) => {
+                        const size = getTablePixelSize(table.capacity, table.shape, gridCellSize);
+                        const isSelected = selectedTableId === table.id;
+                        const isDragging = draggingId === table.id;
+
+                        return (
+                            <div
+                                key={table.id}
+                                onMouseDown={(e) => handleMouseDown(e, table.id)}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (!draggingId) onTableSelect(table.id);
+                                }}
+                                className={`absolute flex items-center justify-center font-bold transition-all duration-100 ${
+                                    getShapeClass(table.shape)
+                                } ${
+                                    isSelected
+                                        ? 'bg-[#ff6b00] text-black shadow-lg shadow-[#ff6b00]/40 z-20'
+                                        : 'bg-white/10 text-white border-2 border-white/30 hover:border-[#ff6b00]/50'
+                                } ${
+                                    isDragging
+                                        ? 'cursor-grabbing z-50 scale-105 shadow-2xl'
+                                        : 'cursor-grab hover:scale-102'
+                                }`}
+                                style={{
+                                    left: table.position_x * gridCellSize + (gridCellSize - size.width) / 2,
+                                    top: table.position_y * gridCellSize + (gridCellSize - size.height) / 2,
+                                    width: size.width,
+                                    height: size.height,
+                                }}
+                            >
+                                <div className="text-center select-none pointer-events-none">
+                                    <div className="font-mono text-sm font-bold">{table.table_number}</div>
+                                    <div className={`text-[10px] ${isSelected ? 'text-black/70' : 'text-white/60'}`}>
+                                        {table.capacity}p
+                                    </div>
+                                </div>
                             </div>
-                        </motion.div>
-                    ))}
+                        );
+                    })}
+                </div>
+
+                {/* Legend */}
+                <div className="mt-4 flex items-center gap-6 text-xs text-slate-500 font-mono">
+                    <span>Taille selon capacite:</span>
+                    <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 rounded-full bg-white/10 border border-white/20" />
+                        <span>2p</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 rounded-full bg-white/10 border border-white/20" />
+                        <span>4p</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <div className="w-10 h-10 rounded-full bg-white/10 border border-white/20" />
+                        <span>6-8p</span>
+                    </div>
                 </div>
             </div>
         </div>
