@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Save, Globe, Palette, MessageSquare, Eye, Settings, Users, Clock } from 'lucide-react';
+import { Save, Globe, Palette, MessageSquare, Eye, Settings, Users, Clock, Mail, Plus, X } from 'lucide-react';
 import { useRestaurant } from '@/contexts/restaurant-context';
 import { supabase } from '@/lib/supabase';
 
@@ -22,6 +22,7 @@ interface ReservationSettings {
     display_phone: string | null;
     display_email: string | null;
     display_address: string | null;
+    notification_emails: string[];
 }
 
 const COLOR_PALETTES = [
@@ -49,6 +50,8 @@ export default function SettingsPage() {
     const [maxPartySize, setMaxPartySize] = useState(20);
     const [advanceBookingDays, setAdvanceBookingDays] = useState(30);
     const [minNoticeHours, setMinNoticeHours] = useState(2);
+    const [notificationEmails, setNotificationEmails] = useState<string[]>([]);
+    const [newEmail, setNewEmail] = useState('');
 
     // Design settings
     const [primaryColor, setPrimaryColor] = useState('#ff6b00');
@@ -103,6 +106,7 @@ export default function SettingsPage() {
                 setMaxPartySize(data.max_party_size);
                 setAdvanceBookingDays(data.advance_booking_days);
                 setMinNoticeHours(data.min_notice_hours);
+                setNotificationEmails(data.notification_emails || []);
                 // Design
                 setPrimaryColor(data.primary_color);
                 setSecondaryColor(data.secondary_color);
@@ -140,6 +144,7 @@ export default function SettingsPage() {
                     max_party_size: maxPartySize,
                     advance_booking_days: advanceBookingDays,
                     min_notice_hours: minNoticeHours,
+                    notification_emails: notificationEmails,
                     primary_color: primaryColor,
                     secondary_color: secondaryColor,
                     accent_color: accentColor,
@@ -161,6 +166,7 @@ export default function SettingsPage() {
                 max_party_size: maxPartySize,
                 advance_booking_days: advanceBookingDays,
                 min_notice_hours: minNoticeHours,
+                notification_emails: notificationEmails,
                 primary_color: primaryColor,
                 secondary_color: secondaryColor,
                 accent_color: accentColor,
@@ -360,6 +366,84 @@ export default function SettingsPage() {
                                 />
                             </div>
                         </div>
+                    </motion.div>
+
+                    {/* Notification Emails */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 }}
+                        className="bg-[#0a0a0a] border border-white/10 rounded-xl p-6"
+                    >
+                        <div className="flex items-center gap-3 mb-2">
+                            <Mail className="h-5 w-5 text-[#ff6b00]" />
+                            <h2 className="font-display text-lg font-bold text-white uppercase tracking-wider">
+                                Notifications email
+                            </h2>
+                        </div>
+                        <p className="text-slate-500 text-sm mb-4">
+                            Ces adresses recevront une notification a chaque nouvelle reservation
+                        </p>
+
+                        {/* Liste des emails */}
+                        {notificationEmails.length > 0 && (
+                            <div className="space-y-2 mb-4">
+                                {notificationEmails.map((email, index) => (
+                                    <div
+                                        key={index}
+                                        className="flex items-center justify-between bg-white/5 border border-white/10 rounded-lg px-4 py-3"
+                                    >
+                                        <span className="text-white font-mono text-sm">{email}</span>
+                                        <button
+                                            onClick={() => {
+                                                setNotificationEmails(prev => prev.filter((_, i) => i !== index));
+                                            }}
+                                            className="p-1 text-slate-400 hover:text-red-400 transition-colors"
+                                        >
+                                            <X className="h-4 w-4" />
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
+                        {/* Ajouter un email */}
+                        <div className="flex gap-2">
+                            <input
+                                type="email"
+                                value={newEmail}
+                                onChange={(e) => setNewEmail(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter' && newEmail && newEmail.includes('@')) {
+                                        e.preventDefault();
+                                        if (!notificationEmails.includes(newEmail)) {
+                                            setNotificationEmails(prev => [...prev, newEmail]);
+                                            setNewEmail('');
+                                        }
+                                    }
+                                }}
+                                className="flex-1 bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white font-mono text-sm focus:outline-none focus:ring-2 focus:ring-[#ff6b00]/50"
+                                placeholder="manager@restaurant.fr"
+                            />
+                            <button
+                                onClick={() => {
+                                    if (newEmail && newEmail.includes('@') && !notificationEmails.includes(newEmail)) {
+                                        setNotificationEmails(prev => [...prev, newEmail]);
+                                        setNewEmail('');
+                                    }
+                                }}
+                                disabled={!newEmail || !newEmail.includes('@')}
+                                className="px-4 py-3 bg-[#ff6b00] text-black font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                <Plus className="h-4 w-4" />
+                            </button>
+                        </div>
+
+                        {notificationEmails.length === 0 && (
+                            <p className="text-slate-600 text-xs mt-3 font-mono">
+                                Aucun email configure. Les notifications seront envoyees a l'email du restaurant.
+                            </p>
+                        )}
                     </motion.div>
                 </div>
             )}

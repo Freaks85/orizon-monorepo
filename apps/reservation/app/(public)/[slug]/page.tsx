@@ -207,11 +207,11 @@ export default function PublicBookingPage() {
 
         setSubmitting(true);
         try {
-            const { error } = await supabase
-                .from('reservations')
-                .insert({
-                    restaurant_id: settings.restaurant_id,
-                    service_id: selectedService.id,
+            const response = await fetch('/api/reservations', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    slug,
                     reservation_date: format(selectedDate, 'yyyy-MM-dd'),
                     reservation_time: selectedTime,
                     party_size: partySize,
@@ -219,10 +219,16 @@ export default function PublicBookingPage() {
                     customer_phone: customerPhone,
                     customer_email: customerEmail || null,
                     notes: notes || null,
-                    status: 'pending'
-                });
+                    service_id: selectedService.id
+                })
+            });
 
-            if (error) throw error;
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Erreur lors de la réservation');
+            }
+
             setSuccess(true);
         } catch (err) {
             console.error('Error submitting reservation:', err);

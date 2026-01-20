@@ -20,13 +20,13 @@ export function Footer() {
                 {/* Links */}
                 <nav className="flex items-center gap-6">
                     <Link
-                        href="https://orizonapp.vercel.app"
+                        href="https://orizonsapp.com"
                         className="text-sm text-slate-500 hover:text-slate-400 transition-colors font-mono"
                     >
                         OrizonApp
                     </Link>
                     <Link
-                        href="https://kitchen-orizonapp.vercel.app"
+                        href="https://kitchen.orizonsapp.com"
                         className="text-sm text-slate-500 hover:text-slate-400 transition-colors font-mono"
                     >
                         OrizonKitchen
