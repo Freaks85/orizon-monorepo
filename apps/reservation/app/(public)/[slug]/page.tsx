@@ -288,22 +288,22 @@ export default function PublicBookingPage() {
     return (
         <div className="min-h-screen" style={{ backgroundColor: settings.secondary_color }}>
             {/* Header */}
-            <header className="border-b border-white/10 py-8">
-                <div className="max-w-4xl mx-auto px-6 text-center">
-                    <h1 className="text-4xl font-bold text-white mb-2">{restaurant.name}</h1>
+            <header className="border-b border-white/10 py-6 sm:py-8">
+                <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">{restaurant.name}</h1>
                     {settings.welcome_message && (
-                        <p className="text-slate-400">{settings.welcome_message}</p>
+                        <p className="text-slate-400 text-sm sm:text-base">{settings.welcome_message}</p>
                     )}
-                    <div className="flex justify-center gap-4 mt-4 text-sm text-slate-500">
+                    <div className="flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-4 mt-4 text-xs sm:text-sm text-slate-500">
                         {(settings.display_address || restaurant.address) && (
                             <span className="flex items-center gap-1">
-                                <MapPin className="h-4 w-4" />
-                                {settings.display_address || restaurant.address}
+                                <MapPin className="h-4 w-4 flex-shrink-0" />
+                                <span className="text-center sm:text-left">{settings.display_address || restaurant.address}</span>
                             </span>
                         )}
                         {(settings.display_phone || restaurant.phone) && (
                             <span className="flex items-center gap-1">
-                                <Phone className="h-4 w-4" />
+                                <Phone className="h-4 w-4 flex-shrink-0" />
                                 {settings.display_phone || restaurant.phone}
                             </span>
                         )}
@@ -312,18 +312,18 @@ export default function PublicBookingPage() {
             </header>
 
             {/* Booking Form */}
-            <main className="max-w-2xl mx-auto px-6 py-12">
-                <div className="bg-[#0a0a0a] border border-white/10 rounded-2xl p-8">
-                    <h2 className="text-2xl font-bold text-white mb-6 text-center">
+            <main className="max-w-2xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+                <div className="bg-[#0a0a0a] border border-white/10 rounded-2xl p-4 sm:p-6 md:p-8">
+                    <h2 className="text-xl sm:text-2xl font-bold text-white mb-6 text-center">
                         Réserver une table
                     </h2>
 
                     {/* Progress */}
-                    <div className="flex items-center justify-center gap-2 mb-8">
+                    <div className="flex items-center justify-center gap-2 mb-6 sm:mb-8">
                         {[1, 2, 3].map((s) => (
                             <div
                                 key={s}
-                                className={`h-2 w-16 rounded-full transition-colors ${
+                                className={`h-2 w-12 sm:w-16 rounded-full transition-colors ${
                                     step >= s ? '' : 'bg-white/10'
                                 }`}
                                 style={{
@@ -368,7 +368,7 @@ export default function PublicBookingPage() {
                                 <label className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-3">
                                     Choisir une date
                                 </label>
-                                <div className="grid grid-cols-4 md:grid-cols-7 gap-2">
+                                <div className="grid grid-cols-3 xs:grid-cols-4 md:grid-cols-7 gap-2">
                                     {getAvailableDates().slice(0, 6).map((date) => {
                                         const isSelected = selectedDate && format(date, 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd');
                                         const hasServices = getAvailableServices(date).length > 0;
@@ -503,7 +503,7 @@ export default function PublicBookingPage() {
                                 <label className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-3">
                                     Choisir une heure
                                 </label>
-                                <div className="grid grid-cols-4 gap-2">
+                                <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
                                     {getTimeSlots(selectedService, selectedDate).map((time) => (
                                         <button
                                             key={time}
@@ -523,17 +523,17 @@ export default function PublicBookingPage() {
                                 </div>
                             </div>
 
-                            <div className="flex gap-3">
+                            <div className="flex flex-col sm:flex-row gap-3">
                                 <button
                                     onClick={() => setStep(1)}
-                                    className="flex-1 py-4 bg-white/5 border border-white/10 rounded-lg text-white font-bold uppercase tracking-widest hover:bg-white/10 transition-colors"
+                                    className="flex-1 py-3 sm:py-4 bg-white/5 border border-white/10 rounded-lg text-white font-bold text-xs sm:text-sm uppercase tracking-widest hover:bg-white/10 transition-colors"
                                 >
                                     Retour
                                 </button>
                                 <button
                                     onClick={() => setStep(3)}
                                     disabled={!selectedTime}
-                                    className="flex-1 py-4 rounded-lg font-bold uppercase tracking-widest transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="flex-1 py-3 sm:py-4 rounded-lg font-bold text-xs sm:text-sm uppercase tracking-widest transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                     style={{
                                         backgroundColor: settings.primary_color,
                                         color: settings.secondary_color
@@ -629,17 +629,17 @@ export default function PublicBookingPage() {
                                 </div>
                             </div>
 
-                            <div className="flex gap-3 pt-2">
+                            <div className="flex flex-col sm:flex-row gap-3 pt-2">
                                 <button
                                     onClick={() => setStep(2)}
-                                    className="flex-1 py-4 bg-white/5 border border-white/10 rounded-lg text-white font-bold uppercase tracking-widest hover:bg-white/10 transition-colors"
+                                    className="flex-1 py-3 sm:py-4 bg-white/5 border border-white/10 rounded-lg text-white font-bold text-xs sm:text-sm uppercase tracking-widest hover:bg-white/10 transition-colors"
                                 >
                                     Retour
                                 </button>
                                 <button
                                     onClick={handleSubmit}
                                     disabled={submitting || !customerName || !customerPhone}
-                                    className="flex-1 py-4 rounded-lg font-bold uppercase tracking-widest transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                                    className="flex-1 py-3 sm:py-4 rounded-lg font-bold text-xs sm:text-sm uppercase tracking-widest transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                                     style={{
                                         backgroundColor: settings.primary_color,
                                         color: settings.secondary_color

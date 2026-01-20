@@ -185,7 +185,7 @@ export default function RoomsPage() {
 
                                 <button
                                     onClick={() => handleDeleteRoom(room.id)}
-                                    className="p-2 text-slate-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
+                                    className="p-2 text-slate-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors md:opacity-0 md:group-hover:opacity-100"
                                 >
                                     <Trash2 className="h-4 w-4" />
                                 </button>

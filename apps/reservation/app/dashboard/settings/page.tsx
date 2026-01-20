@@ -381,7 +381,7 @@ export default function SettingsPage() {
                                 </h2>
                             </div>
 
-                            <div className="grid grid-cols-3 gap-3 mb-6">
+                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
                                 {COLOR_PALETTES.map((palette) => (
                                     <button
                                         key={palette.name}
@@ -404,7 +404,7 @@ export default function SettingsPage() {
                                 ))}
                             </div>
 
-                            <div className="grid grid-cols-3 gap-3">
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-3">
                                 <div>
                                     <label className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-2">
                                         Principale
@@ -414,13 +414,13 @@ export default function SettingsPage() {
                                             type="color"
                                             value={primaryColor}
                                             onChange={(e) => setPrimaryColor(e.target.value)}
-                                            className="w-10 h-10 rounded cursor-pointer"
+                                            className="w-10 h-10 rounded cursor-pointer flex-shrink-0"
                                         />
                                         <input
                                             type="text"
                                             value={primaryColor}
                                             onChange={(e) => setPrimaryColor(e.target.value)}
-                                            className="flex-1 bg-white/5 border border-white/10 rounded px-2 py-1 text-white font-mono text-xs"
+                                            className="flex-1 bg-white/5 border border-white/10 rounded px-2 py-2 text-white font-mono text-xs"
                                         />
                                     </div>
                                 </div>
@@ -433,13 +433,13 @@ export default function SettingsPage() {
                                             type="color"
                                             value={secondaryColor}
                                             onChange={(e) => setSecondaryColor(e.target.value)}
-                                            className="w-10 h-10 rounded cursor-pointer"
+                                            className="w-10 h-10 rounded cursor-pointer flex-shrink-0"
                                         />
                                         <input
                                             type="text"
                                             value={secondaryColor}
                                             onChange={(e) => setSecondaryColor(e.target.value)}
-                                            className="flex-1 bg-white/5 border border-white/10 rounded px-2 py-1 text-white font-mono text-xs"
+                                            className="flex-1 bg-white/5 border border-white/10 rounded px-2 py-2 text-white font-mono text-xs"
                                         />
                                     </div>
                                 </div>
@@ -452,13 +452,13 @@ export default function SettingsPage() {
                                             type="color"
                                             value={accentColor}
                                             onChange={(e) => setAccentColor(e.target.value)}
-                                            className="w-10 h-10 rounded cursor-pointer"
+                                            className="w-10 h-10 rounded cursor-pointer flex-shrink-0"
                                         />
                                         <input
                                             type="text"
                                             value={accentColor}
                                             onChange={(e) => setAccentColor(e.target.value)}
-                                            className="flex-1 bg-white/5 border border-white/10 rounded px-2 py-1 text-white font-mono text-xs"
+                                            className="flex-1 bg-white/5 border border-white/10 rounded px-2 py-2 text-white font-mono text-xs"
                                         />
                                     </div>
                                 </div>
@@ -534,7 +534,7 @@ export default function SettingsPage() {
                                         placeholder="123 Rue Example, 75001 Paris"
                                     />
                                 </div>
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
                                         <label className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-2">
                                             Telephone

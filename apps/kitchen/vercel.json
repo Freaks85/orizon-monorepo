@@ -1,5 +1,5 @@
 {
-  "installCommand": "cd ../.. && npm install -g pnpm && pnpm install",
+  "installCommand": "cd ../.. && corepack enable && pnpm install",
   "buildCommand": "cd ../.. && pnpm turbo build --filter=@orizon/kitchen",
   "framework": "nextjs"
 }

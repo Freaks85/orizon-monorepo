@@ -211,43 +211,43 @@ export default function RoomEditorPage() {
     }
 
     return (
-        <div className="h-[calc(100vh-8rem)] flex flex-col">
+        <div className="min-h-[calc(100vh-8rem)] flex flex-col">
             {/* Header */}
-            <div className="flex items-center justify-between gap-4 mb-4">
-                <div className="flex items-center gap-4">
+            <div className="flex items-center justify-between gap-2 sm:gap-4 mb-4">
+                <div className="flex items-center gap-2 sm:gap-4 min-w-0">
                     <Link
                         href="/dashboard/rooms"
-                        className="p-2 text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+                        className="p-2 text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors flex-shrink-0"
                     >
                         <ArrowLeft className="h-5 w-5" />
                     </Link>
-                    <div>
-                        <h1 className="font-display text-xl font-bold text-white uppercase tracking-wider">
+                    <div className="min-w-0">
+                        <h1 className="font-display text-base sm:text-xl font-bold text-white uppercase tracking-wider truncate">
                             {room.name}
                         </h1>
                         <p className="text-slate-500 text-xs font-mono">
-                            {tables.length} table{tables.length !== 1 ? 's' : ''} configurée{tables.length !== 1 ? 's' : ''}
+                            {tables.length} table{tables.length !== 1 ? 's' : ''}
                         </p>
                     </div>
                 </div>
 
                 <button
                     onClick={() => setShowSettings(!showSettings)}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${
+                    className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all flex-shrink-0 ${
                         showSettings
                             ? 'bg-[#ff6b00] text-black'
                             : 'bg-white/5 text-white border border-white/10 hover:bg-white/10'
                     }`}
                 >
                     <Settings2 className="h-4 w-4" />
-                    Paramètres
+                    <span className="hidden sm:inline">Paramètres</span>
                 </button>
             </div>
 
             {/* Main content */}
-            <div className="flex-1 flex gap-4 min-h-0">
+            <div className="flex-1 flex flex-col lg:flex-row gap-4 min-h-0">
                 {/* Grid Editor */}
-                <div className="flex-1 bg-[#0a0a0a] border border-white/10 rounded-xl overflow-hidden">
+                <div className="flex-1 bg-[#0a0a0a] border border-white/10 rounded-xl overflow-hidden min-h-[300px] sm:min-h-[400px]">
                     <GridEditor
                         room={room}
                         tables={tables}
@@ -260,12 +260,12 @@ export default function RoomEditorPage() {
                 </div>
 
                 {/* Side Panel */}
-                <div className="w-80 flex-shrink-0 space-y-4">
+                <div className="w-full lg:w-80 flex-shrink-0 space-y-4">
                     {/* Room Settings */}
                     {showSettings && (
                         <motion.div
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
                             className="bg-[#0a0a0a] border border-white/10 rounded-xl p-4 space-y-4"
                         >
                             <h3 className="font-display text-sm font-bold text-white uppercase tracking-wider">
@@ -338,9 +338,9 @@ export default function RoomEditorPage() {
                         />
                     )}
 
-                    {/* Help */}
+                    {/* Help - hidden on mobile when no table selected */}
                     {!selectedTable && !showSettings && (
-                        <div className="bg-[#0a0a0a] border border-white/10 rounded-xl p-4">
+                        <div className="bg-[#0a0a0a] border border-white/10 rounded-xl p-4 hidden lg:block">
                             <h3 className="font-display text-sm font-bold text-white uppercase tracking-wider mb-3">
                                 Aide
                             </h3>

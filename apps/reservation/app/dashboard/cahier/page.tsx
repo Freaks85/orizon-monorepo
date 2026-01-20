@@ -262,15 +262,15 @@ export default function CahierPage() {
             </div>
 
             {/* Filters */}
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3">
                 {/* Room selector */}
                 {rooms.length > 1 && (
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 overflow-x-auto pb-2 sm:pb-0 -mx-4 px-4 sm:mx-0 sm:px-0">
                         {rooms.map(room => (
                             <button
                                 key={room.id}
                                 onClick={() => setSelectedRoom(room.id)}
-                                className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
+                                className={`px-3 sm:px-4 py-2 rounded-lg text-[10px] sm:text-xs font-bold uppercase tracking-wider transition-all whitespace-nowrap flex-shrink-0 ${
                                     selectedRoom === room.id
                                         ? 'bg-[#ff6b00] text-black'
                                         : 'bg-[#0a0a0a] border border-white/10 text-slate-400 hover:text-white'
@@ -283,12 +283,12 @@ export default function CahierPage() {
                 )}
 
                 {/* Service selector */}
-                <div className="flex gap-2 ml-auto">
+                <div className="flex gap-2 sm:ml-auto overflow-x-auto pb-2 sm:pb-0 -mx-4 px-4 sm:mx-0 sm:px-0">
                     {services.map(service => (
                         <button
                             key={service.id}
                             onClick={() => setSelectedService(service.id)}
-                            className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
+                            className={`px-3 sm:px-4 py-2 rounded-lg text-[10px] sm:text-xs font-bold uppercase tracking-wider transition-all whitespace-nowrap flex-shrink-0 ${
                                 selectedService === service.id
                                     ? 'bg-white text-black'
                                     : 'bg-[#0a0a0a] border border-white/10 text-slate-400 hover:text-white'
@@ -402,48 +402,94 @@ export default function CahierPage() {
                         {filteredReservations.map(reservation => (
                             <div
                                 key={reservation.id}
-                                className="px-4 py-3 flex items-center justify-between hover:bg-white/5 transition-colors"
+                                className="px-3 sm:px-4 py-3 hover:bg-white/5 transition-colors"
                             >
-                                <div className="flex items-center gap-4">
-                                    <span className="font-mono text-lg text-[#ff6b00] font-bold min-w-[50px]">
-                                        {reservation.reservation_time.slice(0, 5)}
-                                    </span>
-                                    <div className="w-px h-8 bg-white/10" />
-                                    <div>
-                                        <div className="flex items-center gap-2">
-                                            <span className="text-white font-bold">{reservation.customer_name}</span>
-                                            <span className="flex items-center gap-1 px-2 py-0.5 bg-white/10 rounded text-xs font-mono text-white">
-                                                <Users className="h-3 w-3" />
-                                                {reservation.party_size}
+                                {/* Mobile Layout */}
+                                <div className="sm:hidden">
+                                    <div className="flex items-start justify-between mb-2">
+                                        <div className="flex items-center gap-3">
+                                            <span className="font-mono text-lg text-[#ff6b00] font-bold">
+                                                {reservation.reservation_time.slice(0, 5)}
                                             </span>
-                                            {reservation.tables?.table_number && (
-                                                <span className="flex items-center gap-1 px-2 py-0.5 bg-[#ff6b00]/10 text-[#ff6b00] rounded text-xs font-mono font-bold">
-                                                    <MapPin className="h-3 w-3" />
-                                                    {reservation.tables.table_number}
-                                                </span>
-                                            )}
-                                        </div>
-                                        <div className="flex items-center gap-2 text-xs text-slate-500 font-mono mt-1">
-                                            <Phone className="h-3 w-3" />
-                                            {reservation.customer_phone}
+                                            <div className="w-px h-8 bg-white/10" />
+                                            <div>
+                                                <span className="text-white font-bold text-sm">{reservation.customer_name}</span>
+                                                <div className="flex items-center gap-2 mt-1">
+                                                    <span className="flex items-center gap-1 px-1.5 py-0.5 bg-white/10 rounded text-[10px] font-mono text-white">
+                                                        <Users className="h-2.5 w-2.5" />
+                                                        {reservation.party_size}
+                                                    </span>
+                                                    {reservation.tables?.table_number && (
+                                                        <span className="flex items-center gap-1 px-1.5 py-0.5 bg-[#ff6b00]/10 text-[#ff6b00] rounded text-[10px] font-mono font-bold">
+                                                            <MapPin className="h-2.5 w-2.5" />
+                                                            {reservation.tables.table_number}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
+                                    <div className="flex items-center gap-2 mt-3">
+                                        <button
+                                            onClick={() => handleStatusChange(reservation.id, 'completed')}
+                                            className="flex-1 flex items-center justify-center gap-1.5 px-2 py-2 bg-emerald-500/10 text-emerald-500 rounded-lg hover:bg-emerald-500/20 transition-colors font-bold text-[10px] uppercase tracking-wider"
+                                        >
+                                            <UserCheck className="h-3.5 w-3.5" />
+                                            Arrive
+                                        </button>
+                                        <button
+                                            onClick={() => handleStatusChange(reservation.id, 'cancelled')}
+                                            className="flex-1 flex items-center justify-center gap-1.5 px-2 py-2 bg-red-500/10 text-red-500 rounded-lg hover:bg-red-500/20 transition-colors font-bold text-[10px] uppercase tracking-wider"
+                                        >
+                                            <X className="h-3.5 w-3.5" />
+                                            Annuler
+                                        </button>
+                                    </div>
                                 </div>
-                                <div className="flex items-center gap-2">
-                                    <button
-                                        onClick={() => handleStatusChange(reservation.id, 'completed')}
-                                        className="flex items-center gap-2 px-3 py-2 bg-emerald-500/10 text-emerald-500 rounded-lg hover:bg-emerald-500/20 transition-colors font-bold text-xs uppercase tracking-wider"
-                                    >
-                                        <UserCheck className="h-4 w-4" />
-                                        Arrive
-                                    </button>
-                                    <button
-                                        onClick={() => handleStatusChange(reservation.id, 'cancelled')}
-                                        className="flex items-center gap-2 px-3 py-2 bg-red-500/10 text-red-500 rounded-lg hover:bg-red-500/20 transition-colors font-bold text-xs uppercase tracking-wider"
-                                    >
-                                        <X className="h-4 w-4" />
-                                        Annuler
-                                    </button>
+
+                                {/* Desktop Layout */}
+                                <div className="hidden sm:flex items-center justify-between">
+                                    <div className="flex items-center gap-4">
+                                        <span className="font-mono text-lg text-[#ff6b00] font-bold min-w-[50px]">
+                                            {reservation.reservation_time.slice(0, 5)}
+                                        </span>
+                                        <div className="w-px h-8 bg-white/10" />
+                                        <div>
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-white font-bold">{reservation.customer_name}</span>
+                                                <span className="flex items-center gap-1 px-2 py-0.5 bg-white/10 rounded text-xs font-mono text-white">
+                                                    <Users className="h-3 w-3" />
+                                                    {reservation.party_size}
+                                                </span>
+                                                {reservation.tables?.table_number && (
+                                                    <span className="flex items-center gap-1 px-2 py-0.5 bg-[#ff6b00]/10 text-[#ff6b00] rounded text-xs font-mono font-bold">
+                                                        <MapPin className="h-3 w-3" />
+                                                        {reservation.tables.table_number}
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <div className="flex items-center gap-2 text-xs text-slate-500 font-mono mt-1">
+                                                <Phone className="h-3 w-3" />
+                                                {reservation.customer_phone}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <button
+                                            onClick={() => handleStatusChange(reservation.id, 'completed')}
+                                            className="flex items-center gap-2 px-3 py-2 bg-emerald-500/10 text-emerald-500 rounded-lg hover:bg-emerald-500/20 transition-colors font-bold text-xs uppercase tracking-wider"
+                                        >
+                                            <UserCheck className="h-4 w-4" />
+                                            Arrive
+                                        </button>
+                                        <button
+                                            onClick={() => handleStatusChange(reservation.id, 'cancelled')}
+                                            className="flex items-center gap-2 px-3 py-2 bg-red-500/10 text-red-500 rounded-lg hover:bg-red-500/20 transition-colors font-bold text-xs uppercase tracking-wider"
+                                        >
+                                            <X className="h-4 w-4" />
+                                            Annuler
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         ))}

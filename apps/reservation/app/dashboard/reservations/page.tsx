@@ -231,117 +231,210 @@ export default function ReservationsListPage() {
 
             {/* Reservations List */}
             {filteredReservations.length === 0 ? (
-                <div className="bg-[#0a0a0a] border border-white/10 p-12 rounded-xl text-center">
-                    <Calendar className="h-12 w-12 text-slate-600 mx-auto mb-4" />
-                    <p className="text-slate-500 font-mono">Aucune reservation trouvee</p>
+                <div className="bg-[#0a0a0a] border border-white/10 p-8 sm:p-12 rounded-xl text-center">
+                    <Calendar className="h-10 w-10 sm:h-12 sm:w-12 text-slate-600 mx-auto mb-4" />
+                    <p className="text-slate-500 font-mono text-sm">Aucune reservation trouvee</p>
                 </div>
             ) : (
-                <div className="bg-[#0a0a0a] border border-white/10 rounded-xl overflow-hidden">
-                    <table className="w-full">
-                        <thead>
-                            <tr className="border-b border-white/10">
-                                <th className="text-left px-4 py-3 text-xs font-mono uppercase tracking-wider text-slate-500">Date</th>
-                                <th className="text-left px-4 py-3 text-xs font-mono uppercase tracking-wider text-slate-500">Heure</th>
-                                <th className="text-left px-4 py-3 text-xs font-mono uppercase tracking-wider text-slate-500">Client</th>
-                                <th className="text-left px-4 py-3 text-xs font-mono uppercase tracking-wider text-slate-500">Couverts</th>
-                                <th className="text-left px-4 py-3 text-xs font-mono uppercase tracking-wider text-slate-500">Service</th>
-                                <th className="text-left px-4 py-3 text-xs font-mono uppercase tracking-wider text-slate-500">Table</th>
-                                <th className="text-left px-4 py-3 text-xs font-mono uppercase tracking-wider text-slate-500">Statut</th>
-                                <th className="text-right px-4 py-3 text-xs font-mono uppercase tracking-wider text-slate-500">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {filteredReservations.map((reservation, index) => (
-                                <motion.tr
-                                    key={reservation.id}
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    transition={{ delay: index * 0.02 }}
-                                    className="border-b border-white/5 hover:bg-white/5 transition-colors"
-                                >
-                                    <td className="px-4 py-4">
-                                        <span className="text-white font-mono text-sm">
-                                            {format(new Date(reservation.reservation_date), 'dd/MM/yyyy')}
-                                        </span>
-                                    </td>
-                                    <td className="px-4 py-4">
-                                        <span className="text-[#ff6b00] font-mono text-sm font-bold">
-                                            {reservation.reservation_time.slice(0, 5)}
-                                        </span>
-                                    </td>
-                                    <td className="px-4 py-4">
+                <>
+                    {/* Mobile: Card View */}
+                    <div className="md:hidden space-y-3">
+                        {filteredReservations.map((reservation, index) => (
+                            <motion.div
+                                key={reservation.id}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: index * 0.02 }}
+                                className="bg-[#0a0a0a] border border-white/10 rounded-xl p-4"
+                            >
+                                <div className="flex items-start justify-between mb-3">
+                                    <div className="flex items-center gap-3">
+                                        <div className="text-center">
+                                            <p className="text-[#ff6b00] font-mono text-lg font-bold">{reservation.reservation_time.slice(0, 5)}</p>
+                                            <p className="text-slate-500 font-mono text-xs">{format(new Date(reservation.reservation_date), 'dd/MM')}</p>
+                                        </div>
+                                        <div className="w-px h-10 bg-white/10" />
                                         <div>
-                                            <p className="text-white font-bold text-sm">{reservation.customer_name}</p>
+                                            <p className="text-white font-bold">{reservation.customer_name}</p>
                                             <p className="text-slate-500 text-xs font-mono">{reservation.customer_phone}</p>
                                         </div>
-                                    </td>
-                                    <td className="px-4 py-4">
-                                        <span className="text-slate-400 font-mono text-sm">
-                                            {reservation.party_size} pers.
+                                    </div>
+                                    <span className={`px-2 py-1 rounded-full text-[10px] font-mono uppercase ${getStatusBadge(reservation.status)}`}>
+                                        {getStatusLabel(reservation.status)}
+                                    </span>
+                                </div>
+
+                                <div className="flex items-center gap-2 flex-wrap mb-3">
+                                    <span className="flex items-center gap-1 px-2 py-1 bg-white/5 rounded text-xs font-mono text-slate-400">
+                                        <Users className="h-3 w-3" />
+                                        {reservation.party_size} pers.
+                                    </span>
+                                    {reservation.services?.name && (
+                                        <span className="flex items-center gap-1 px-2 py-1 bg-white/5 rounded text-xs font-mono text-slate-400">
+                                            <Clock className="h-3 w-3" />
+                                            {reservation.services.name}
                                         </span>
-                                    </td>
-                                    <td className="px-4 py-4">
-                                        <span className="text-slate-400 text-sm">
-                                            {reservation.services?.name || '-'}
+                                    )}
+                                    {reservation.table_id ? (
+                                        <span className="flex items-center gap-1 px-2 py-1 bg-[#ff6b00]/10 border border-[#ff6b00]/30 rounded text-[#ff6b00] text-xs font-mono font-bold">
+                                            <Table2 className="h-3 w-3" />
+                                            {reservation.tables?.table_number}
                                         </span>
-                                    </td>
-                                    <td className="px-4 py-4">
-                                        {reservation.table_id ? (
-                                            <span className="flex items-center gap-1.5 px-2 py-1 bg-[#ff6b00]/10 border border-[#ff6b00]/30 rounded text-[#ff6b00] text-xs font-mono font-bold w-fit">
-                                                <Table2 className="h-3 w-3" />
-                                                {reservation.tables?.table_number}
+                                    ) : (
+                                        <button
+                                            onClick={() => {
+                                                setSelectedReservation(reservation);
+                                                setShowTableModal(true);
+                                            }}
+                                            className="flex items-center gap-1 px-2 py-1 bg-white/5 border border-white/10 rounded text-slate-400 text-xs font-mono hover:border-[#ff6b00]/30 hover:text-[#ff6b00] transition-all"
+                                        >
+                                            <Table2 className="h-3 w-3" />
+                                            Placer
+                                        </button>
+                                    )}
+                                </div>
+
+                                {/* Actions */}
+                                <div className="flex gap-2 pt-3 border-t border-white/10">
+                                    {reservation.status === 'pending' && (
+                                        <>
+                                            <button
+                                                onClick={() => handleStatusChange(reservation.id, 'confirmed')}
+                                                className="flex-1 flex items-center justify-center gap-2 py-2 bg-[#ff6b00]/10 text-[#ff6b00] rounded-lg hover:bg-[#ff6b00]/20 transition-colors text-xs font-bold uppercase"
+                                            >
+                                                <Check className="h-4 w-4" />
+                                                Confirmer
+                                            </button>
+                                            <button
+                                                onClick={() => handleStatusChange(reservation.id, 'cancelled')}
+                                                className="flex-1 flex items-center justify-center gap-2 py-2 bg-red-500/10 text-red-500 rounded-lg hover:bg-red-500/20 transition-colors text-xs font-bold uppercase"
+                                            >
+                                                <X className="h-4 w-4" />
+                                                Annuler
+                                            </button>
+                                        </>
+                                    )}
+                                    {reservation.status === 'confirmed' && (
+                                        <button
+                                            onClick={() => handleStatusChange(reservation.id, 'completed')}
+                                            className="flex-1 py-2 bg-blue-500/10 text-blue-400 rounded-lg text-xs font-mono uppercase hover:bg-blue-500/20 transition-colors"
+                                        >
+                                            Marquer termine
+                                        </button>
+                                    )}
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
+
+                    {/* Desktop: Table View */}
+                    <div className="hidden md:block bg-[#0a0a0a] border border-white/10 rounded-xl overflow-hidden">
+                        <table className="w-full">
+                            <thead>
+                                <tr className="border-b border-white/10">
+                                    <th className="text-left px-4 py-3 text-xs font-mono uppercase tracking-wider text-slate-500">Date</th>
+                                    <th className="text-left px-4 py-3 text-xs font-mono uppercase tracking-wider text-slate-500">Heure</th>
+                                    <th className="text-left px-4 py-3 text-xs font-mono uppercase tracking-wider text-slate-500">Client</th>
+                                    <th className="text-left px-4 py-3 text-xs font-mono uppercase tracking-wider text-slate-500">Couverts</th>
+                                    <th className="text-left px-4 py-3 text-xs font-mono uppercase tracking-wider text-slate-500">Service</th>
+                                    <th className="text-left px-4 py-3 text-xs font-mono uppercase tracking-wider text-slate-500">Table</th>
+                                    <th className="text-left px-4 py-3 text-xs font-mono uppercase tracking-wider text-slate-500">Statut</th>
+                                    <th className="text-right px-4 py-3 text-xs font-mono uppercase tracking-wider text-slate-500">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {filteredReservations.map((reservation, index) => (
+                                    <motion.tr
+                                        key={reservation.id}
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        transition={{ delay: index * 0.02 }}
+                                        className="border-b border-white/5 hover:bg-white/5 transition-colors"
+                                    >
+                                        <td className="px-4 py-4">
+                                            <span className="text-white font-mono text-sm">
+                                                {format(new Date(reservation.reservation_date), 'dd/MM/yyyy')}
                                             </span>
-                                        ) : (
-                                            <button
-                                                onClick={() => {
-                                                    setSelectedReservation(reservation);
-                                                    setShowTableModal(true);
-                                                }}
-                                                className="flex items-center gap-1.5 px-2 py-1 bg-white/5 border border-white/10 rounded text-slate-400 text-xs font-mono hover:border-[#ff6b00]/30 hover:text-[#ff6b00] transition-all"
-                                            >
-                                                <Table2 className="h-3 w-3" />
-                                                Placer
-                                            </button>
-                                        )}
-                                    </td>
-                                    <td className="px-4 py-4">
-                                        <span className={`px-2 py-1 rounded-full text-[10px] font-mono uppercase ${getStatusBadge(reservation.status)}`}>
-                                            {getStatusLabel(reservation.status)}
-                                        </span>
-                                    </td>
-                                    <td className="px-4 py-4 text-right">
-                                        {reservation.status === 'pending' && (
-                                            <div className="flex items-center justify-end gap-2">
-                                                <button
-                                                    onClick={() => handleStatusChange(reservation.id, 'confirmed')}
-                                                    className="p-2 bg-[#ff6b00]/10 text-[#ff6b00] rounded-lg hover:bg-[#ff6b00]/20 transition-colors"
-                                                    title="Confirmer"
-                                                >
-                                                    <Check className="h-4 w-4" />
-                                                </button>
-                                                <button
-                                                    onClick={() => handleStatusChange(reservation.id, 'cancelled')}
-                                                    className="p-2 bg-red-500/10 text-red-500 rounded-lg hover:bg-red-500/20 transition-colors"
-                                                    title="Annuler"
-                                                >
-                                                    <X className="h-4 w-4" />
-                                                </button>
+                                        </td>
+                                        <td className="px-4 py-4">
+                                            <span className="text-[#ff6b00] font-mono text-sm font-bold">
+                                                {reservation.reservation_time.slice(0, 5)}
+                                            </span>
+                                        </td>
+                                        <td className="px-4 py-4">
+                                            <div>
+                                                <p className="text-white font-bold text-sm">{reservation.customer_name}</p>
+                                                <p className="text-slate-500 text-xs font-mono">{reservation.customer_phone}</p>
                                             </div>
-                                        )}
-                                        {reservation.status === 'confirmed' && (
-                                            <button
-                                                onClick={() => handleStatusChange(reservation.id, 'completed')}
-                                                className="px-3 py-1.5 bg-blue-500/10 text-blue-400 rounded-lg text-xs font-mono uppercase hover:bg-blue-500/20 transition-colors"
-                                            >
-                                                Terminer
-                                            </button>
-                                        )}
-                                    </td>
-                                </motion.tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+                                        </td>
+                                        <td className="px-4 py-4">
+                                            <span className="text-slate-400 font-mono text-sm">
+                                                {reservation.party_size} pers.
+                                            </span>
+                                        </td>
+                                        <td className="px-4 py-4">
+                                            <span className="text-slate-400 text-sm">
+                                                {reservation.services?.name || '-'}
+                                            </span>
+                                        </td>
+                                        <td className="px-4 py-4">
+                                            {reservation.table_id ? (
+                                                <span className="flex items-center gap-1.5 px-2 py-1 bg-[#ff6b00]/10 border border-[#ff6b00]/30 rounded text-[#ff6b00] text-xs font-mono font-bold w-fit">
+                                                    <Table2 className="h-3 w-3" />
+                                                    {reservation.tables?.table_number}
+                                                </span>
+                                            ) : (
+                                                <button
+                                                    onClick={() => {
+                                                        setSelectedReservation(reservation);
+                                                        setShowTableModal(true);
+                                                    }}
+                                                    className="flex items-center gap-1.5 px-2 py-1 bg-white/5 border border-white/10 rounded text-slate-400 text-xs font-mono hover:border-[#ff6b00]/30 hover:text-[#ff6b00] transition-all"
+                                                >
+                                                    <Table2 className="h-3 w-3" />
+                                                    Placer
+                                                </button>
+                                            )}
+                                        </td>
+                                        <td className="px-4 py-4">
+                                            <span className={`px-2 py-1 rounded-full text-[10px] font-mono uppercase ${getStatusBadge(reservation.status)}`}>
+                                                {getStatusLabel(reservation.status)}
+                                            </span>
+                                        </td>
+                                        <td className="px-4 py-4 text-right">
+                                            {reservation.status === 'pending' && (
+                                                <div className="flex items-center justify-end gap-2">
+                                                    <button
+                                                        onClick={() => handleStatusChange(reservation.id, 'confirmed')}
+                                                        className="p-2 bg-[#ff6b00]/10 text-[#ff6b00] rounded-lg hover:bg-[#ff6b00]/20 transition-colors"
+                                                        title="Confirmer"
+                                                    >
+                                                        <Check className="h-4 w-4" />
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleStatusChange(reservation.id, 'cancelled')}
+                                                        className="p-2 bg-red-500/10 text-red-500 rounded-lg hover:bg-red-500/20 transition-colors"
+                                                        title="Annuler"
+                                                    >
+                                                        <X className="h-4 w-4" />
+                                                    </button>
+                                                </div>
+                                            )}
+                                            {reservation.status === 'confirmed' && (
+                                                <button
+                                                    onClick={() => handleStatusChange(reservation.id, 'completed')}
+                                                    className="px-3 py-1.5 bg-blue-500/10 text-blue-400 rounded-lg text-xs font-mono uppercase hover:bg-blue-500/20 transition-colors"
+                                                >
+                                                    Terminer
+                                                </button>
+                                            )}
+                                        </td>
+                                    </motion.tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </>
             )}
 
             {/* Table Assignment Modal */}
