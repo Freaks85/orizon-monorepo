@@ -64,8 +64,7 @@ export default function ReservationsListPage() {
                         tables (table_number)
                     `)
                     .eq('restaurant_id', restaurant.id)
-                    .order('reservation_date', { ascending: false })
-                    .order('reservation_time', { ascending: true }),
+                    .order('created_at', { ascending: false }),
                 supabase
                     .from('tables')
                     .select('*, rooms(name)')
@@ -85,12 +84,25 @@ export default function ReservationsListPage() {
 
     const handleStatusChange = async (reservationId: string, status: Reservation['status']) => {
         try {
-            const { error } = await supabase
-                .from('reservations')
-                .update({ status })
-                .eq('id', reservationId);
+            // For confirmation, use the API that sends the email
+            if (status === 'confirmed') {
+                const response = await fetch(`/api/reservations/${reservationId}/confirm`, {
+                    method: 'POST',
+                });
 
-            if (error) throw error;
+                if (!response.ok) {
+                    const data = await response.json();
+                    throw new Error(data.error || 'Failed to confirm reservation');
+                }
+            } else {
+                // For other status changes, update directly
+                const { error } = await supabase
+                    .from('reservations')
+                    .update({ status })
+                    .eq('id', reservationId);
+
+                if (error) throw error;
+            }
 
             setReservations(reservations.map(r =>
                 r.id === reservationId ? { ...r, status } : r

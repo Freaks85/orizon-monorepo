@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { resend, getFromEmail } from '@/lib/resend';
-import { ReservationConfirmationEmail } from '@/lib/email-templates/reservation-confirmation';
 import { NewReservationNotificationEmail } from '@/lib/email-templates/new-reservation-notification';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
@@ -114,38 +113,10 @@ export async function POST(request: NextRequest) {
         const fromEmail = getFromEmail(body.slug);
         const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://reservation.orizonsapp.com'}/dashboard/cahier`;
 
-        // Send emails if Resend is configured
+        // Send notification emails to staff if Resend is configured
+        // Note: Customer confirmation email is sent when reservation is confirmed from dashboard
         if (resend) {
             try {
-                // Email to customer (if email provided)
-                if (body.customer_email) {
-                    await resend.emails.send({
-                        from: `${restaurant.name} <${fromEmail}>`,
-                        to: body.customer_email,
-                        subject: `Confirmation de réservation - ${restaurant.name}`,
-                        react: ReservationConfirmationEmail({
-                            customerName: body.customer_name,
-                            restaurantName: restaurant.name,
-                            reservationDate: formattedDate,
-                            reservationTime: body.reservation_time,
-                            partySize: body.party_size,
-                            serviceName: service.name,
-                            confirmationMessage: settings.confirmation_message,
-                            restaurantPhone: settings.display_phone || restaurant.phone,
-                            restaurantEmail: settings.display_email || restaurant.email,
-                            restaurantAddress: settings.display_address || restaurant.address,
-                            // Couleurs personnalisées du restaurant
-                            primaryColor: settings.primary_color,
-                            secondaryColor: settings.secondary_color,
-                            accentColor: settings.accent_color,
-                        }),
-                    });
-                    console.log(`Confirmation email sent to ${body.customer_email}`);
-
-                    // Delay to respect Resend rate limit (1 email/second)
-                    await delay(1100);
-                }
-
                 // Get notification emails (from settings or fallback to restaurant email)
                 const notificationEmails: string[] = settings.notification_emails?.length > 0
                     ? settings.notification_emails
