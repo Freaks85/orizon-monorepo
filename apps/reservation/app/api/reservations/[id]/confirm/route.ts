@@ -132,7 +132,8 @@ export async function POST(
                     console.error('Queue error:', err);
                     resolve({ success: false, error: 'Queue processing error' });
                     return delay(1100);
-                });
+                })
+                .then(() => {});
         });
 
         if (!result.success) {
