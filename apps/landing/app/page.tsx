@@ -212,7 +212,7 @@ export default function HomePage() {
                         </span>
                     </div>
                     <p className="text-slate-500 text-sm font-mono">
-                        © 2024 OrizonApp. Tous droits réservés.
+                        © 2026 OrizonApp. Tous droits réservés.
                     </p>
                 </div>
             </footer>

@@ -37,7 +37,7 @@ export const Footer = () => {
                 </div>
 
                 <div className="mt-24 pt-8 border-t border-white/10 flex justify-between items-center">
-                    <p className="font-mono text-[10px] text-slate-600 uppercase">© 2025 OrizonKitchen Defense Systems.</p>
+                    <p className="font-mono text-[10px] text-slate-600 uppercase">© 2026 OrizonKitchen Defense Systems.</p>
                     <div className="flex gap-4">
                         <div className="h-1 w-1 bg-neon-green rounded-full"></div>
                         <div className="h-1 w-1 bg-neon-green rounded-full opacity-50"></div>

@@ -35,7 +35,7 @@ export function Footer() {
 
                 {/* Copyright */}
                 <p className="text-slate-500 text-sm font-mono">
-                    © 2024 OrizonApp. Tous droits reserves.
+                    © 2026 OrizonApp. Tous droits reserves.
                 </p>
             </div>
         </footer>
