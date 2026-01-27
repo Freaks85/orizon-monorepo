@@ -293,9 +293,9 @@ export default function ServicesPage() {
                             initial={{ opacity: 0, scale: 0.95, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                            className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-md mx-4"
+                            className="fixed left-4 right-4 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 top-1/2 -translate-y-1/2 z-50 sm:w-full sm:max-w-md"
                         >
-                            <div className="bg-[#0a0a0a] border border-white/10 rounded-2xl p-6">
+                            <div className="bg-[#0a0a0a] border border-white/10 rounded-2xl p-4 sm:p-6">
                                 <h2 className="font-display text-xl font-bold text-white uppercase tracking-wider mb-6">
                                     {editingService ? 'Modifier le service' : 'Nouveau service'}
                                 </h2>

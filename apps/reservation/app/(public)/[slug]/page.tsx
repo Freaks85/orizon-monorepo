@@ -274,15 +274,15 @@ export default function PublicBookingPage() {
                     >
                         <Check className="h-10 w-10" style={{ color: settings.primary_color }} />
                     </div>
-                    <h1 className="text-3xl font-bold text-white mb-4">Réservation envoyée !</h1>
-                    <p className="text-slate-400 mb-2">
+                    <h1 className="text-3xl font-bold mb-4" style={{ color: settings.accent_color }}>Réservation envoyée !</h1>
+                    <p className="mb-2" style={{ color: `${settings.accent_color}99` }}>
                         Merci {customerName}, votre demande de réservation a bien été reçue.
                     </p>
-                    <p className="text-slate-500 text-sm">
+                    <p className="text-sm" style={{ color: `${settings.accent_color}70` }}>
                         {format(selectedDate!, 'EEEE d MMMM yyyy', { locale: fr })} à {selectedTime} pour {partySize} personne{partySize > 1 ? 's' : ''}
                     </p>
                     {settings.confirmation_message && (
-                        <p className="text-slate-400 mt-6 text-sm italic">
+                        <p className="mt-6 text-sm italic" style={{ color: `${settings.accent_color}99` }}>
                             {settings.confirmation_message}
                         </p>
                     )}
@@ -294,13 +294,13 @@ export default function PublicBookingPage() {
     return (
         <div className="min-h-screen" style={{ backgroundColor: settings.secondary_color }}>
             {/* Header */}
-            <header className="border-b border-white/10 py-6 sm:py-8">
+            <header className="py-6 sm:py-8" style={{ borderBottom: `1px solid ${settings.accent_color}15` }}>
                 <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">{restaurant.name}</h1>
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2" style={{ color: settings.accent_color }}>{restaurant.name}</h1>
                     {settings.welcome_message && (
-                        <p className="text-slate-400 text-sm sm:text-base">{settings.welcome_message}</p>
+                        <p className="text-sm sm:text-base" style={{ color: `${settings.accent_color}80` }}>{settings.welcome_message}</p>
                     )}
-                    <div className="flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-4 mt-4 text-xs sm:text-sm text-slate-500">
+                    <div className="flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-4 mt-4 text-xs sm:text-sm" style={{ color: `${settings.accent_color}60` }}>
                         {(settings.display_address || restaurant.address) && (
                             <span className="flex items-center gap-1">
                                 <MapPin className="h-4 w-4 flex-shrink-0" />
@@ -319,8 +319,14 @@ export default function PublicBookingPage() {
 
             {/* Booking Form */}
             <main className="max-w-2xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
-                <div className="bg-[#0a0a0a] border border-white/10 rounded-2xl p-4 sm:p-6 md:p-8">
-                    <h2 className="text-xl sm:text-2xl font-bold text-white mb-6 text-center">
+                <div
+                    className="rounded-2xl p-4 sm:p-6 md:p-8 border"
+                    style={{
+                        backgroundColor: `${settings.primary_color}08`,
+                        borderColor: `${settings.accent_color}15`
+                    }}
+                >
+                    <h2 className="text-xl sm:text-2xl font-bold mb-6 text-center" style={{ color: settings.accent_color }}>
                         Réserver une table
                     </h2>
 
@@ -329,11 +335,9 @@ export default function PublicBookingPage() {
                         {[1, 2, 3].map((s) => (
                             <div
                                 key={s}
-                                className={`h-2 w-12 sm:w-16 rounded-full transition-colors ${
-                                    step >= s ? '' : 'bg-white/10'
-                                }`}
+                                className="h-2 w-12 sm:w-16 rounded-full transition-colors"
                                 style={{
-                                    backgroundColor: step >= s ? settings.primary_color : undefined
+                                    backgroundColor: step >= s ? settings.primary_color : `${settings.accent_color}15`
                                 }}
                             />
                         ))}
@@ -347,23 +351,33 @@ export default function PublicBookingPage() {
                             className="space-y-6"
                         >
                             <div>
-                                <label className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-3">
+                                <label className="block text-xs font-mono uppercase tracking-wider mb-3" style={{ color: `${settings.accent_color}99` }}>
                                     Nombre de personnes
                                 </label>
                                 <div className="flex items-center gap-3">
                                     <button
                                         onClick={() => setPartySize(Math.max(settings.min_party_size, partySize - 1))}
-                                        className="w-12 h-12 bg-white/5 border border-white/10 rounded-lg text-white hover:bg-white/10 transition-colors font-bold text-xl"
+                                        className="w-12 h-12 rounded-lg transition-colors font-bold text-xl border"
+                                        style={{
+                                            backgroundColor: `${settings.accent_color}10`,
+                                            borderColor: `${settings.accent_color}20`,
+                                            color: settings.accent_color
+                                        }}
                                     >
                                         -
                                     </button>
                                     <div className="flex-1 text-center">
-                                        <span className="text-3xl font-bold text-white">{partySize}</span>
-                                        <span className="text-slate-500 ml-2">personne{partySize > 1 ? 's' : ''}</span>
+                                        <span className="text-3xl font-bold" style={{ color: settings.accent_color }}>{partySize}</span>
+                                        <span className="ml-2" style={{ color: `${settings.accent_color}60` }}>personne{partySize > 1 ? 's' : ''}</span>
                                     </div>
                                     <button
                                         onClick={() => setPartySize(Math.min(settings.max_party_size, partySize + 1))}
-                                        className="w-12 h-12 bg-white/5 border border-white/10 rounded-lg text-white hover:bg-white/10 transition-colors font-bold text-xl"
+                                        className="w-12 h-12 rounded-lg transition-colors font-bold text-xl border"
+                                        style={{
+                                            backgroundColor: `${settings.accent_color}10`,
+                                            borderColor: `${settings.accent_color}20`,
+                                            color: settings.accent_color
+                                        }}
                                     >
                                         +
                                     </button>
@@ -371,10 +385,10 @@ export default function PublicBookingPage() {
                             </div>
 
                             <div>
-                                <label className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-3">
+                                <label className="block text-xs font-mono uppercase tracking-wider mb-3" style={{ color: `${settings.accent_color}99` }}>
                                     Choisir une date
                                 </label>
-                                <div className="grid grid-cols-3 xs:grid-cols-4 md:grid-cols-7 gap-2">
+                                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-2">
                                     {getAvailableDates().slice(0, 6).map((date) => {
                                         const isSelected = selectedDate && format(date, 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd');
                                         const hasServices = getAvailableServices(date).length > 0;
@@ -388,14 +402,11 @@ export default function PublicBookingPage() {
                                                 }}
                                                 disabled={!hasServices}
                                                 className={`p-3 rounded-lg text-center transition-all ${
-                                                    isSelected
-                                                        ? 'text-black'
-                                                        : hasServices
-                                                        ? 'bg-white/5 text-white hover:bg-white/10'
-                                                        : 'bg-white/5 text-slate-600 cursor-not-allowed'
+                                                    !hasServices && !isSelected ? 'cursor-not-allowed opacity-40' : ''
                                                 }`}
                                                 style={{
-                                                    backgroundColor: isSelected ? settings.primary_color : undefined
+                                                    backgroundColor: isSelected ? settings.primary_color : `${settings.accent_color}10`,
+                                                    color: isSelected ? settings.secondary_color : hasServices ? settings.accent_color : `${settings.accent_color}40`
                                                 }}
                                             >
                                                 <div className="text-[10px] uppercase">
@@ -413,7 +424,12 @@ export default function PublicBookingPage() {
                                             setCalendarMonth(new Date());
                                             setShowCalendar(true);
                                         }}
-                                        className="p-3 rounded-lg text-center transition-all bg-white/5 text-white hover:bg-white/10 border border-dashed border-white/20 hover:border-white/40"
+                                        className="p-3 rounded-lg text-center transition-all border border-dashed"
+                                        style={{
+                                            backgroundColor: `${settings.accent_color}10`,
+                                            color: settings.accent_color,
+                                            borderColor: `${settings.accent_color}30`
+                                        }}
                                     >
                                         <CalendarDays className="h-5 w-5 mx-auto mb-1 opacity-70" />
                                         <div className="text-[10px] uppercase">
@@ -434,7 +450,7 @@ export default function PublicBookingPage() {
 
                             {selectedDate && (
                                 <div>
-                                    <label className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-3">
+                                    <label className="block text-xs font-mono uppercase tracking-wider mb-3" style={{ color: `${settings.accent_color}99` }}>
                                         Choisir un service
                                     </label>
                                     <div className="grid grid-cols-2 gap-3">
@@ -444,14 +460,11 @@ export default function PublicBookingPage() {
                                                     onClick={() => available && setSelectedService(service)}
                                                     disabled={!available}
                                                     className={`w-full p-4 rounded-lg text-left transition-all ${
-                                                        !available
-                                                            ? 'bg-white/5 text-slate-600 cursor-not-allowed'
-                                                            : selectedService?.id === service.id
-                                                            ? 'text-black'
-                                                            : 'bg-white/5 text-white hover:bg-white/10'
+                                                        !available ? 'cursor-not-allowed opacity-40' : ''
                                                     }`}
                                                     style={{
-                                                        backgroundColor: available && selectedService?.id === service.id ? settings.primary_color : undefined
+                                                        backgroundColor: available && selectedService?.id === service.id ? settings.primary_color : `${settings.accent_color}10`,
+                                                        color: available && selectedService?.id === service.id ? settings.secondary_color : settings.accent_color
                                                     }}
                                                 >
                                                     <div className="font-bold">{service.name}</div>
@@ -477,7 +490,7 @@ export default function PublicBookingPage() {
                                         ))}
                                     </div>
                                     {getServicesWithStatus(selectedDate).every(s => !s.available) && (
-                                        <p className="text-center text-slate-500 text-sm mt-4">
+                                        <p className="text-center text-sm mt-4" style={{ color: `${settings.accent_color}60` }}>
                                             Aucun service disponible pour cette date. Essayez une autre date.
                                         </p>
                                     )}
@@ -506,7 +519,7 @@ export default function PublicBookingPage() {
                             className="space-y-6"
                         >
                             <div>
-                                <label className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-3">
+                                <label className="block text-xs font-mono uppercase tracking-wider mb-3" style={{ color: `${settings.accent_color}99` }}>
                                     Choisir une heure
                                 </label>
                                 <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
@@ -514,13 +527,10 @@ export default function PublicBookingPage() {
                                         <button
                                             key={time}
                                             onClick={() => setSelectedTime(time)}
-                                            className={`p-3 rounded-lg font-mono transition-all ${
-                                                selectedTime === time
-                                                    ? 'text-black'
-                                                    : 'bg-white/5 text-white hover:bg-white/10'
-                                            }`}
+                                            className="p-3 rounded-lg font-mono text-sm transition-all"
                                             style={{
-                                                backgroundColor: selectedTime === time ? settings.primary_color : undefined
+                                                backgroundColor: selectedTime === time ? settings.primary_color : `${settings.accent_color}10`,
+                                                color: selectedTime === time ? settings.secondary_color : settings.accent_color
                                             }}
                                         >
                                             {time}
@@ -532,7 +542,12 @@ export default function PublicBookingPage() {
                             <div className="flex flex-col sm:flex-row gap-3">
                                 <button
                                     onClick={() => setStep(1)}
-                                    className="flex-1 py-3 sm:py-4 bg-white/5 border border-white/10 rounded-lg text-white font-bold text-xs sm:text-sm uppercase tracking-widest hover:bg-white/10 transition-colors"
+                                    className="flex-1 py-3 sm:py-4 rounded-lg font-bold text-xs sm:text-sm uppercase tracking-widest transition-colors border"
+                                    style={{
+                                        backgroundColor: `${settings.accent_color}10`,
+                                        borderColor: `${settings.accent_color}20`,
+                                        color: settings.accent_color
+                                    }}
                                 >
                                     Retour
                                 </button>
@@ -559,17 +574,22 @@ export default function PublicBookingPage() {
                             className="space-y-4"
                         >
                             <div>
-                                <label className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-2">
+                                <label className="block text-xs font-mono uppercase tracking-wider mb-2" style={{ color: `${settings.accent_color}99` }}>
                                     Nom complet *
                                 </label>
                                 <div className="relative">
-                                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-500" />
+                                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5" style={{ color: `${settings.accent_color}50` }} />
                                     <input
                                         type="text"
                                         value={customerName}
                                         onChange={(e) => setCustomerName(e.target.value)}
                                         required
-                                        className="w-full bg-white/5 border border-white/10 rounded-lg pl-10 pr-4 py-3 text-white focus:outline-none focus:ring-2"
+                                        className="w-full rounded-lg pl-10 pr-4 py-3 focus:outline-none focus:ring-2 border"
+                                        style={{
+                                            backgroundColor: `${settings.accent_color}08`,
+                                            borderColor: `${settings.accent_color}20`,
+                                            color: settings.accent_color,
+                                        } as any}
                                         style={{ '--tw-ring-color': settings.primary_color } as any}
                                         placeholder="Jean Dupont"
                                     />
@@ -577,17 +597,22 @@ export default function PublicBookingPage() {
                             </div>
 
                             <div>
-                                <label className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-2">
+                                <label className="block text-xs font-mono uppercase tracking-wider mb-2" style={{ color: `${settings.accent_color}99` }}>
                                     Téléphone *
                                 </label>
                                 <div className="relative">
-                                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-500" />
+                                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5" style={{ color: `${settings.accent_color}50` }} />
                                     <input
                                         type="tel"
                                         value={customerPhone}
                                         onChange={(e) => setCustomerPhone(e.target.value)}
                                         required
-                                        className="w-full bg-white/5 border border-white/10 rounded-lg pl-10 pr-4 py-3 text-white focus:outline-none focus:ring-2"
+                                        className="w-full rounded-lg pl-10 pr-4 py-3 focus:outline-none focus:ring-2 border"
+                                        style={{
+                                            backgroundColor: `${settings.accent_color}08`,
+                                            borderColor: `${settings.accent_color}20`,
+                                            color: settings.accent_color,
+                                        } as any}
                                         style={{ '--tw-ring-color': settings.primary_color } as any}
                                         placeholder="06 12 34 56 78"
                                     />
@@ -595,16 +620,21 @@ export default function PublicBookingPage() {
                             </div>
 
                             <div>
-                                <label className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-2">
+                                <label className="block text-xs font-mono uppercase tracking-wider mb-2" style={{ color: `${settings.accent_color}99` }}>
                                     Email (optionnel)
                                 </label>
                                 <div className="relative">
-                                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-500" />
+                                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5" style={{ color: `${settings.accent_color}50` }} />
                                     <input
                                         type="email"
                                         value={customerEmail}
                                         onChange={(e) => setCustomerEmail(e.target.value)}
-                                        className="w-full bg-white/5 border border-white/10 rounded-lg pl-10 pr-4 py-3 text-white focus:outline-none focus:ring-2"
+                                        className="w-full rounded-lg pl-10 pr-4 py-3 focus:outline-none focus:ring-2 border"
+                                        style={{
+                                            backgroundColor: `${settings.accent_color}08`,
+                                            borderColor: `${settings.accent_color}20`,
+                                            color: settings.accent_color,
+                                        } as any}
                                         style={{ '--tw-ring-color': settings.primary_color } as any}
                                         placeholder="jean@email.com"
                                     />
@@ -612,23 +642,28 @@ export default function PublicBookingPage() {
                             </div>
 
                             <div>
-                                <label className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-2">
+                                <label className="block text-xs font-mono uppercase tracking-wider mb-2" style={{ color: `${settings.accent_color}99` }}>
                                     Notes (optionnel)
                                 </label>
                                 <textarea
                                     value={notes}
                                     onChange={(e) => setNotes(e.target.value)}
                                     rows={3}
-                                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 resize-none"
-                                    style={{ '--tw-ring-color': settings.primary_color } as any}
+                                    className="w-full rounded-lg px-4 py-3 focus:outline-none focus:ring-2 resize-none border"
+                                    style={{
+                                        backgroundColor: `${settings.accent_color}08`,
+                                        borderColor: `${settings.accent_color}20`,
+                                        color: settings.accent_color,
+                                        '--tw-ring-color': settings.primary_color,
+                                    } as any}
                                     placeholder="Allergie, anniversaire, demande spéciale..."
                                 />
                             </div>
 
                             {/* Summary */}
-                            <div className="bg-white/5 rounded-lg p-4 mt-6">
-                                <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-2">Récapitulatif</h3>
-                                <div className="text-sm text-slate-400 space-y-1">
+                            <div className="rounded-lg p-4 mt-6" style={{ backgroundColor: `${settings.accent_color}08` }}>
+                                <h3 className="text-sm font-bold uppercase tracking-wider mb-2" style={{ color: settings.accent_color }}>Récapitulatif</h3>
+                                <div className="text-sm space-y-1" style={{ color: `${settings.accent_color}80` }}>
                                     <p>{format(selectedDate!, 'EEEE d MMMM yyyy', { locale: fr })}</p>
                                     <p>{selectedService?.name} à {selectedTime}</p>
                                     <p>{partySize} personne{partySize > 1 ? 's' : ''}</p>
@@ -638,7 +673,12 @@ export default function PublicBookingPage() {
                             <div className="flex flex-col sm:flex-row gap-3 pt-2">
                                 <button
                                     onClick={() => setStep(2)}
-                                    className="flex-1 py-3 sm:py-4 bg-white/5 border border-white/10 rounded-lg text-white font-bold text-xs sm:text-sm uppercase tracking-widest hover:bg-white/10 transition-colors"
+                                    className="flex-1 py-3 sm:py-4 rounded-lg font-bold text-xs sm:text-sm uppercase tracking-widest transition-colors border"
+                                    style={{
+                                        backgroundColor: `${settings.accent_color}10`,
+                                        borderColor: `${settings.accent_color}20`,
+                                        color: settings.accent_color
+                                    }}
                                 >
                                     Retour
                                 </button>
@@ -677,18 +717,19 @@ export default function PublicBookingPage() {
                         initial={{ opacity: 0, scale: 0.95, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-sm mx-4"
+                        className="fixed left-4 right-4 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 top-1/2 -translate-y-1/2 z-50 sm:w-full sm:max-w-sm"
                     >
                         <div
-                            className="rounded-2xl p-6 border border-white/10"
-                            style={{ backgroundColor: settings.secondary_color }}
+                            className="rounded-2xl p-4 sm:p-6 border"
+                            style={{ backgroundColor: settings.secondary_color, borderColor: `${settings.accent_color}15` }}
                         >
                             {/* Header */}
                             <div className="flex items-center justify-between mb-6">
-                                <h3 className="text-lg font-bold text-white">Choisir une date</h3>
+                                <h3 className="text-lg font-bold" style={{ color: settings.accent_color }}>Choisir une date</h3>
                                 <button
                                     onClick={() => setShowCalendar(false)}
-                                    className="p-2 text-slate-400 hover:text-white transition-colors"
+                                    className="p-2 transition-colors"
+                                    style={{ color: `${settings.accent_color}60` }}
                                 >
                                     <X className="h-5 w-5" />
                                 </button>
@@ -699,16 +740,18 @@ export default function PublicBookingPage() {
                                 <button
                                     onClick={() => setCalendarMonth(subMonths(calendarMonth, 1))}
                                     disabled={isSameMonth(calendarMonth, new Date())}
-                                    className="p-2 text-slate-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                                    className="p-2 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                                    style={{ color: `${settings.accent_color}60` }}
                                 >
                                     <ChevronLeft className="h-5 w-5" />
                                 </button>
-                                <span className="text-white font-bold capitalize">
+                                <span className="font-bold capitalize" style={{ color: settings.accent_color }}>
                                     {format(calendarMonth, 'MMMM yyyy', { locale: fr })}
                                 </span>
                                 <button
                                     onClick={() => setCalendarMonth(addMonths(calendarMonth, 1))}
-                                    className="p-2 text-slate-400 hover:text-white transition-colors"
+                                    className="p-2 transition-colors"
+                                    style={{ color: `${settings.accent_color}60` }}
                                 >
                                     <ChevronRight className="h-5 w-5" />
                                 </button>
@@ -717,7 +760,7 @@ export default function PublicBookingPage() {
                             {/* Days of week */}
                             <div className="grid grid-cols-7 gap-1 mb-2">
                                 {['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'].map(day => (
-                                    <div key={day} className="text-center text-xs text-slate-500 font-mono py-2">
+                                    <div key={day} className="text-center text-xs font-mono py-2" style={{ color: `${settings.accent_color}50` }}>
                                         {day}
                                     </div>
                                 ))}
@@ -759,18 +802,15 @@ export default function PublicBookingPage() {
                                                         }}
                                                         disabled={isDisabled || !hasServices}
                                                         className={`aspect-square rounded-lg flex items-center justify-center text-sm font-bold transition-all ${
-                                                            isSelected
-                                                                ? 'text-black'
-                                                                : isDisabled
-                                                                ? 'text-slate-700 cursor-not-allowed'
-                                                                : !hasServices
-                                                                ? 'text-slate-600 cursor-not-allowed'
-                                                                : 'text-white hover:bg-white/10'
-                                                        } ${
-                                                            isTodayDate && !isSelected ? 'ring-1 ring-white/30' : ''
+                                                            isDisabled || !hasServices ? 'cursor-not-allowed' : ''
                                                         }`}
                                                         style={{
-                                                            backgroundColor: isSelected ? settings.primary_color : undefined
+                                                            backgroundColor: isSelected ? settings.primary_color : undefined,
+                                                            color: isSelected ? settings.secondary_color
+                                                                : isDisabled ? `${settings.accent_color}20`
+                                                                : !hasServices ? `${settings.accent_color}30`
+                                                                : settings.accent_color,
+                                                            ...(isTodayDate && !isSelected ? { boxShadow: `inset 0 0 0 1px ${settings.accent_color}40` } : {})
                                                         }}
                                                     >
                                                         {format(day, 'd')}
@@ -783,9 +823,9 @@ export default function PublicBookingPage() {
                             </div>
 
                             {/* Legend */}
-                            <div className="flex items-center justify-center gap-4 mt-4 text-xs text-slate-500">
+                            <div className="flex items-center justify-center gap-4 mt-4 text-xs" style={{ color: `${settings.accent_color}50` }}>
                                 <div className="flex items-center gap-1">
-                                    <div className="w-3 h-3 rounded-full ring-1 ring-white/30" />
+                                    <div className="w-3 h-3 rounded-full" style={{ boxShadow: `inset 0 0 0 1px ${settings.accent_color}40` }} />
                                     <span>Aujourd'hui</span>
                                 </div>
                                 <div className="flex items-center gap-1">

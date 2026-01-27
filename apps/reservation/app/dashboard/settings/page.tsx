@@ -488,12 +488,12 @@ export default function SettingsPage() {
                                 ))}
                             </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-3">
+                            <div className="grid grid-cols-3 gap-3">
                                 <div>
-                                    <label className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-2">
+                                    <label className="block text-[10px] sm:text-xs font-mono uppercase tracking-wider text-slate-400 mb-2">
                                         Principale
                                     </label>
-                                    <div className="flex items-center gap-2">
+                                    <div className="flex flex-col sm:flex-row items-center gap-2">
                                         <input
                                             type="color"
                                             value={primaryColor}
@@ -504,15 +504,15 @@ export default function SettingsPage() {
                                             type="text"
                                             value={primaryColor}
                                             onChange={(e) => setPrimaryColor(e.target.value)}
-                                            className="flex-1 bg-white/5 border border-white/10 rounded px-2 py-2 text-white font-mono text-xs"
+                                            className="w-full bg-white/5 border border-white/10 rounded px-1.5 sm:px-2 py-2 text-white font-mono text-[10px] sm:text-xs"
                                         />
                                     </div>
                                 </div>
                                 <div>
-                                    <label className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-2">
+                                    <label className="block text-[10px] sm:text-xs font-mono uppercase tracking-wider text-slate-400 mb-2">
                                         Fond
                                     </label>
-                                    <div className="flex items-center gap-2">
+                                    <div className="flex flex-col sm:flex-row items-center gap-2">
                                         <input
                                             type="color"
                                             value={secondaryColor}
@@ -523,15 +523,15 @@ export default function SettingsPage() {
                                             type="text"
                                             value={secondaryColor}
                                             onChange={(e) => setSecondaryColor(e.target.value)}
-                                            className="flex-1 bg-white/5 border border-white/10 rounded px-2 py-2 text-white font-mono text-xs"
+                                            className="w-full bg-white/5 border border-white/10 rounded px-1.5 sm:px-2 py-2 text-white font-mono text-[10px] sm:text-xs"
                                         />
                                     </div>
                                 </div>
                                 <div>
-                                    <label className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-2">
+                                    <label className="block text-[10px] sm:text-xs font-mono uppercase tracking-wider text-slate-400 mb-2">
                                         Accent
                                     </label>
-                                    <div className="flex items-center gap-2">
+                                    <div className="flex flex-col sm:flex-row items-center gap-2">
                                         <input
                                             type="color"
                                             value={accentColor}
@@ -542,7 +542,7 @@ export default function SettingsPage() {
                                             type="text"
                                             value={accentColor}
                                             onChange={(e) => setAccentColor(e.target.value)}
-                                            className="flex-1 bg-white/5 border border-white/10 rounded px-2 py-2 text-white font-mono text-xs"
+                                            className="w-full bg-white/5 border border-white/10 rounded px-1.5 sm:px-2 py-2 text-white font-mono text-[10px] sm:text-xs"
                                         />
                                     </div>
                                 </div>
@@ -662,32 +662,60 @@ export default function SettingsPage() {
                                 className="rounded-xl overflow-hidden border border-white/10"
                                 style={{ backgroundColor: secondaryColor }}
                             >
+                                {/* Header */}
                                 <div className="p-6 border-b border-white/10 text-center">
-                                    <h4 className="text-xl font-bold text-white mb-1">
+                                    <h4 className="text-xl font-bold mb-1" style={{ color: accentColor }}>
                                         {restaurant?.name}
                                     </h4>
                                     {welcomeMessage && (
-                                        <p className="text-sm text-slate-400">{welcomeMessage}</p>
+                                        <p className="text-sm" style={{ color: `${accentColor}99` }}>{welcomeMessage}</p>
                                     )}
                                 </div>
 
+                                {/* Form card */}
                                 <div className="p-6">
-                                    <div className="bg-black/20 rounded-lg p-4 space-y-4">
-                                        <div
-                                            className="h-10 rounded-lg"
-                                            style={{ backgroundColor: `${primaryColor}20` }}
-                                        />
+                                    <div
+                                        className="rounded-lg p-4 space-y-4 border"
+                                        style={{
+                                            backgroundColor: `${primaryColor}08`,
+                                            borderColor: `${accentColor}15`
+                                        }}
+                                    >
+                                        {/* Party size */}
+                                        <div className="flex items-center justify-between">
+                                            <div
+                                                className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold"
+                                                style={{ backgroundColor: `${accentColor}10`, color: accentColor }}
+                                            >
+                                                −
+                                            </div>
+                                            <span className="text-lg font-bold" style={{ color: accentColor }}>2 personnes</span>
+                                            <div
+                                                className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold"
+                                                style={{ backgroundColor: `${accentColor}10`, color: accentColor }}
+                                            >
+                                                +
+                                            </div>
+                                        </div>
+
+                                        {/* Date buttons */}
                                         <div className="grid grid-cols-3 gap-2">
-                                            {[1, 2, 3].map((i) => (
+                                            {['Lun', 'Mar', 'Mer'].map((day, i) => (
                                                 <div
-                                                    key={i}
-                                                    className="h-12 rounded-lg"
+                                                    key={day}
+                                                    className="py-2 rounded-lg text-center text-xs font-bold"
                                                     style={{
-                                                        backgroundColor: i === 2 ? primaryColor : `${primaryColor}20`
+                                                        backgroundColor: i === 1 ? primaryColor : `${accentColor}10`,
+                                                        color: i === 1 ? secondaryColor : `${accentColor}80`
                                                     }}
-                                                />
+                                                >
+                                                    <div className="text-[9px] opacity-70">{day}</div>
+                                                    <div>{27 + i}</div>
+                                                </div>
                                             ))}
                                         </div>
+
+                                        {/* CTA */}
                                         <button
                                             className="w-full py-3 rounded-lg font-bold text-sm"
                                             style={{

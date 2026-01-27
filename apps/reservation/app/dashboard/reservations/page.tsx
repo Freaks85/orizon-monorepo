@@ -259,19 +259,19 @@ export default function ReservationsListPage() {
                                 transition={{ delay: index * 0.02 }}
                                 className="bg-[#0a0a0a] border border-white/10 rounded-xl p-4"
                             >
-                                <div className="flex items-start justify-between mb-3">
-                                    <div className="flex items-center gap-3">
-                                        <div className="text-center">
-                                            <p className="text-[#ff6b00] font-mono text-lg font-bold">{reservation.reservation_time.slice(0, 5)}</p>
+                                <div className="flex items-start justify-between gap-2 mb-3">
+                                    <div className="flex items-center gap-3 min-w-0">
+                                        <div className="text-center flex-shrink-0">
+                                            <p className="text-[#ff6b00] font-mono text-base sm:text-lg font-bold">{reservation.reservation_time.slice(0, 5)}</p>
                                             <p className="text-slate-500 font-mono text-xs">{format(new Date(reservation.reservation_date), 'dd/MM')}</p>
                                         </div>
-                                        <div className="w-px h-10 bg-white/10" />
-                                        <div>
-                                            <p className="text-white font-bold">{reservation.customer_name}</p>
+                                        <div className="w-px h-10 bg-white/10 flex-shrink-0" />
+                                        <div className="min-w-0">
+                                            <p className="text-white font-bold text-sm truncate">{reservation.customer_name}</p>
                                             <p className="text-slate-500 text-xs font-mono">{reservation.customer_phone}</p>
                                         </div>
                                     </div>
-                                    <span className={`px-2 py-1 rounded-full text-[10px] font-mono uppercase ${getStatusBadge(reservation.status)}`}>
+                                    <span className={`flex-shrink-0 px-2 py-1 rounded-full text-[10px] font-mono uppercase ${getStatusBadge(reservation.status)}`}>
                                         {getStatusLabel(reservation.status)}
                                     </span>
                                 </div>
@@ -464,17 +464,17 @@ export default function ReservationsListPage() {
                             initial={{ opacity: 0, scale: 0.95, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                            className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-lg mx-4"
+                            className="fixed left-4 right-4 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 top-1/2 -translate-y-1/2 z-50 sm:w-full sm:max-w-lg"
                         >
-                            <div className="bg-[#0a0a0a] border border-white/10 rounded-2xl p-6">
-                                <h2 className="font-display text-xl font-bold text-white uppercase tracking-wider mb-2">
+                            <div className="bg-[#0a0a0a] border border-white/10 rounded-2xl p-4 sm:p-6">
+                                <h2 className="font-display text-lg sm:text-xl font-bold text-white uppercase tracking-wider mb-2">
                                     Assigner une table
                                 </h2>
-                                <p className="text-slate-500 text-sm font-mono mb-6">
+                                <p className="text-slate-500 text-xs sm:text-sm font-mono mb-4 sm:mb-6">
                                     {selectedReservation.customer_name} - {selectedReservation.party_size} personnes a {selectedReservation.reservation_time.slice(0, 5)}
                                 </p>
 
-                                <div className="grid grid-cols-4 gap-3 max-h-60 overflow-y-auto">
+                                <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 sm:gap-3 max-h-60 overflow-y-auto">
                                     {tables
                                         .filter(t => t.capacity >= selectedReservation.party_size)
                                         .map(table => (

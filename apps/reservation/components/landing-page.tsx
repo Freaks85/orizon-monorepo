@@ -94,9 +94,9 @@ const Hero = () => {
                         </span>
                     </motion.div>
 
-                    <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[1.15] font-bold uppercase tracking-tight text-center">
+                    <h1 className="font-display text-4xl sm:text-5xl md:text-7xl lg:text-8xl leading-[1.15] font-bold uppercase tracking-tight text-center">
                         <span className="block text-white/70">Reservez.</span>
-                        <span className="block text-white text-6xl sm:text-7xl md:text-8xl lg:text-9xl my-2 md:my-4 drop-shadow-[0_0_30px_rgba(255,107,0,0.3)]">Gerez.</span>
+                        <span className="block text-white text-5xl sm:text-6xl md:text-8xl lg:text-9xl my-2 md:my-4 drop-shadow-[0_0_30px_rgba(255,107,0,0.3)]">Gerez.</span>
                         <span className="block text-stroke text-white/70">Simplifiez.</span>
                     </h1>
 
@@ -203,7 +203,7 @@ const HorizontalFeatures = () => {
             {/* Mobile: Vertical Grid */}
             <section className="lg:hidden py-16 sm:py-24 bg-dark-gunmetal px-4 sm:px-6">
                 <div className="max-w-7xl mx-auto">
-                    <h2 className="font-display text-3xl sm:text-4xl text-white uppercase opacity-40 mb-8 sm:mb-12 text-center">Fonctionnalites</h2>
+                    <h2 className="font-display text-2xl sm:text-3xl md:text-4xl text-white uppercase opacity-40 mb-8 sm:mb-12 text-center">Fonctionnalites</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                         {features.map((feature, i) => (
                             <motion.div
@@ -283,7 +283,7 @@ const CTASection = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                 >
-                    <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white uppercase tracking-wider mb-4 sm:mb-6">
+                    <h2 className="font-display text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold text-white uppercase tracking-wider mb-4 sm:mb-6">
                         Pret a simplifier vos reservations ?
                     </h2>
                     <p className="text-slate-400 text-sm sm:text-base lg:text-lg mb-8 sm:mb-10 font-mono px-4">

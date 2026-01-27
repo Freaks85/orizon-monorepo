@@ -41,9 +41,9 @@ export function TopNav({ onMenuClick }: TopNavProps) {
                     <div className="relative">
                         <button
                             onClick={() => setShowRestaurantDropdown(!showRestaurantDropdown)}
-                            className="flex items-center gap-2 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white hover:bg-white/10 transition-colors"
+                            className="flex items-center gap-2 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white hover:bg-white/10 transition-colors max-w-[160px] sm:max-w-none"
                         >
-                            <span className="font-mono text-xs uppercase tracking-wider">
+                            <span className="font-mono text-xs uppercase tracking-wider truncate">
                                 {restaurant?.name || 'Sélectionner'}
                             </span>
                             <ChevronDown className="h-4 w-4 text-slate-400" />

@@ -225,7 +225,7 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
                             animate={{ x: 0 }}
                             exit={{ x: '-100%' }}
                             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                            className="fixed left-0 top-0 h-screen w-72 bg-[#0a0a0a]/95 backdrop-blur-xl border-r border-white/10 flex flex-col z-50 md:hidden shadow-2xl shadow-black/50"
+                            className="fixed left-0 top-0 h-screen w-[80vw] max-w-72 bg-[#0a0a0a]/95 backdrop-blur-xl border-r border-white/10 flex flex-col z-50 md:hidden shadow-2xl shadow-black/50"
                         >
                             {fullSidebarContent}
                         </motion.aside>

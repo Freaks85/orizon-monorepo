@@ -66,7 +66,7 @@ export function GridEditor({
     const [draggingId, setDraggingId] = useState<string | null>(null);
     const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
     const gridRef = useRef<HTMLDivElement>(null);
-    const gridCellSize = 70;
+    const gridCellSize = typeof window !== 'undefined' && window.innerWidth < 640 ? 50 : 70;
 
     const handleCellClick = useCallback((x: number, y: number) => {
         if (placementMode) {
@@ -159,7 +159,7 @@ export function GridEditor({
     return (
         <div className="flex flex-col h-full">
             {/* Toolbar */}
-            <div className="flex items-center gap-3 p-4 border-b border-white/10 bg-[#0a0a0a]">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3 p-3 sm:p-4 border-b border-white/10 bg-[#0a0a0a]">
                 <button
                     onClick={() => setPlacementMode(!placementMode)}
                     className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${
@@ -185,13 +185,13 @@ export function GridEditor({
                     </button>
                 )}
 
-                <div className="ml-auto text-xs text-slate-500 font-mono">
-                    {tables.length} table{tables.length !== 1 ? 's' : ''} | Glissez pour deplacer
+                <div className="ml-auto text-[10px] sm:text-xs text-slate-500 font-mono">
+                    {tables.length} table{tables.length !== 1 ? 's' : ''} <span className="hidden sm:inline">| Glissez pour deplacer</span>
                 </div>
             </div>
 
             {/* Grid */}
-            <div className="flex-1 overflow-auto p-6 bg-[#050505]">
+            <div className="flex-1 overflow-auto p-3 sm:p-6 bg-[#050505]">
                 <div
                     ref={gridRef}
                     className="relative bg-[#0a0a0a] border border-white/10 rounded-xl select-none"
@@ -275,7 +275,7 @@ export function GridEditor({
                 </div>
 
                 {/* Legend */}
-                <div className="mt-4 flex items-center gap-6 text-xs text-slate-500 font-mono">
+                <div className="mt-4 flex flex-wrap items-center gap-3 sm:gap-6 text-[10px] sm:text-xs text-slate-500 font-mono">
                     <span>Taille selon capacite:</span>
                     <div className="flex items-center gap-2">
                         <div className="w-6 h-6 rounded-full bg-white/10 border border-white/20" />

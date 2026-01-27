@@ -658,7 +658,7 @@ function RoomPlanView({
     const [selectedRoom, setSelectedRoom] = useState(rooms[0]?.id);
     const currentRoom = rooms.find(r => r.id === selectedRoom);
     const roomTables = tables.filter(t => t.room_id === selectedRoom);
-    const cellSize = 50;
+    const cellSize = typeof window !== 'undefined' && window.innerWidth < 640 ? 35 : 50;
 
     const getTableReservation = (tableId: string) => {
         return reservations.find(r => r.table_id === tableId);
@@ -667,15 +667,15 @@ function RoomPlanView({
     if (!currentRoom) return null;
 
     return (
-        <div className="bg-[#0a0a0a] border border-white/10 rounded-xl p-4 space-y-4">
+        <div className="bg-[#0a0a0a] border border-white/10 rounded-xl p-3 sm:p-4 space-y-3 sm:space-y-4">
             {/* Room tabs */}
             {rooms.length > 1 && (
-                <div className="flex gap-2 overflow-x-auto">
+                <div className="flex gap-2 overflow-x-auto pb-1 -mx-3 px-3 sm:mx-0 sm:px-0">
                     {rooms.map(room => (
                         <button
                             key={room.id}
                             onClick={() => setSelectedRoom(room.id)}
-                            className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all whitespace-nowrap ${
+                            className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all whitespace-nowrap flex-shrink-0 ${
                                 selectedRoom === room.id
                                     ? 'bg-white text-black'
                                     : 'bg-white/5 text-slate-400 hover:text-white'
@@ -688,7 +688,7 @@ function RoomPlanView({
             )}
 
             {/* Plan */}
-            <div className="overflow-auto">
+            <div className="overflow-auto -mx-3 px-3 sm:mx-0 sm:px-0">
                 <div
                     className="relative bg-[#050505] rounded-xl mx-auto"
                     style={{
