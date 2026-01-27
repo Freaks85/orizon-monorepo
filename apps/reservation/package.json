@@ -13,6 +13,7 @@
     "@orizon/ui": "*",
     "@react-email/components": "^1.0.6",
     "@supabase/supabase-js": "^2.86.2",
+    "@vercel/analytics": "^1.6.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.23.25",

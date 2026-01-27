@@ -83,3 +83,197 @@ body {
   background: rgba(255, 107, 0, 0.3);
   color: white;
 }
+
+/* Mesh Gradient Background */
+.bg-mesh-gradient {
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(255, 107, 0, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(120, 40, 200, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(255, 107, 0, 0.04) 0%, transparent 50%);
+  animation: meshMove 12s ease-in-out infinite alternate;
+}
+
+@keyframes meshMove {
+  0% {
+    background-position: 0% 0%, 100% 0%, 50% 100%;
+  }
+  50% {
+    background-position: 30% 20%, 70% 50%, 20% 60%;
+  }
+  100% {
+    background-position: 10% 40%, 90% 10%, 60% 80%;
+  }
+}
+
+/* Rotating Conic Gradient Border */
+.animate-border-rotate {
+  position: relative;
+  z-index: 0;
+}
+.animate-border-rotate::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(from var(--angle, 0deg), transparent 40%, #ff6b00 50%, transparent 60%);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  animation: borderRotate 4s linear infinite;
+}
+
+@keyframes borderRotate {
+  to { --angle: 360deg; }
+}
+
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/* Pulse Ring */
+.pulse-ring {
+  position: relative;
+}
+.pulse-ring::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  border: 2px solid rgba(255, 107, 0, 0.4);
+  animation: pulseRing 2s ease-out infinite;
+}
+
+@keyframes pulseRing {
+  0% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(1.15); opacity: 0; }
+}
+
+/* SVG Line Draw */
+.draw-line {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: drawLine 2s ease forwards;
+}
+
+@keyframes drawLine {
+  to { stroke-dashoffset: 0; }
+}
+
+/* ── Living Animations ── */
+
+/* Gentle float for decorative elements */
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+.animate-float-delayed {
+  animation: float 6s ease-in-out 2s infinite;
+}
+.animate-float-slow {
+  animation: float 8s ease-in-out 1s infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+
+/* Soft breathing glow */
+.animate-glow-breathe {
+  animation: glowBreathe 4s ease-in-out infinite;
+}
+
+@keyframes glowBreathe {
+  0%, 100% { opacity: 0.4; filter: blur(20px); }
+  50% { opacity: 0.8; filter: blur(30px); }
+}
+
+/* Shimmer sweep for buttons and cards */
+.shimmer-hover {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer-hover::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+  transition: none;
+}
+.shimmer-hover:hover::after {
+  animation: shimmerSweep 0.8s ease forwards;
+}
+
+@keyframes shimmerSweep {
+  to { left: 100%; }
+}
+
+/* Gradient shift for backgrounds */
+.animate-gradient-shift {
+  background-size: 200% 200%;
+  animation: gradientShift 8s ease infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Smooth underline expand for nav links */
+.nav-link-underline {
+  position: relative;
+}
+.nav-link-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  width: 0;
+  height: 1px;
+  background: #ff6b00;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: translateX(-50%);
+}
+.nav-link-underline:hover::after {
+  width: 100%;
+}
+
+/* Magnetic button effect base */
+.btn-magnetic {
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.3s ease;
+}
+.btn-magnetic:hover {
+  box-shadow: 0 0 30px rgba(255, 107, 0, 0.2), 0 0 60px rgba(255, 107, 0, 0.1);
+}
+
+/* Subtle noise texture overlay */
+.noise-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Orb ambient animation */
+.orb {
+  border-radius: 50%;
+  filter: blur(80px);
+  animation: orbDrift 12s ease-in-out infinite alternate;
+}
+.orb-2 {
+  animation: orbDrift 15s ease-in-out 3s infinite alternate-reverse;
+}
+
+@keyframes orbDrift {
+  0% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -20px) scale(1.1); }
+  66% { transform: translate(-20px, 15px) scale(0.95); }
+  100% { transform: translate(10px, -10px) scale(1.05); }
+}
