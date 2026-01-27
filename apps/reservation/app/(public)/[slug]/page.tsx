@@ -589,8 +589,8 @@ export default function PublicBookingPage() {
                                             backgroundColor: `${settings.accent_color}08`,
                                             borderColor: `${settings.accent_color}20`,
                                             color: settings.accent_color,
+                                            '--tw-ring-color': settings.primary_color,
                                         } as any}
-                                        style={{ '--tw-ring-color': settings.primary_color } as any}
                                         placeholder="Jean Dupont"
                                     />
                                 </div>
@@ -612,8 +612,8 @@ export default function PublicBookingPage() {
                                             backgroundColor: `${settings.accent_color}08`,
                                             borderColor: `${settings.accent_color}20`,
                                             color: settings.accent_color,
+                                            '--tw-ring-color': settings.primary_color,
                                         } as any}
-                                        style={{ '--tw-ring-color': settings.primary_color } as any}
                                         placeholder="06 12 34 56 78"
                                     />
                                 </div>
@@ -634,8 +634,8 @@ export default function PublicBookingPage() {
                                             backgroundColor: `${settings.accent_color}08`,
                                             borderColor: `${settings.accent_color}20`,
                                             color: settings.accent_color,
+                                            '--tw-ring-color': settings.primary_color,
                                         } as any}
-                                        style={{ '--tw-ring-color': settings.primary_color } as any}
                                         placeholder="jean@email.com"
                                     />
                                 </div>

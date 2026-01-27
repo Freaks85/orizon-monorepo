@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Save, Globe, Palette, MessageSquare, Eye, Settings, Users, Clock, Mail, Plus, X } from 'lucide-react';
 import { useRestaurant } from '@/contexts/restaurant-context';
 import { supabase } from '@/lib/supabase';
@@ -26,13 +26,44 @@ interface ReservationSettings {
 }
 
 const COLOR_PALETTES = [
-    { name: 'Neon', primary: '#ff6b00', secondary: '#0a0a0a', accent: '#ffffff' },
-    { name: 'Ocean', primary: '#0ea5e9', secondary: '#0c1524', accent: '#ffffff' },
-    { name: 'Sunset', primary: '#f97316', secondary: '#1c0a04', accent: '#ffffff' },
-    { name: 'Rose', primary: '#ec4899', secondary: '#1a0612', accent: '#ffffff' },
-    { name: 'Gold', primary: '#eab308', secondary: '#1a1506', accent: '#ffffff' },
-    { name: 'Purple', primary: '#a855f7', secondary: '#12061a', accent: '#ffffff' },
+    // Classiques
+    { name: 'Neon', category: 'Classiques', primary: '#ff6b00', secondary: '#0a0a0a', accent: '#ffffff' },
+    { name: 'Ocean', category: 'Classiques', primary: '#0ea5e9', secondary: '#0c1524', accent: '#ffffff' },
+    { name: 'Sunset', category: 'Classiques', primary: '#f97316', secondary: '#1c0a04', accent: '#ffffff' },
+    { name: 'Rose', category: 'Classiques', primary: '#ec4899', secondary: '#1a0612', accent: '#ffffff' },
+    { name: 'Gold', category: 'Classiques', primary: '#eab308', secondary: '#1a1506', accent: '#ffffff' },
+    { name: 'Purple', category: 'Classiques', primary: '#a855f7', secondary: '#12061a', accent: '#ffffff' },
+    // Elegance
+    { name: 'Bordeaux', category: 'Elegance', primary: '#9f1239', secondary: '#0a0506', accent: '#f5f0eb' },
+    { name: 'Champagne', category: 'Elegance', primary: '#d4a574', secondary: '#1a1410', accent: '#faf5ef' },
+    { name: 'Emeraude', category: 'Elegance', primary: '#059669', secondary: '#041a12', accent: '#f0fdf4' },
+    { name: 'Saphir', category: 'Elegance', primary: '#2563eb', secondary: '#050d1e', accent: '#eff6ff' },
+    { name: 'Noir & Or', category: 'Elegance', primary: '#d4af37', secondary: '#0a0a0a', accent: '#ffffff' },
+    { name: 'Ivoire', category: 'Elegance', primary: '#92400e', secondary: '#faf5ef', accent: '#1a1207' },
+    // Moderne
+    { name: 'Menthe', category: 'Moderne', primary: '#10b981', secondary: '#0a0a0a', accent: '#ffffff' },
+    { name: 'Corail', category: 'Moderne', primary: '#f43f5e', secondary: '#0f0507', accent: '#ffffff' },
+    { name: 'Lavande', category: 'Moderne', primary: '#8b5cf6', secondary: '#0d0719', accent: '#f5f3ff' },
+    { name: 'Cyan', category: 'Moderne', primary: '#06b6d4', secondary: '#061217', accent: '#ecfeff' },
+    { name: 'Lime', category: 'Moderne', primary: '#84cc16', secondary: '#0a0f04', accent: '#ffffff' },
+    { name: 'Fuchsia', category: 'Moderne', primary: '#d946ef', secondary: '#140518', accent: '#fdf4ff' },
+    // Nature
+    { name: 'Foret', category: 'Nature', primary: '#166534', secondary: '#050e08', accent: '#dcfce7' },
+    { name: 'Terre', category: 'Nature', primary: '#a16207', secondary: '#120e04', accent: '#fefce8' },
+    { name: 'Ciel', category: 'Nature', primary: '#0284c7', secondary: '#041928', accent: '#e0f2fe' },
+    { name: 'Automne', category: 'Nature', primary: '#c2410c', secondary: '#140804', accent: '#fff7ed' },
+    { name: 'Olive', category: 'Nature', primary: '#4d7c0f', secondary: '#0a0e04', accent: '#f7fee7' },
+    { name: 'Ardoise', category: 'Nature', primary: '#475569', secondary: '#0f1117', accent: '#f1f5f9' },
+    // Clair
+    { name: 'Blanc Epure', category: 'Clair', primary: '#2563eb', secondary: '#ffffff', accent: '#1e293b' },
+    { name: 'Blanc Rose', category: 'Clair', primary: '#e11d48', secondary: '#fff1f2', accent: '#1a1a2e' },
+    { name: 'Blanc Vert', category: 'Clair', primary: '#16a34a', secondary: '#f0fdf4', accent: '#14532d' },
+    { name: 'Creme', category: 'Clair', primary: '#b45309', secondary: '#fffbeb', accent: '#451a03' },
+    { name: 'Gris Clair', category: 'Clair', primary: '#6366f1', secondary: '#f8fafc', accent: '#1e1b4b' },
+    { name: 'Blanc Violet', category: 'Clair', primary: '#9333ea', secondary: '#faf5ff', accent: '#3b0764' },
 ];
+
+const PALETTE_CATEGORIES = ['Classiques', 'Elegance', 'Moderne', 'Nature', 'Clair'] as const;
 
 type Tab = 'general' | 'design';
 
@@ -52,6 +83,21 @@ export default function SettingsPage() {
     const [minNoticeHours, setMinNoticeHours] = useState(2);
     const [notificationEmails, setNotificationEmails] = useState<string[]>([]);
     const [newEmail, setNewEmail] = useState('');
+    const [showPaletteModal, setShowPaletteModal] = useState(false);
+
+    useEffect(() => {
+        if (showPaletteModal) {
+            document.body.style.overflow = 'hidden';
+            document.documentElement.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+            document.documentElement.style.overflow = '';
+        }
+        return () => {
+            document.body.style.overflow = '';
+            document.documentElement.style.overflow = '';
+        };
+    }, [showPaletteModal]);
 
     // Design settings
     const [primaryColor, setPrimaryColor] = useState('#ff6b00');
@@ -465,13 +511,13 @@ export default function SettingsPage() {
                                 </h2>
                             </div>
 
-                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
-                                {COLOR_PALETTES.map((palette) => (
+                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-3">
+                                {COLOR_PALETTES.slice(0, 6).map((palette) => (
                                     <button
                                         key={palette.name}
                                         onClick={() => handlePaletteSelect(palette)}
                                         className={`p-3 rounded-lg border transition-all ${
-                                            primaryColor === palette.primary
+                                            primaryColor === palette.primary && secondaryColor === palette.secondary
                                                 ? 'border-white/50 ring-2 ring-white/20'
                                                 : 'border-white/10 hover:border-white/20'
                                         }`}
@@ -481,12 +527,18 @@ export default function SettingsPage() {
                                             className="h-6 rounded mb-2"
                                             style={{ backgroundColor: palette.primary }}
                                         />
-                                        <p className="text-xs text-center text-slate-400">
+                                        <p className="text-xs text-center" style={{ color: `${palette.accent}80` }}>
                                             {palette.name}
                                         </p>
                                     </button>
                                 ))}
                             </div>
+                            <button
+                                onClick={() => setShowPaletteModal(true)}
+                                className="w-full py-2.5 mb-6 text-xs font-bold uppercase tracking-widest text-slate-400 border border-white/10 rounded-lg hover:bg-white/5 hover:text-white transition-all"
+                            >
+                                Voir plus de palettes
+                            </button>
 
                             <div className="grid grid-cols-3 gap-3">
                                 <div>
@@ -732,6 +784,75 @@ export default function SettingsPage() {
                     </motion.div>
                 </div>
             )}
+
+            {/* Palette Modal */}
+            <AnimatePresence>
+                {showPaletteModal && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm overflow-hidden"
+                        onClick={() => setShowPaletteModal(false)}
+                        onWheel={(e) => e.stopPropagation()}
+                        onTouchMove={(e) => e.stopPropagation()}
+                    >
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            className="bg-[#0a0a0a] border border-white/10 rounded-xl w-full max-w-lg max-h-[80vh] overflow-hidden"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <div className="flex items-center justify-between p-4 border-b border-white/10">
+                                <h3 className="font-display text-lg font-bold text-white uppercase tracking-wider">
+                                    Palettes de couleurs
+                                </h3>
+                                <button
+                                    onClick={() => setShowPaletteModal(false)}
+                                    className="p-2 text-slate-400 hover:text-white transition-colors"
+                                >
+                                    <X className="h-5 w-5" />
+                                </button>
+                            </div>
+                            <div className="overflow-y-auto p-4 space-y-6 max-h-[calc(80vh-64px)] overscroll-contain">
+                                {PALETTE_CATEGORIES.map((category) => (
+                                    <div key={category}>
+                                        <h4 className="text-xs font-mono uppercase tracking-widest text-slate-500 mb-3">
+                                            {category}
+                                        </h4>
+                                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                                            {COLOR_PALETTES.filter(p => p.category === category).map((palette) => (
+                                                <button
+                                                    key={palette.name}
+                                                    onClick={() => {
+                                                        handlePaletteSelect(palette);
+                                                        setShowPaletteModal(false);
+                                                    }}
+                                                    className={`p-3 rounded-lg border transition-all ${
+                                                        primaryColor === palette.primary && secondaryColor === palette.secondary
+                                                            ? 'border-white/50 ring-2 ring-white/20'
+                                                            : 'border-white/10 hover:border-white/20'
+                                                    }`}
+                                                    style={{ backgroundColor: palette.secondary }}
+                                                >
+                                                    <div
+                                                        className="h-6 rounded mb-2"
+                                                        style={{ backgroundColor: palette.primary }}
+                                                    />
+                                                    <p className="text-xs text-center" style={{ color: `${palette.accent}80` }}>
+                                                        {palette.name}
+                                                    </p>
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* Save Button */}
             <button
