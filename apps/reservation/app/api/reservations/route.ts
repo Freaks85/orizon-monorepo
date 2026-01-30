@@ -133,13 +133,13 @@ export async function POST(request: NextRequest) {
                         react: NewReservationNotificationEmail({
                             restaurantName: restaurant.name,
                             customerName: body.customer_name,
-                            customerPhone: body.customer_phone,
-                            customerEmail: body.customer_email,
+                            customerPhone: body.customer_phone || '',
+                            customerEmail: body.customer_email || '',
                             reservationDate: formattedDate,
                             reservationTime: body.reservation_time,
                             partySize: body.party_size,
                             serviceName: service.name,
-                            notes: body.notes,
+                            notes: body.notes || '',
                             dashboardUrl,
                             // Couleurs personnalisées du restaurant
                             primaryColor: settings.primary_color,
