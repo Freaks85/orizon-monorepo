@@ -70,8 +70,10 @@ export default function InvitationPage() {
                 return;
             }
 
-            const invitedByName = data.invited_by?.raw_user_meta_data?.first_name && data.invited_by?.raw_user_meta_data?.last_name
-                ? `${data.invited_by.raw_user_meta_data.first_name} ${data.invited_by.raw_user_meta_data.last_name}`
+            // Handle invited_by which can be an array or object
+            const invitedByData = Array.isArray(data.invited_by) ? data.invited_by[0] : data.invited_by;
+            const invitedByName = invitedByData?.raw_user_meta_data?.first_name && invitedByData?.raw_user_meta_data?.last_name
+                ? `${invitedByData.raw_user_meta_data.first_name} ${invitedByData.raw_user_meta_data.last_name}`
                 : 'Un membre de l\'équipe';
 
             setInvitation({
