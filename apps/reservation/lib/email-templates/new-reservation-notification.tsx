@@ -128,7 +128,7 @@ export function NewReservationNotificationEmail({
                     {/* Footer */}
                     <Section style={footer}>
                         <Text style={footerText}>
-                            Email envoye automatiquement par Orizon Reservation
+                            Email envoye automatiquement par Orizons Reservation
                         </Text>
                         <Text style={footerText}>
                             {restaurantName}

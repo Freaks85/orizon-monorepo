@@ -1,5 +1,5 @@
 -- =====================================================
--- MIGRATION: Reservation System for OrizonReservation
+-- MIGRATION: Reservation System for OrizonsReservation
 -- =====================================================
 
 -- Add slug column to restaurants if not exists

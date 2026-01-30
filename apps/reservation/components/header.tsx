@@ -67,7 +67,7 @@ export function Header() {
                         </motion.div>
                         <div className="flex flex-col">
                             <span className="font-display font-bold text-base sm:text-lg tracking-wider text-white uppercase leading-none">
-                                Orizon<span className="text-[#ff6b00]">Resa</span>
+                                Orizons<span className="text-[#ff6b00]">Resa</span>
                             </span>
                             <span className="text-[8px] text-slate-600 font-mono tracking-[0.2em] uppercase hidden sm:block">
                                 Réservation

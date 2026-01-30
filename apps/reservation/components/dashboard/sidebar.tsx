@@ -65,7 +65,7 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
                         className="overflow-hidden whitespace-nowrap"
                     >
                         <span className="font-display font-bold text-lg tracking-widest text-white uppercase">
-                            Orizon<span className="text-[#ff6b00]">Reservation</span>
+                            Orizons<span className="text-[#ff6b00]">Reservation</span>
                         </span>
                     </motion.div>
                 </div>
@@ -147,7 +147,7 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
                         <CalendarRange className="h-5 w-5 text-[#ff6b00]" />
                     </div>
                     <span className="font-display font-bold text-lg tracking-widest text-white uppercase">
-                        Orizon<span className="text-[#ff6b00]">Reservation</span>
+                        Orizons<span className="text-[#ff6b00]">Reservation</span>
                     </span>
                 </div>
                 <button

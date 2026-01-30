@@ -168,7 +168,7 @@ export default function SignupPage() {
                         <CalendarRange className="h-12 w-12 text-[#ff6b00] opacity-20" />
                     </div>
 
-                    <h2 className="font-display text-2xl text-white uppercase mb-8">Pourquoi OrizonReservation ?</h2>
+                    <h2 className="font-display text-2xl text-white uppercase mb-8">Pourquoi OrizonsReservation ?</h2>
 
                     <ul className="space-y-6">
                         {[

@@ -58,7 +58,7 @@ export default function LoginPage() {
                         </div>
                     </div>
                     <h1 className="font-display text-2xl font-bold tracking-widest text-white uppercase">
-                        Orizon<span className="text-[#ff6b00]">Reservation</span>
+                        Orizons<span className="text-[#ff6b00]">Reservation</span>
                     </h1>
                     <p className="text-slate-500 text-sm font-mono mt-2">
                         Connectez-vous à votre espace

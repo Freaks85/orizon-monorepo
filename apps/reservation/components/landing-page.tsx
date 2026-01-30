@@ -441,7 +441,7 @@ const ProductShowcase = () => {
                                         <div className="w-7 h-7 rounded-lg bg-neon-orange/20 flex items-center justify-center">
                                             <Utensils className="w-3.5 h-3.5 text-neon-orange" />
                                         </div>
-                                        <span className="text-xs font-display text-white uppercase tracking-wide">Orizon</span>
+                                        <span className="text-xs font-display text-white uppercase tracking-wide">Orizons</span>
                                     </div>
                                     <div className="flex flex-col gap-1">
                                         {[

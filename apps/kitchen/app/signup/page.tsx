@@ -160,7 +160,7 @@ export default function SignupPage() {
                         <ShieldCheck className="h-12 w-12 text-neon-green opacity-20" />
                     </div>
 
-                    <h2 className="font-display text-2xl text-white uppercase mb-8">Pourquoi OrizonKitchen ?</h2>
+                    <h2 className="font-display text-2xl text-white uppercase mb-8">Pourquoi OrizonsKitchen ?</h2>
 
                     <ul className="space-y-6">
                         {[
@@ -182,7 +182,7 @@ export default function SignupPage() {
                     <div className="mt-12 p-6 border border-neon-green/20 bg-neon-green/5">
                         <p className="text-neon-green font-display text-lg uppercase mb-2">"Une révolution."</p>
                         <p className="text-slate-400 text-sm italic">
-                            "Depuis que nous utilisons OrizonKitchen, les contrôles sanitaires sont devenus une simple formalité. L'équipe est plus sereine."
+                            "Depuis que nous utilisons OrizonsKitchen, les contrôles sanitaires sont devenus une simple formalité. L'équipe est plus sereine."
                         </p>
                         <p className="text-slate-500 text-xs font-bold uppercase mt-4">— Chef Philippe Etchebest (Fictif)</p>
                     </div>

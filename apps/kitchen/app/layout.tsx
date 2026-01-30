@@ -14,7 +14,7 @@ const oswald = Oswald({
 });
 
 export const metadata: Metadata = {
-  title: "OrizonKitchen - Command Center",
+  title: "OrizonsKitchen - Command Center",
   description: "La sécurité alimentaire maîtrisée. Interface de gestion HACCP haute précision.",
 };
 

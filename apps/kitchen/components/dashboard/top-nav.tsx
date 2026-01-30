@@ -132,7 +132,7 @@ export function TopNav({ onMenuClick }: TopNavProps) {
                     {/* Page Title - Desktop */}
                     <div className="hidden md:block">
                         <h1 className="font-display text-lg font-bold text-white uppercase tracking-wider">
-                            Orizon<span className="text-[#00ff9d]">Kitchen</span>
+                            Orizons<span className="text-[#00ff9d]">Kitchen</span>
                         </h1>
                     </div>
                 </div>

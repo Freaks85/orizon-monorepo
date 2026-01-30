@@ -82,7 +82,7 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
                         className="overflow-hidden whitespace-nowrap"
                     >
                         <span className="font-display font-bold text-lg tracking-widest text-white uppercase">
-                            Orizon<span className="text-[#00ff9d]">Kitchen</span>
+                            Orizons<span className="text-[#00ff9d]">Kitchen</span>
                         </span>
                     </motion.div>
                 </div>
@@ -165,7 +165,7 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
                         <ShieldCheck className="h-5 w-5 text-[#00ff9d]" />
                     </div>
                     <span className="font-display font-bold text-lg tracking-widest text-white uppercase">
-                        Orizon<span className="text-[#00ff9d]">Kitchen</span>
+                        Orizons<span className="text-[#00ff9d]">Kitchen</span>
                     </span>
                 </div>
                 <button

@@ -288,7 +288,7 @@ export const DashboardHeroSection: React.FC = () => {
                             {/* Image du dashboard - Remplacez par votre propre capture d'écran si nécessaire */}
                             <img
                                 src="/images/dashboard-preview.svg"
-                                alt="Aperçu du tableau de bord OrizonKitchen"
+                                alt="Aperçu du tableau de bord OrizonsKitchen"
                                 className="w-full h-full object-cover object-top"
                                 onError={(e) => {
                                     // Fallback si l'image n'existe pas

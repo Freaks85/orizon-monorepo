@@ -10,7 +10,7 @@ export const Footer = () => {
             <div className="max-w-7xl mx-auto px-6 relative z-10">
                 <div className="flex flex-col md:flex-row justify-between items-start gap-12">
                     <div>
-                        <h2 className="font-display text-4xl text-white uppercase mb-2">OrizonKitchen</h2>
+                        <h2 className="font-display text-4xl text-white uppercase mb-2">OrizonsKitchen</h2>
                         <p className="font-mono text-xs text-neon-green uppercase tracking-[0.2em]">Command Center v2.0</p>
                     </div>
 
@@ -37,7 +37,7 @@ export const Footer = () => {
                 </div>
 
                 <div className="mt-24 pt-8 border-t border-white/10 flex justify-between items-center">
-                    <p className="font-mono text-[10px] text-slate-600 uppercase">© 2026 OrizonKitchen Defense Systems.</p>
+                    <p className="font-mono text-[10px] text-slate-600 uppercase">© 2026 OrizonsKitchen Defense Systems.</p>
                     <div className="flex gap-4">
                         <div className="h-1 w-1 bg-neon-green rounded-full"></div>
                         <div className="h-1 w-1 bg-neon-green rounded-full opacity-50"></div>

@@ -29,7 +29,7 @@ export function TopNav({ onMenuClick }: TopNavProps) {
                 <div className="flex items-center gap-2 md:hidden">
                     <CalendarRange className="h-5 w-5 text-[#ff6b00]" />
                     <span className="font-display font-bold text-sm tracking-widest text-white uppercase">
-                        Orizon<span className="text-[#ff6b00]">Resa</span>
+                        Orizons<span className="text-[#ff6b00]">Resa</span>
                     </span>
                 </div>
             </div>

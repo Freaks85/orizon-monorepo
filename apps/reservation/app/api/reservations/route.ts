@@ -127,7 +127,7 @@ export async function POST(request: NextRequest) {
                     const recipientEmail = notificationEmails[i];
 
                     await resend.emails.send({
-                        from: `Orizon Reservation <${fromEmail}>`,
+                        from: `Orizons Reservation <${fromEmail}>`,
                         to: recipientEmail,
                         subject: `Nouvelle réservation - ${body.customer_name} (${body.party_size} pers.)`,
                         react: NewReservationNotificationEmail({

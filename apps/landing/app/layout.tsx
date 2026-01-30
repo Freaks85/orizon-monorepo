@@ -13,8 +13,8 @@ const oswald = Oswald({
 });
 
 export const metadata: Metadata = {
-  title: "OrizonApp - Suite d'applications pour la restauration",
-  description: "Gérez votre restaurant avec OrizonKitchen et OrizonReservation",
+  title: "OrizonsApp - Suite d'applications pour la restauration",
+  description: "Gérez votre restaurant avec OrizonsKitchen et OrizonsReservation",
 };
 
 export default function RootLayout({

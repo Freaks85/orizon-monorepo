@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 const apps = [
     {
-        name: 'OrizonKitchen',
+        name: 'OrizonsKitchen',
         description: 'Gestion HACCP et traçabilité alimentaire',
         icon: ShieldCheck,
         color: '#00ff9d',
@@ -15,7 +15,7 @@ const apps = [
         available: true
     },
     {
-        name: 'OrizonReservation',
+        name: 'OrizonsReservation',
         description: 'Gestion des réservations en ligne',
         icon: CalendarRange,
         color: '#00ff9d',
@@ -24,7 +24,7 @@ const apps = [
         available: true
     },
     {
-        name: 'OrizonMenu',
+        name: 'OrizonsMenu',
         description: 'Gestion de carte et menus digitaux',
         icon: ChefHat,
         color: '#6366f1',
@@ -45,7 +45,7 @@ export default function HomePage() {
                             <span className="text-black font-bold text-lg">O</span>
                         </div>
                         <span className="font-display font-bold text-xl tracking-wider text-white uppercase">
-                            Orizon<span className="text-[#00ff9d]">App</span>
+                            Orizons<span className="text-[#00ff9d]">App</span>
                         </span>
                     </div>
                     <nav className="hidden md:flex items-center gap-6">
@@ -208,11 +208,11 @@ export default function HomePage() {
                             <span className="text-black font-bold text-sm">O</span>
                         </div>
                         <span className="font-display font-bold tracking-wider text-white uppercase">
-                            OrizonApp
+                            OrizonsApp
                         </span>
                     </div>
                     <p className="text-slate-500 text-sm font-mono">
-                        © 2026 OrizonApp. Tous droits réservés.
+                        © 2026 OrizonsApp. Tous droits réservés.
                     </p>
                 </div>
             </footer>

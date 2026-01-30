@@ -15,8 +15,8 @@ const oswald = Oswald({
 });
 
 export const metadata: Metadata = {
-  title: "OrizonReservation - Gestion des réservations",
-  description: "Gérez vos réservations de restaurant avec OrizonReservation",
+  title: "OrizonsReservation - Gestion des réservations",
+  description: "Gérez vos réservations de restaurant avec OrizonsReservation",
 };
 
 export default function RootLayout({
