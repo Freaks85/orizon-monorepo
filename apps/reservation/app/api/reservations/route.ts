@@ -20,8 +20,8 @@ interface ReservationRequest {
     reservation_time: string;
     party_size: number;
     customer_name: string;
-    customer_phone: string;
-    customer_email?: string | null;
+    customer_phone?: string | null;
+    customer_email: string;
     notes?: string | null;
     service_id: string;
 }
@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
 
         // Validate required fields
         if (!body.slug || !body.reservation_date || !body.reservation_time ||
-            !body.party_size || !body.customer_name || !body.customer_phone || !body.service_id) {
+            !body.party_size || !body.customer_name || !body.customer_email || !body.service_id) {
             return NextResponse.json(
                 { error: 'Missing required fields' },
                 { status: 400 }
@@ -92,8 +92,8 @@ export async function POST(request: NextRequest) {
                 reservation_time: body.reservation_time,
                 party_size: body.party_size,
                 customer_name: body.customer_name,
-                customer_phone: body.customer_phone,
-                customer_email: body.customer_email || null,
+                customer_phone: body.customer_phone || null,
+                customer_email: body.customer_email,
                 notes: body.notes || null,
                 status: 'pending'
             })
@@ -111,7 +111,7 @@ export async function POST(request: NextRequest) {
         // Format date for emails
         const formattedDate = format(new Date(body.reservation_date), 'EEEE d MMMM yyyy', { locale: fr });
         const fromEmail = getFromEmail(body.slug);
-        const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://reservation.orizonsapp.com'}/dashboard/cahier`;
+        const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://reservation.orizonsapp.com'}/dashboard/reservations`;
 
         // Send notification emails to staff if Resend is configured
         // Note: Customer confirmation email is sent when reservation is confirmed from dashboard

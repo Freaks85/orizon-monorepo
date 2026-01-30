@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-    LayoutDashboard,
+    BarChart3,
     Table2,
     Clock,
     CalendarCheck,
@@ -13,18 +13,21 @@ import {
     LogOut,
     CalendarRange,
     X,
-    ChevronRight
+    ChevronRight,
+    Users
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '@/lib/supabase';
+import { usePermissions } from '@/contexts/permission-context';
 
-const menuItems = [
-    { icon: LayoutDashboard, label: 'Dashboard', href: '/dashboard' },
-    { icon: CalendarCheck, label: 'Reservations', href: '/dashboard/reservations' },
-    { icon: BookOpen, label: 'Cahier Resa', href: '/dashboard/cahier' },
-    { icon: Table2, label: 'Salles', href: '/dashboard/rooms' },
-    { icon: Clock, label: 'Services', href: '/dashboard/services' },
-    { icon: Settings, label: 'Parametres', href: '/dashboard/settings' },
+const allMenuItems = [
+    { icon: BookOpen, label: 'Cahier de réservation', href: '/dashboard/cahier', requiresPermission: { module: 'reservations' as const, action: 'view' as const } },
+    { icon: CalendarCheck, label: 'Réservations', href: '/dashboard/reservations', requiresPermission: { module: 'reservations' as const, action: 'view' as const } },
+    { icon: BarChart3, label: 'Analyse', href: '/dashboard', requiresPermission: { module: 'analytics' as const, action: 'view' as const } },
+    { icon: Table2, label: 'Salles', href: '/dashboard/rooms', requiresPermission: { module: 'rooms' as const, action: 'view' as const } },
+    { icon: Clock, label: 'Services', href: '/dashboard/services', requiresPermission: { module: 'services' as const, action: 'view' as const } },
+    { icon: Users, label: 'Équipe', href: '/dashboard/team', requiresPermission: { module: 'team' as const, action: 'view' as const } },
+    { icon: Settings, label: 'Paramètres', href: '/dashboard/settings', requiresPermission: { module: 'settings' as const, action: 'view' as const } },
 ];
 
 interface SidebarProps {
@@ -35,6 +38,16 @@ interface SidebarProps {
 export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
     const pathname = usePathname();
     const [isHovered, setIsHovered] = useState(false);
+    const { hasPermission, loading } = usePermissions();
+
+    // Filter menu items based on permissions
+    const menuItems = useMemo(() => {
+        if (loading) return [];
+        return allMenuItems.filter(item => {
+            if (!item.requiresPermission) return true;
+            return hasPermission(item.requiresPermission.module, item.requiresPermission.action);
+        });
+    }, [hasPermission, loading]);
 
     const handleLinkClick = () => {
         if (onClose) {

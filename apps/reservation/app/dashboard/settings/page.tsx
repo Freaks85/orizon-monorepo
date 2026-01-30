@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Save, Globe, Palette, MessageSquare, Eye, Settings, Users, Clock, Mail, Plus, X } from 'lucide-react';
 import { useRestaurant } from '@/contexts/restaurant-context';
+import { PermissionGuard } from '@/components/permission-guard';
 import { supabase } from '@/lib/supabase';
 
 interface ReservationSettings {
@@ -238,7 +239,8 @@ export default function SettingsPage() {
     }
 
     return (
-        <div className="max-w-6xl mx-auto space-y-6">
+        <PermissionGuard module="settings" action="view">
+            <div className="max-w-6xl mx-auto space-y-6">
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
@@ -870,5 +872,6 @@ export default function SettingsPage() {
                 )}
             </button>
         </div>
+        </PermissionGuard>
     );
 }

@@ -163,7 +163,7 @@ const Hero = () => {
                                 href="/signup"
                                 className="group shimmer-hover btn-magnetic px-8 py-4 bg-gradient-to-r from-[#ff6b00] to-[#ff8533] text-black font-bold text-xs uppercase tracking-widest rounded-xl flex items-center gap-3"
                             >
-                                Essayer gratuitement
+                                Commencer maintenant
                                 <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
                             </Link>
                         </motion.div>
@@ -184,7 +184,7 @@ const Hero = () => {
                         transition={{ duration: 1, delay: 1.8 }}
                         className="mt-12 flex items-center justify-center gap-6 flex-wrap"
                     >
-                        {["Zéro commission", "Sans engagement", "Essai gratuit"].map((tag, i) => (
+                        {["Sans commission", "Sans engagement", "40€ par mois"].map((tag, i) => (
                             <motion.span
                                 key={i}
                                 initial={{ opacity: 0, y: 10 }}
@@ -664,21 +664,12 @@ const Comparison = () => (
 
 const plans = [
     {
-        name: "Starter",
-        price: "0",
-        period: "pour toujours",
-        description: "Parfait pour démarrer",
-        features: ["1 salle", "50 réservations / mois", "Page de réservation", "Notifications email", "Support par email"],
-        cta: "Commencer gratuitement",
-        highlighted: false
-    },
-    {
-        name: "Pro",
-        price: "29",
+        name: "Illimité",
+        price: "40",
         period: "/ mois",
-        description: "Pour les restaurants ambitieux",
-        features: ["Salles illimitées", "Réservations illimitées", "Page personnalisable", "Statistiques avancées", "Support prioritaire", "Branding personnalisé"],
-        cta: "Essai gratuit 7 jours",
+        description: "Tout inclus, sans commission",
+        features: ["Salles illimitées", "Réservations illimitées", "Page personnalisable", "Statistiques avancées", "Support prioritaire", "Branding personnalisé", "Sans commission sur les réservations"],
+        cta: "Commencer maintenant",
         highlighted: true
     }
 ];
@@ -698,10 +689,10 @@ const Pricing = () => (
                     Tarifs
                 </motion.span>
                 <motion.h2 variants={fadeUp} custom={1} className="font-display text-3xl sm:text-4xl lg:text-5xl text-white uppercase mt-4">
-                    Tarification transparente
+                    Un seul tarif, tout inclus
                 </motion.h2>
                 <motion.p variants={fadeUp} custom={2} className="text-slate-400 text-sm mt-4 max-w-md mx-auto">
-                    Sans surprise. Sans engagement. Commencez gratuitement.
+                    40€ par mois. Sans commission. Sans limites.
                 </motion.p>
             </motion.div>
 
@@ -710,7 +701,7 @@ const Pricing = () => (
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={staggerContainer}
-                className="grid grid-cols-1 md:grid-cols-2 gap-6"
+                className="flex justify-center"
             >
                 {plans.map((plan, i) => (
                     <motion.div
@@ -718,20 +709,14 @@ const Pricing = () => (
                         variants={fadeUp}
                         custom={i}
                         whileHover={{ y: -6, transition: { duration: 0.3 } }}
-                        className={`relative p-8 sm:p-10 rounded-2xl border transition-all duration-500 ${
-                            plan.highlighted
-                                ? "border-neon-orange/30 bg-neon-orange/[0.03]"
-                                : "border-white/[0.08] bg-white/[0.02] hover:border-white/15"
-                        }`}
+                        className="relative p-8 sm:p-10 rounded-2xl border transition-all duration-500 border-neon-orange/30 bg-neon-orange/[0.03] max-w-md w-full"
                     >
-                        {plan.highlighted && (
-                            <>
-                                <div className="absolute inset-0 animate-border-rotate rounded-2xl" />
-                                <span className="absolute -top-3 left-8 z-20 px-4 py-1.5 bg-gradient-to-r from-[#ff6b00] to-[#ff8533] text-black text-[10px] font-bold uppercase tracking-widest rounded-full shadow-lg shadow-[#ff6b00]/20">
-                                    Populaire
-                                </span>
-                            </>
-                        )}
+                        <>
+                            <div className="absolute inset-0 animate-border-rotate rounded-2xl" />
+                            <span className="absolute -top-3 left-8 z-20 px-4 py-1.5 bg-gradient-to-r from-[#ff6b00] to-[#ff8533] text-black text-[10px] font-bold uppercase tracking-widest rounded-full shadow-lg shadow-[#ff6b00]/20">
+                                Sans Commission
+                            </span>
+                        </>
 
                         <div className="relative z-10">
                             <h3 className="font-display text-xl text-white uppercase">{plan.name}</h3>
@@ -753,11 +738,7 @@ const Pricing = () => (
                             <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                                 <Link
                                     href="/signup"
-                                    className={`mt-8 block text-center py-4 rounded-xl font-bold text-xs uppercase tracking-widest transition-all duration-300 shimmer-hover ${
-                                        plan.highlighted
-                                            ? "bg-gradient-to-r from-[#ff6b00] to-[#ff8533] text-black btn-magnetic"
-                                            : "border border-white/20 text-white hover:border-white/40 hover:bg-white/5"
-                                    }`}
+                                    className="mt-8 block text-center py-4 rounded-xl font-bold text-xs uppercase tracking-widest transition-all duration-300 shimmer-hover bg-gradient-to-r from-[#ff6b00] to-[#ff8533] text-black btn-magnetic"
                                 >
                                     {plan.cta}
                                 </Link>
@@ -774,7 +755,7 @@ const Pricing = () => (
                 transition={{ delay: 0.5 }}
                 className="text-center text-slate-600 text-xs font-mono mt-8"
             >
-                Essai gratuit de 7 jours. Sans carte bancaire.
+                Résiliable à tout moment. Sans engagement.
             </motion.p>
         </div>
     </section>
@@ -811,7 +792,7 @@ const FinalCTA = () => (
                     className="font-display text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white uppercase tracking-tight leading-[1.1]"
                 >
                     Commencez<br />
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ff6b00] to-[#ff8533] drop-shadow-[0_0_40px_rgba(255,107,0,0.3)]">gratuitement</span>
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ff6b00] to-[#ff8533] drop-shadow-[0_0_40px_rgba(255,107,0,0.3)]">dès maintenant</span>
                 </motion.h2>
 
                 <motion.div variants={fadeUp} custom={3} className="mt-10">

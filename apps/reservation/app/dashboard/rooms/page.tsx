@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Table2, Trash2, LayoutGrid } from 'lucide-react';
 import { useRestaurant } from '@/contexts/restaurant-context';
+import { PermissionGuard } from '@/components/permission-guard';
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
 
@@ -115,7 +116,8 @@ export default function RoomsPage() {
     }
 
     return (
-        <div className="max-w-7xl mx-auto space-y-6">
+        <PermissionGuard module="rooms" action="view">
+            <div className="max-w-7xl mx-auto space-y-6">
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
@@ -271,5 +273,6 @@ export default function RoomsPage() {
                 )}
             </AnimatePresence>
         </div>
+        </PermissionGuard>
     );
 }

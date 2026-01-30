@@ -35,7 +35,7 @@ export default function LoginPage() {
                 return;
             }
 
-            router.push('/dashboard');
+            router.push('/dashboard/cahier');
         } catch (err) {
             setError('Une erreur est survenue. Veuillez réessayer.');
         } finally {

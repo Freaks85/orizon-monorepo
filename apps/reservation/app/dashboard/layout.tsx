@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Sidebar } from '@/components/dashboard/sidebar';
 import { TopNav } from '@/components/dashboard/top-nav';
 import { RestaurantProvider, useRestaurant } from '@/contexts/restaurant-context';
+import { PermissionProvider } from '@/contexts/permission-context';
 import { supabase } from '@/lib/supabase';
 
 function DashboardContent({ children }: { children: React.ReactNode }) {
@@ -57,7 +58,9 @@ export default function DashboardLayout({
 }) {
     return (
         <RestaurantProvider>
-            <DashboardContent>{children}</DashboardContent>
+            <PermissionProvider>
+                <DashboardContent>{children}</DashboardContent>
+            </PermissionProvider>
         </RestaurantProvider>
     );
 }

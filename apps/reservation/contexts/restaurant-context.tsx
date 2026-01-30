@@ -57,6 +57,14 @@ export function RestaurantProvider({ children }: { children: ReactNode }) {
                 `)
                 .eq('user_id', user.id);
 
+            console.log('🏢 Restaurant Context Debug:', {
+                user_id: user.id,
+                user_email: user.email,
+                data,
+                error,
+                errorDetails: error ? JSON.stringify(error) : null
+            });
+
             if (error) throw error;
 
             const restaurantList = data
@@ -75,7 +83,8 @@ export function RestaurantProvider({ children }: { children: ReactNode }) {
                 localStorage.setItem('activeRestaurantId', activeRestaurant.id);
             }
         } catch (error) {
-            console.error('Error fetching restaurants:', error);
+            console.error('❌ Error fetching restaurants:', error);
+            console.error('Error details:', JSON.stringify(error, null, 2));
         } finally {
             setLoading(false);
         }

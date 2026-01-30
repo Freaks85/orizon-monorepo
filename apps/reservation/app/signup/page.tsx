@@ -43,8 +43,8 @@ export default function SignupPage() {
 
             if (signUpError) throw signUpError;
 
-            // Redirect to dashboard
-            router.push('/dashboard');
+            // Redirect to cahier de réservation
+            router.push('/dashboard/cahier');
 
         } catch (err: any) {
             console.error(err);
@@ -149,11 +149,11 @@ export default function SignupPage() {
                             disabled={loading}
                             className="w-full bg-[#ff6b00] text-black font-bold uppercase tracking-widest py-4 rounded-lg hover:bg-[#ff8533] transition-colors text-sm mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            {loading ? 'Creation en cours...' : "Demarrer l'essai gratuit"}
+                            {loading ? 'Creation en cours...' : "Créer mon compte"}
                         </button>
 
                         <p className="text-xs text-slate-600 text-center mt-4">
-                            En cliquant, vous acceptez nos <a href="#" className="underline hover:text-white">CGU</a>. Pas de carte bancaire requise.
+                            En cliquant, vous acceptez nos <a href="#" className="underline hover:text-white">CGU</a>. Abonnement à 40€/mois.
                         </p>
 
                         <p className="text-xs text-slate-500 text-center mt-2">
@@ -172,11 +172,11 @@ export default function SignupPage() {
 
                     <ul className="space-y-6">
                         {[
-                            "7 Jours d'acces complet gratuit",
-                            "Aucune carte bancaire requise",
+                            "40€ par mois, sans commission",
+                            "Réservations illimitées",
                             "Configuration en 2 minutes",
-                            "Zero commission sur les reservations",
-                            "Page de booking personnalisable"
+                            "Support technique inclus",
+                            "Résiliable à tout moment"
                         ].map((item, i) => (
                             <li key={i} className="flex items-center gap-4 text-slate-300 font-mono text-sm uppercase tracking-wider">
                                 <div className="h-5 w-5 rounded-full bg-[#ff6b00]/20 flex items-center justify-center flex-shrink-0">

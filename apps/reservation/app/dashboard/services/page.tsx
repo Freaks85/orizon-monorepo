@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Clock, Users, Edit2, Trash2, Calendar } from 'lucide-react';
 import { useRestaurant } from '@/contexts/restaurant-context';
+import { PermissionGuard } from '@/components/permission-guard';
 import { supabase } from '@/lib/supabase';
 
 interface Service {
@@ -167,7 +168,8 @@ export default function ServicesPage() {
     }
 
     return (
-        <div className="max-w-7xl mx-auto space-y-6">
+        <PermissionGuard module="services" action="view">
+            <div className="max-w-7xl mx-auto space-y-6">
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
@@ -405,5 +407,6 @@ export default function ServicesPage() {
                 )}
             </AnimatePresence>
         </div>
+        </PermissionGuard>
     );
 }

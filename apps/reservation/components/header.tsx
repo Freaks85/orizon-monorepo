@@ -33,7 +33,7 @@ export function Header() {
     }, [mobileMenuOpen]);
 
     const navLinks = [
-        { label: "Fonctionnalités", href: "#features" },
+        { label: "Fonctionnalités", href: "/features" },
         { label: "Produit", href: "#comparison" },
         { label: "Tarifs", href: "#pricing" },
     ];
@@ -101,7 +101,7 @@ export function Header() {
                                 href="/signup"
                                 className="group shimmer-hover btn-magnetic px-5 py-2.5 bg-gradient-to-r from-[#ff6b00] to-[#ff8533] text-black font-bold text-xs uppercase tracking-widest rounded-xl flex items-center gap-2"
                             >
-                                Essai gratuit
+                                Commencer
                                 <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform duration-300" />
                             </Link>
                         </motion.div>
@@ -173,7 +173,7 @@ export function Header() {
                                     onClick={() => setMobileMenuOpen(false)}
                                     className="text-center py-4 bg-gradient-to-r from-[#ff6b00] to-[#ff8533] text-black font-bold text-sm uppercase tracking-widest rounded-xl flex items-center justify-center gap-2"
                                 >
-                                    Essai gratuit
+                                    Commencer
                                     <ArrowRight className="h-4 w-4" />
                                 </Link>
                             </motion.div>

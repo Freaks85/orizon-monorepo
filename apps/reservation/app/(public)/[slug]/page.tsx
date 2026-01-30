@@ -216,8 +216,8 @@ export default function PublicBookingPage() {
                     reservation_time: selectedTime,
                     party_size: partySize,
                     customer_name: customerName,
-                    customer_phone: customerPhone,
-                    customer_email: customerEmail || null,
+                    customer_phone: customerPhone || null,
+                    customer_email: customerEmail,
                     notes: notes || null,
                     service_id: selectedService.id
                 })
@@ -598,7 +598,7 @@ export default function PublicBookingPage() {
 
                             <div>
                                 <label className="block text-xs font-mono uppercase tracking-wider mb-2" style={{ color: `${settings.accent_color}99` }}>
-                                    Téléphone *
+                                    Téléphone (optionnel)
                                 </label>
                                 <div className="relative">
                                     <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5" style={{ color: `${settings.accent_color}50` }} />
@@ -606,7 +606,6 @@ export default function PublicBookingPage() {
                                         type="tel"
                                         value={customerPhone}
                                         onChange={(e) => setCustomerPhone(e.target.value)}
-                                        required
                                         className="w-full rounded-lg pl-10 pr-4 py-3 focus:outline-none focus:ring-2 border"
                                         style={{
                                             backgroundColor: `${settings.accent_color}08`,
@@ -621,7 +620,7 @@ export default function PublicBookingPage() {
 
                             <div>
                                 <label className="block text-xs font-mono uppercase tracking-wider mb-2" style={{ color: `${settings.accent_color}99` }}>
-                                    Email (optionnel)
+                                    Email *
                                 </label>
                                 <div className="relative">
                                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5" style={{ color: `${settings.accent_color}50` }} />
@@ -629,6 +628,7 @@ export default function PublicBookingPage() {
                                         type="email"
                                         value={customerEmail}
                                         onChange={(e) => setCustomerEmail(e.target.value)}
+                                        required
                                         className="w-full rounded-lg pl-10 pr-4 py-3 focus:outline-none focus:ring-2 border"
                                         style={{
                                             backgroundColor: `${settings.accent_color}08`,
@@ -684,7 +684,7 @@ export default function PublicBookingPage() {
                                 </button>
                                 <button
                                     onClick={handleSubmit}
-                                    disabled={submitting || !customerName || !customerPhone}
+                                    disabled={submitting || !customerName || !customerEmail}
                                     className="flex-1 py-3 sm:py-4 rounded-lg font-bold text-xs sm:text-sm uppercase tracking-widest transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                                     style={{
                                         backgroundColor: settings.primary_color,

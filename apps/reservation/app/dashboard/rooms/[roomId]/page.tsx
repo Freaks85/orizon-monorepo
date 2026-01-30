@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Save, Settings2 } from 'lucide-react';
 import { useRestaurant } from '@/contexts/restaurant-context';
+import { PermissionGuard } from '@/components/permission-guard';
 import { supabase } from '@/lib/supabase';
 import { GridEditor } from '@/components/room-mapper/grid-editor';
 import { TableProperties } from '@/components/room-mapper/table-properties';
@@ -211,7 +212,8 @@ export default function RoomEditorPage() {
     }
 
     return (
-        <div className="min-h-[calc(100vh-8rem)] flex flex-col">
+        <PermissionGuard module="rooms" action="view">
+            <div className="min-h-[calc(100vh-8rem)] flex flex-col">
             {/* Header */}
             <div className="flex items-center justify-between gap-2 sm:gap-4 mb-4">
                 <div className="flex items-center gap-2 sm:gap-4 min-w-0">
@@ -355,5 +357,6 @@ export default function RoomEditorPage() {
                 </div>
             </div>
         </div>
+        </PermissionGuard>
     );
 }
