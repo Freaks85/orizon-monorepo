@@ -5,10 +5,15 @@ import { ReservationConfirmationEmail } from '@/lib/email-templates/reservation-
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 
+// Validate service role key exists
+if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    throw new Error('SUPABASE_SERVICE_ROLE_KEY is required');
+}
+
 // Create admin Supabase client for server-side operations
 const supabaseAdmin = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
 // Delay function for rate limiting (Resend free tier: 1 email/second)

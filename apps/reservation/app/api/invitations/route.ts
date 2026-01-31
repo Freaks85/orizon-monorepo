@@ -2,85 +2,59 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { randomBytes } from 'crypto';
 import { resend } from '../../../lib/resend';
+import { authorizeRequest } from '@/lib/auth-middleware';
+import { checkCsrfToken } from '@/lib/csrf';
+import { invitationSchema } from '@/lib/validations';
+import { ZodError } from 'zod';
+
+// Validate service role key exists
+if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    throw new Error('SUPABASE_SERVICE_ROLE_KEY is required');
+}
+
+const supabaseAdmin = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
 
 export async function POST(request: NextRequest) {
     try {
-        const body = await request.json();
-        const { email, role, restaurant_id } = body;
+        // Check CSRF token
+        const csrfError = checkCsrfToken(request);
+        if (csrfError) return csrfError;
 
-        // Validate required fields
-        if (!email || !role || !restaurant_id) {
-            return NextResponse.json(
-                { error: 'Email, role and restaurant_id are required' },
-                { status: 400 }
-            );
-        }
+        const rawBody = await request.json();
 
-        // Validate role
-        const validRoles = ['admin', 'manager', 'staff'];
-        if (!validRoles.includes(role)) {
-            return NextResponse.json(
-                { error: 'Invalid role. Must be admin, manager, or staff' },
-                { status: 400 }
-            );
-        }
-
-        // Get current user
-        const authHeader = request.headers.get('authorization');
-        if (!authHeader) {
-            return NextResponse.json(
-                { error: 'Unauthorized' },
-                { status: 401 }
-            );
-        }
-
-        const token = authHeader.replace('Bearer ', '');
-
-        // Create a Supabase client with the user's token for RLS
-        const supabase = createClient(
-            process.env.NEXT_PUBLIC_SUPABASE_URL!,
-            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-            {
-                global: {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                }
+        // Validate input with Zod
+        let validatedData;
+        try {
+            validatedData = invitationSchema.parse(rawBody);
+        } catch (error) {
+            if (error instanceof ZodError) {
+                return NextResponse.json(
+                    {
+                        error: 'Données invalides',
+                        details: error.errors.map(e => ({
+                            field: e.path.join('.'),
+                            message: e.message
+                        }))
+                    },
+                    { status: 400 }
+                );
             }
-        );
-
-        const { data: { user }, error: userError } = await supabase.auth.getUser(token);
-
-        if (userError || !user) {
-            return NextResponse.json(
-                { error: 'Unauthorized' },
-                { status: 401 }
-            );
+            throw error;
         }
 
-        // Check if user has permission to invite
-        const { data: member, error: memberError } = await supabase
-            .from('restaurant_members')
-            .select('role, permissions')
-            .eq('restaurant_id', restaurant_id)
-            .eq('user_id', user.id)
-            .single();
+        const { email, role, restaurant_id } = validatedData;
 
-        console.log('Permission check:', {
-            restaurant_id,
-            user_id: user.id,
-            member,
-            memberError,
-            hasError: !!memberError
+        // Authenticate and authorize
+        const { context, error: authError } = await authorizeRequest(request, {
+            restaurantId: restaurant_id,
+            module: 'team',
+            action: 'invite'
         });
 
-        if (memberError || !member || !['owner', 'admin', 'manager'].includes(member.role)) {
-            console.error('Permission denied:', memberError);
-            return NextResponse.json(
-                { error: 'You do not have permission to invite team members' },
-                { status: 403 }
-            );
-        }
+        if (authError) return authError;
 
         // Check if email already has a pending invitation
         const { data: existingInvitation } = await supabase
@@ -108,12 +82,12 @@ export async function POST(request: NextRequest) {
         const expiresAt = new Date();
         expiresAt.setDate(expiresAt.getDate() + 7);
 
-        // Create invitation
-        const { data: invitation, error: invitationError } = await supabase
+        // Create invitation using admin client
+        const { data: invitation, error: invitationError } = await supabaseAdmin
             .from('invitations')
             .insert({
                 restaurant_id,
-                invited_by: user.id,
+                invited_by: context!.user.id,
                 email,
                 role,
                 token: invitationToken,
@@ -131,7 +105,7 @@ export async function POST(request: NextRequest) {
         }
 
         // Get restaurant details for email
-        const { data: restaurant } = await supabase
+        const { data: restaurant } = await supabaseAdmin
             .from('restaurants')
             .select('name')
             .eq('id', restaurant_id)
@@ -270,39 +244,6 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
     try {
-        // Get current user
-        const authHeader = request.headers.get('authorization');
-        if (!authHeader) {
-            return NextResponse.json(
-                { error: 'Unauthorized' },
-                { status: 401 }
-            );
-        }
-
-        const token = authHeader.replace('Bearer ', '');
-
-        // Create a Supabase client with the user's token for RLS
-        const supabase = createClient(
-            process.env.NEXT_PUBLIC_SUPABASE_URL!,
-            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-            {
-                global: {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                }
-            }
-        );
-
-        const { data: { user }, error: userError } = await supabase.auth.getUser(token);
-
-        if (userError || !user) {
-            return NextResponse.json(
-                { error: 'Unauthorized' },
-                { status: 401 }
-            );
-        }
-
         // Get restaurant_id from query params
         const { searchParams } = new URL(request.url);
         const restaurant_id = searchParams.get('restaurant_id');
@@ -314,31 +255,17 @@ export async function GET(request: NextRequest) {
             );
         }
 
-        // Check if user is a member
-        const { data: member, error: memberError } = await supabase
-            .from('restaurant_members')
-            .select('role')
-            .eq('restaurant_id', restaurant_id)
-            .eq('user_id', user.id)
-            .single();
-
-        console.log('GET Permission check:', {
-            restaurant_id,
-            user_id: user.id,
-            member,
-            memberError
+        // Authenticate and authorize
+        const { context, error: authError } = await authorizeRequest(request, {
+            restaurantId: restaurant_id,
+            module: 'team',
+            action: 'view'
         });
 
-        if (memberError || !member || !['owner', 'admin', 'manager'].includes(member.role)) {
-            console.error('GET Permission denied:', memberError);
-            return NextResponse.json(
-                { error: 'You do not have permission to view invitations' },
-                { status: 403 }
-            );
-        }
+        if (authError) return authError;
 
-        // Get all pending invitations for this restaurant
-        const { data: invitations, error } = await supabase
+        // Get all pending invitations for this restaurant using admin client
+        const { data: invitations, error } = await supabaseAdmin
             .from('invitations')
             .select('*')
             .eq('restaurant_id', restaurant_id)
@@ -366,6 +293,10 @@ export async function GET(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
     try {
+        // Check CSRF token
+        const csrfError = checkCsrfToken(request);
+        if (csrfError) return csrfError;
+
         const { searchParams } = new URL(request.url);
         const invitation_id = searchParams.get('id');
 
@@ -376,41 +307,31 @@ export async function DELETE(request: NextRequest) {
             );
         }
 
-        // Get current user
-        const authHeader = request.headers.get('authorization');
-        if (!authHeader) {
+        // First, get the invitation to know which restaurant it belongs to
+        const { data: invitation, error: invitationError } = await supabaseAdmin
+            .from('invitations')
+            .select('restaurant_id')
+            .eq('id', invitation_id)
+            .single();
+
+        if (invitationError || !invitation) {
             return NextResponse.json(
-                { error: 'Unauthorized' },
-                { status: 401 }
+                { error: 'Invitation not found' },
+                { status: 404 }
             );
         }
 
-        const token = authHeader.replace('Bearer ', '');
+        // Authenticate and authorize
+        const { context, error: authError } = await authorizeRequest(request, {
+            restaurantId: invitation.restaurant_id,
+            module: 'team',
+            action: 'manage'
+        });
 
-        // Create a Supabase client with the user's token for RLS
-        const supabase = createClient(
-            process.env.NEXT_PUBLIC_SUPABASE_URL!,
-            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-            {
-                global: {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                }
-            }
-        );
+        if (authError) return authError;
 
-        const { data: { user }, error: userError } = await supabase.auth.getUser(token);
-
-        if (userError || !user) {
-            return NextResponse.json(
-                { error: 'Unauthorized' },
-                { status: 401 }
-            );
-        }
-
-        // Delete invitation (RLS will check permissions)
-        const { error } = await supabase
+        // Delete invitation using admin client
+        const { error } = await supabaseAdmin
             .from('invitations')
             .delete()
             .eq('id', invitation_id);

@@ -103,13 +103,41 @@ export function RestaurantProvider({ children }: { children: ReactNode }) {
     };
 
     useEffect(() => {
-        fetchRestaurants();
+        let isMounted = true;
+        let fetchPromise: Promise<void> | null = null;
 
-        const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
-            fetchRestaurants();
+        const safeFetchRestaurants = async () => {
+            // Prevent concurrent fetches
+            if (fetchPromise) {
+                await fetchPromise;
+                return;
+            }
+
+            fetchPromise = fetchRestaurants();
+            await fetchPromise;
+            fetchPromise = null;
+        };
+
+        // Initial fetch
+        if (isMounted) {
+            safeFetchRestaurants();
+        }
+
+        // Subscribe to auth changes
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event) => {
+            if (isMounted && (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED')) {
+                await safeFetchRestaurants();
+            } else if (event === 'SIGNED_OUT') {
+                setRestaurants([]);
+                setRestaurant(null);
+                setLoading(false);
+            }
         });
 
-        return () => subscription.unsubscribe();
+        return () => {
+            isMounted = false;
+            subscription.unsubscribe();
+        };
     }, []);
 
     return (

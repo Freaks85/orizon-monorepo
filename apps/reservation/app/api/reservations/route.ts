@@ -4,11 +4,18 @@ import { resend, getFromEmail } from '@/lib/resend';
 import { NewReservationNotificationEmail } from '@/lib/email-templates/new-reservation-notification';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import { reservationSchema, checkRateLimit, sanitizeHtml } from '@/lib/validations';
+import { ZodError } from 'zod';
+
+// Validate service role key exists
+if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    throw new Error('SUPABASE_SERVICE_ROLE_KEY is required');
+}
 
 // Create admin Supabase client for server-side operations
 const supabaseAdmin = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
 // Delay function for rate limiting (Resend free tier: 1 email/second)
@@ -28,16 +35,53 @@ interface ReservationRequest {
 
 export async function POST(request: NextRequest) {
     try {
-        const body: ReservationRequest = await request.json();
+        // Get client IP for rate limiting
+        const clientIp = request.headers.get('x-forwarded-for') ||
+                         request.headers.get('x-real-ip') ||
+                         'unknown';
 
-        // Validate required fields
-        if (!body.slug || !body.reservation_date || !body.reservation_time ||
-            !body.party_size || !body.customer_name || !body.customer_email || !body.service_id) {
+        // Check rate limit: max 5 reservations per hour per IP
+        const rateLimit = checkRateLimit(`reservation:${clientIp}`, 5, 3600000);
+        if (!rateLimit.allowed) {
             return NextResponse.json(
-                { error: 'Missing required fields' },
-                { status: 400 }
+                {
+                    error: 'Trop de tentatives. Veuillez réessayer plus tard.',
+                    resetAt: new Date(rateLimit.resetAt).toISOString()
+                },
+                {
+                    status: 429,
+                    headers: {
+                        'X-RateLimit-Limit': '5',
+                        'X-RateLimit-Remaining': '0',
+                        'X-RateLimit-Reset': rateLimit.resetAt.toString()
+                    }
+                }
             );
         }
+
+        const rawBody = await request.json();
+
+        // Validate and sanitize input
+        let validatedData;
+        try {
+            validatedData = reservationSchema.parse(rawBody);
+        } catch (error) {
+            if (error instanceof ZodError) {
+                return NextResponse.json(
+                    {
+                        error: 'Données invalides',
+                        details: error.errors.map(e => ({
+                            field: e.path.join('.'),
+                            message: e.message
+                        }))
+                    },
+                    { status: 400 }
+                );
+            }
+            throw error;
+        }
+
+        const body = validatedData;
 
         // Get restaurant settings by slug
         const { data: settings, error: settingsError } = await supabaseAdmin

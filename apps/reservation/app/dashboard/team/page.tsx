@@ -211,12 +211,26 @@ export default function TeamPage() {
         if (!confirm(`Êtes-vous sûr de vouloir retirer ${memberEmail} de l'équipe ?`)) return;
 
         try {
-            const { error } = await supabase
-                .from('restaurant_members')
-                .delete()
-                .eq('id', memberId);
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) {
+                setError('Vous devez être connecté');
+                return;
+            }
 
-            if (error) throw error;
+            const response = await fetch(`/api/members?id=${memberId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${session.access_token}`
+                }
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                setError(data.error || 'Erreur lors de la suppression');
+                setTimeout(() => setError(''), 3000);
+                return;
+            }
 
             setSuccess('Membre retiré de l\'équipe');
             await fetchTeamData();
@@ -224,6 +238,7 @@ export default function TeamPage() {
         } catch (err) {
             console.error('Error removing member:', err);
             setError('Erreur lors de la suppression');
+            setTimeout(() => setError(''), 3000);
         }
     };
 
