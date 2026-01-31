@@ -51,3 +51,10 @@ nul
 SECURITY_AUDIT_REPORT.md
 SECURITY_FINAL_REPORT.md
 **/email-templates/README.md
+
+# Database Migrations & SQL Scripts
+**/supabase/migrations/
+**/supabase/scripts/
+**/*_SQL*.sql
+**/URGENT_SQL.sql
+**/SQL_A_EXECUTER.sql
