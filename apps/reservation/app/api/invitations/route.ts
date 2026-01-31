@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { randomBytes } from 'crypto';
+import { resend } from '../../../lib/resend';
 
 export async function POST(request: NextRequest) {
     try {
@@ -136,11 +137,116 @@ export async function POST(request: NextRequest) {
             .eq('id', restaurant_id)
             .single();
 
-        // Send invitation email (using Supabase Auth will be configured with Resend SMTP)
+        // Send invitation email
         const invitationUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://reservation.orizonsapp.com'}/invitation/${invitationToken}`;
 
-        // TODO: Send email via Supabase Auth email template
-        // For now, return the invitation data
+        // Send email via Resend
+        if (resend) {
+            try {
+                const emailHtml = `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <meta charset="utf-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    </head>
+                    <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #e5e5e5; max-width: 600px; margin: 0 auto; padding: 0; background-color: #0a0a0a;">
+                        <!-- Header -->
+                        <div style="background: #0a0a0a; padding: 30px; text-align: center; border-bottom: 3px solid #ff6b00;">
+                            <div style="display: inline-block; background: #ff6b00; padding: 12px 20px; border-radius: 8px; margin-bottom: 15px;">
+                                <span style="color: #000; font-weight: bold; font-size: 24px; letter-spacing: 2px; text-transform: uppercase;">
+                                    Orizon<span style="color: #fff;">Resa</span>
+                                </span>
+                            </div>
+                            <h1 style="color: #fff; margin: 15px 0 0 0; font-size: 26px; font-weight: 600;">Invitation à rejoindre l'équipe</h1>
+                        </div>
+
+                        <!-- Content -->
+                        <div style="background: #1a1a1a; padding: 40px 30px;">
+                            <div style="background: #0a0a0a; border: 1px solid #333; border-left: 4px solid #ff6b00; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+                                <p style="font-size: 15px; color: #ff6b00; margin: 0 0 10px 0; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">
+                                    ${restaurant?.name || 'Notre restaurant'}
+                                </p>
+                                <p style="font-size: 14px; color: #999; margin: 0;">
+                                    Rôle : <strong style="color: #e5e5e5;">${role === 'admin' ? 'Administrateur' : role === 'manager' ? 'Manager' : 'Personnel'}</strong>
+                                </p>
+                            </div>
+
+                            <p style="font-size: 16px; margin-bottom: 20px; color: #e5e5e5;">Bonjour,</p>
+
+                            <p style="font-size: 15px; margin-bottom: 20px; color: #ccc; line-height: 1.7;">
+                                Vous avez été invité(e) à rejoindre <strong style="color: #ff6b00;">${restaurant?.name || 'notre restaurant'}</strong> sur la plateforme Orizon Reservations.
+                            </p>
+
+                            <p style="font-size: 15px; margin-bottom: 30px; color: #ccc; line-height: 1.7;">
+                                Cette invitation est valable pendant <strong>7 jours</strong>. Cliquez sur le bouton ci-dessous pour accepter l'invitation et créer votre compte :
+                            </p>
+
+                            <!-- CTA Button -->
+                            <div style="text-align: center; margin: 40px 0;">
+                                <a href="${invitationUrl}"
+                                   style="background: linear-gradient(135deg, #ff6b00 0%, #ff8533 100%);
+                                          color: #000;
+                                          padding: 16px 45px;
+                                          text-decoration: none;
+                                          border-radius: 6px;
+                                          font-weight: bold;
+                                          font-size: 15px;
+                                          text-transform: uppercase;
+                                          letter-spacing: 1px;
+                                          display: inline-block;
+                                          box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);">
+                                    Accepter l'invitation
+                                </a>
+                            </div>
+
+                            <!-- Alternative Link -->
+                            <div style="background: #0a0a0a; border: 1px solid #333; padding: 20px; border-radius: 8px; margin-top: 30px;">
+                                <p style="font-size: 13px; color: #999; margin: 0 0 10px 0;">
+                                    Si le bouton ne fonctionne pas, copiez et collez ce lien dans votre navigateur :
+                                </p>
+                                <p style="margin: 0;">
+                                    <a href="${invitationUrl}" style="color: #ff6b00; word-break: break-all; font-size: 12px; text-decoration: underline;">${invitationUrl}</a>
+                                </p>
+                            </div>
+
+                            <!-- Expiration Notice -->
+                            <div style="margin-top: 30px; padding: 15px; background: #0a0a0a; border: 1px solid #333; border-radius: 6px;">
+                                <p style="font-size: 12px; color: #666; text-align: center; margin: 0;">
+                                    ⏰ Cette invitation expirera le <strong style="color: #ff6b00;">${expiresAt.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</strong>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Footer -->
+                        <div style="background: #0a0a0a; padding: 25px 30px; text-align: center; border-top: 1px solid #333;">
+                            <p style="font-size: 11px; color: #666; margin: 0 0 5px 0;">
+                                Si vous n'avez pas demandé cette invitation, vous pouvez ignorer cet email.
+                            </p>
+                            <p style="font-size: 11px; color: #666; margin: 0;">
+                                &copy; 2026 <strong style="color: #ff6b00;">Orizon Reservations</strong>. Tous droits réservés.
+                            </p>
+                        </div>
+                    </body>
+                    </html>
+                `;
+
+                await resend.emails.send({
+                    from: 'Orizon Reservations <noreply@orizonsapp.com>',
+                    to: email,
+                    subject: `Invitation à rejoindre ${restaurant?.name || 'notre restaurant'}`,
+                    html: emailHtml,
+                });
+
+                console.log('Invitation email sent successfully to:', email);
+            } catch (emailError) {
+                console.error('Error sending invitation email:', emailError);
+                // Don't fail the request if email fails, but log it
+            }
+        } else {
+            console.warn('Resend is not configured. Email not sent.');
+        }
+
         return NextResponse.json({
             success: true,
             invitation: {

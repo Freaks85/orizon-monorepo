@@ -39,51 +39,26 @@ export default function InvitationPage() {
 
     const fetchInvitation = async () => {
         try {
-            const { data, error } = await supabase
-                .from('invitations')
-                .select(`
-                    id,
-                    email,
-                    role,
-                    expires_at,
-                    accepted_at,
-                    restaurants:restaurant_id (name),
-                    invited_by:invited_by (
-                        raw_user_meta_data
-                    )
-                `)
-                .eq('token', token)
-                .is('accepted_at', null)
-                .single();
+            // Use API route instead of direct Supabase call to bypass RLS
+            const response = await fetch(`/api/invitations/verify?token=${token}`);
 
-            if (error || !data) {
-                setError('Invitation invalide ou expirée');
+            if (!response.ok) {
+                const errorData = await response.json();
+                setError(errorData.error || 'Invitation invalide ou expirée');
                 setLoading(false);
                 return;
             }
 
-            // Check if expired
-            const expiresAt = new Date(data.expires_at);
-            if (expiresAt < new Date()) {
-                setError('Cette invitation a expiré');
-                setLoading(false);
-                return;
-            }
-
-            // Handle invited_by which can be an array or object
-            const invitedByData = Array.isArray(data.invited_by) ? data.invited_by[0] : data.invited_by;
-            const invitedByName = invitedByData?.raw_user_meta_data?.first_name && invitedByData?.raw_user_meta_data?.last_name
-                ? `${invitedByData.raw_user_meta_data.first_name} ${invitedByData.raw_user_meta_data.last_name}`
-                : 'Un membre de l\'équipe';
+            const data = await response.json();
 
             setInvitation({
                 id: data.id,
                 email: data.email,
                 role: data.role,
-                restaurant_name: (data.restaurants as any)?.name || 'le restaurant',
-                invited_by_name: invitedByName,
+                restaurant_name: data.restaurant_name,
+                invited_by_name: data.invited_by_name,
                 expires_at: data.expires_at,
-                accepted: !!data.accepted_at
+                accepted: false
             });
 
         } catch (err) {
