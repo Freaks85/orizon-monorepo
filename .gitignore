@@ -46,3 +46,8 @@ nul
 
 .vercel
 .env*.local
+
+# Documentation & Security Reports
+SECURITY_AUDIT_REPORT.md
+SECURITY_FINAL_REPORT.md
+email-templates/README.md
