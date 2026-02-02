@@ -12,6 +12,7 @@ export default function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [rememberMe, setRememberMe] = useState(true);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -33,6 +34,14 @@ export default function LoginPage() {
                     setError('Email ou mot de passe incorrect.');
                 }
                 return;
+            }
+
+            // Stocker la préférence "rester connecté"
+            if (!rememberMe) {
+                // Si l'utilisateur ne veut pas rester connecté, on marque la session
+                sessionStorage.setItem('session_only', 'true');
+            } else {
+                sessionStorage.removeItem('session_only');
             }
 
             router.push('/dashboard/cahier');
@@ -116,6 +125,33 @@ export default function LoginPage() {
                                 {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                             </button>
                         </div>
+                    </div>
+
+                    {/* Remember me */}
+                    <div className="flex items-center justify-between">
+                        <label className="flex items-center gap-2 cursor-pointer group">
+                            <div className="relative">
+                                <input
+                                    type="checkbox"
+                                    checked={rememberMe}
+                                    onChange={(e) => setRememberMe(e.target.checked)}
+                                    className="sr-only peer"
+                                />
+                                <div className="w-5 h-5 border border-white/20 rounded bg-white/5 peer-checked:bg-[#ff6b00] peer-checked:border-[#ff6b00] transition-all flex items-center justify-center">
+                                    {rememberMe && (
+                                        <svg className="w-3 h-3 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    )}
+                                </div>
+                            </div>
+                            <span className="text-sm text-slate-400 group-hover:text-white transition-colors">
+                                Rester connecté
+                            </span>
+                        </label>
+                        <Link href="#" className="text-sm text-slate-500 hover:text-[#ff6b00] transition-colors">
+                            Mot de passe oublié ?
+                        </Link>
                     </div>
 
                     <button

@@ -17,6 +17,7 @@ import {
 import { useRestaurant } from '@/contexts/restaurant-context';
 import { usePermissions } from '@/contexts/permission-context';
 import { supabase } from '@/lib/supabase';
+import { useCsrfToken } from '@/hooks/use-csrf';
 
 interface TeamMember {
     id: string;
@@ -45,6 +46,7 @@ interface Invitation {
 export default function TeamPage() {
     const { restaurant } = useRestaurant();
     const { hasPermission, role } = usePermissions();
+    const { token: csrfToken } = useCsrfToken();
     const [members, setMembers] = useState<TeamMember[]>([]);
     const [invitations, setInvitations] = useState<Invitation[]>([]);
     const [loading, setLoading] = useState(true);
@@ -137,7 +139,8 @@ export default function TeamPage() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${session.access_token}`
+                    'Authorization': `Bearer ${session.access_token}`,
+                    ...(csrfToken ? { 'X-CSRF-Token': csrfToken } : {})
                 },
                 body: JSON.stringify({
                     email: inviteEmail,
@@ -192,7 +195,8 @@ export default function TeamPage() {
             const response = await fetch(`/api/invitations?id=${id}`, {
                 method: 'DELETE',
                 headers: {
-                    'Authorization': `Bearer ${session.access_token}`
+                    'Authorization': `Bearer ${session.access_token}`,
+                    ...(csrfToken ? { 'X-CSRF-Token': csrfToken } : {})
                 }
             });
 
@@ -219,7 +223,8 @@ export default function TeamPage() {
             const response = await fetch(`/api/members?id=${memberId}`, {
                 method: 'DELETE',
                 headers: {
-                    'Authorization': `Bearer ${session.access_token}`
+                    'Authorization': `Bearer ${session.access_token}`,
+                    ...(csrfToken ? { 'X-CSRF-Token': csrfToken } : {})
                 }
             });
 

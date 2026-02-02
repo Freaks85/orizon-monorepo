@@ -2,14 +2,13 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { CalendarRange, ArrowLeft, Check, AlertCircle } from 'lucide-react';
+import { CalendarRange, ArrowLeft, Check, AlertCircle, Mail } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 
 export default function SignupPage() {
-    const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [emailSent, setEmailSent] = useState(false);
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -37,14 +36,15 @@ export default function SignupPage() {
                         last_name: formData.lastName,
                         restaurant_name: formData.restaurantName,
                         role: 'manager'
-                    }
+                    },
+                    emailRedirectTo: `${window.location.origin}/dashboard`
                 }
             });
 
             if (signUpError) throw signUpError;
 
-            // Redirect to cahier de réservation
-            router.push('/dashboard/cahier');
+            // Afficher le message de confirmation
+            setEmailSent(true);
 
         } catch (err: any) {
             console.error(err);
@@ -53,6 +53,55 @@ export default function SignupPage() {
             setLoading(false);
         }
     };
+
+    // Écran de confirmation après inscription
+    if (emailSent) {
+        return (
+            <div className="bg-[#050505] min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
+                {/* Background Grid */}
+                <div className="absolute inset-0 bg-grid-pattern opacity-20 pointer-events-none"></div>
+
+                {/* Orange gradient orbs */}
+                <div className="absolute top-20 right-1/4 w-96 h-96 bg-[#ff6b00]/10 rounded-full blur-[128px] pointer-events-none" />
+                <div className="absolute bottom-20 left-1/4 w-64 h-64 bg-[#ff6b00]/5 rounded-full blur-[96px] pointer-events-none" />
+
+                <div className="w-full max-w-md relative z-10 border border-white/10 shadow-2xl shadow-[#ff6b00]/5 bg-black rounded-xl overflow-hidden p-8 md:p-12 text-center">
+                    <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-[#ff6b00]/20 flex items-center justify-center">
+                        <Mail className="h-10 w-10 text-[#ff6b00]" />
+                    </div>
+
+                    <h1 className="font-display text-2xl md:text-3xl text-white uppercase mb-4">Vérifiez votre email</h1>
+
+                    <p className="text-slate-400 mb-6">
+                        Un email de confirmation a été envoyé à <span className="text-white font-bold">{formData.email}</span>
+                    </p>
+
+                    <div className="bg-white/5 border border-white/10 rounded-lg p-4 mb-6">
+                        <p className="text-slate-500 text-sm">
+                            Cliquez sur le lien dans l'email pour activer votre compte et accéder à votre espace.
+                        </p>
+                    </div>
+
+                    <p className="text-slate-600 text-xs mb-6">
+                        Vous n'avez pas reçu l'email ? Vérifiez vos spams ou{' '}
+                        <button
+                            onClick={() => setEmailSent(false)}
+                            className="text-[#ff6b00] hover:underline"
+                        >
+                            réessayez avec une autre adresse
+                        </button>
+                    </p>
+
+                    <Link
+                        href="/login"
+                        className="inline-flex items-center justify-center w-full bg-white/5 border border-white/10 text-white font-bold uppercase tracking-widest py-4 rounded-lg hover:bg-white/10 transition-colors text-sm"
+                    >
+                        Aller à la connexion
+                    </Link>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="bg-[#050505] min-h-screen flex items-center justify-center p-6 relative overflow-hidden">

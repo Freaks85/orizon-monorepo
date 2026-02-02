@@ -15,11 +15,14 @@ import {
     X,
     ChevronRight,
     Users,
-    CreditCard
+    CreditCard,
+    User,
+    ChevronUp
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '@/lib/supabase';
 import { usePermissions } from '@/contexts/permission-context';
+import { useEffect } from 'react';
 
 const allMenuItems = [
     { icon: BookOpen, label: 'Cahier de réservation', href: '/dashboard/cahier', requiresPermission: { module: 'reservations' as const, action: 'view' as const } },
@@ -40,7 +43,40 @@ interface SidebarProps {
 export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
     const pathname = usePathname();
     const [isHovered, setIsHovered] = useState(false);
+    const [showUserMenu, setShowUserMenu] = useState(false);
+    const [user, setUser] = useState<{ firstName: string; lastName: string; email: string } | null>(null);
     const { hasPermission, loading, role } = usePermissions();
+
+    // Récupérer les infos utilisateur
+    useEffect(() => {
+        const getUser = async () => {
+            const { data: { user: authUser } } = await supabase.auth.getUser();
+            if (authUser) {
+                setUser({
+                    firstName: authUser.user_metadata?.first_name || '',
+                    lastName: authUser.user_metadata?.last_name || '',
+                    email: authUser.email || ''
+                });
+            }
+        };
+        getUser();
+    }, []);
+
+    // Initiales pour l'avatar
+    const getInitials = () => {
+        if (!user) return '?';
+        const first = user.firstName?.charAt(0) || '';
+        const last = user.lastName?.charAt(0) || '';
+        return (first + last).toUpperCase() || user.email?.charAt(0).toUpperCase() || '?';
+    };
+
+    const getDisplayName = () => {
+        if (!user) return 'Utilisateur';
+        if (user.firstName || user.lastName) {
+            return `${user.firstName} ${user.lastName}`.trim();
+        }
+        return user.email?.split('@')[0] || 'Utilisateur';
+    };
 
     // Filter menu items based on permissions
     const menuItems = useMemo(() => {
@@ -135,25 +171,71 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
                 })}
             </nav>
 
-            {/* Logout Button */}
-            <div className="p-3 border-t border-white/10">
+            {/* User Menu */}
+            <div className="p-3 border-t border-white/10 relative">
                 <button
-                    onClick={handleLogout}
-                    className="w-full flex items-center gap-3 h-12 px-3 rounded-xl text-slate-500 hover:text-red-400 hover:bg-red-500/10 transition-all duration-200 border border-transparent hover:border-red-500/20"
+                    onClick={() => setShowUserMenu(!showUserMenu)}
+                    className="w-full flex items-center gap-3 h-12 px-3 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 transition-all duration-200"
                 >
-                    <LogOut className="h-5 w-5 flex-shrink-0" />
-                    <motion.span
+                    {/* Avatar */}
+                    <div className="w-8 h-8 rounded-full bg-[#ff6b00]/20 flex items-center justify-center flex-shrink-0">
+                        <span className="text-[#ff6b00] text-xs font-bold">{getInitials()}</span>
+                    </div>
+                    <motion.div
                         initial={false}
                         animate={{
                             opacity: isHovered ? 1 : 0,
                             x: isHovered ? 0 : -10
                         }}
                         transition={{ duration: 0.2, ease: "easeOut" }}
-                        className="font-mono text-xs uppercase tracking-wider font-bold whitespace-nowrap"
+                        className="flex-1 text-left overflow-hidden"
                     >
-                        Déconnexion
-                    </motion.span>
+                        <p className="font-mono text-xs uppercase tracking-wider font-bold whitespace-nowrap truncate">
+                            {getDisplayName()}
+                        </p>
+                    </motion.div>
+                    <motion.div
+                        initial={false}
+                        animate={{
+                            opacity: isHovered ? 1 : 0,
+                            rotate: showUserMenu ? 180 : 0
+                        }}
+                        transition={{ duration: 0.2, ease: "easeOut" }}
+                    >
+                        <ChevronUp className="h-4 w-4" />
+                    </motion.div>
                 </button>
+
+                {/* Dropdown Menu */}
+                <AnimatePresence>
+                    {showUserMenu && isHovered && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 10 }}
+                            className="absolute bottom-full left-3 right-3 mb-2 bg-[#0a0a0a] border border-white/10 rounded-xl overflow-hidden shadow-xl"
+                        >
+                            <Link
+                                href="/dashboard/account"
+                                onClick={() => {
+                                    setShowUserMenu(false);
+                                    handleLinkClick();
+                                }}
+                                className="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-white/5 transition-colors"
+                            >
+                                <User className="h-4 w-4" />
+                                <span className="font-mono text-xs uppercase tracking-wider">Mon compte</span>
+                            </Link>
+                            <button
+                                onClick={handleLogout}
+                                className="w-full flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                            >
+                                <LogOut className="h-4 w-4" />
+                                <span className="font-mono text-xs uppercase tracking-wider">Déconnexion</span>
+                            </button>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
         </div>
     );
@@ -202,7 +284,28 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
                 })}
             </nav>
 
-            <div className="p-4 border-t border-white/10">
+            {/* User Menu Mobile */}
+            <div className="p-4 border-t border-white/10 space-y-2">
+                {/* User Info */}
+                <div className="flex items-center gap-3 px-4 py-2">
+                    <div className="w-10 h-10 rounded-full bg-[#ff6b00]/20 flex items-center justify-center">
+                        <span className="text-[#ff6b00] text-sm font-bold">{getInitials()}</span>
+                    </div>
+                    <div>
+                        <p className="font-mono text-sm text-white font-bold">{getDisplayName()}</p>
+                        <p className="font-mono text-xs text-slate-500">{user?.email}</p>
+                    </div>
+                </div>
+
+                <Link
+                    href="/dashboard/account"
+                    onClick={handleLinkClick}
+                    className="flex items-center gap-3 w-full px-4 py-3 text-slate-400 hover:text-white hover:bg-white/5 transition-colors rounded-xl"
+                >
+                    <User className="h-5 w-5" />
+                    <span className="font-mono text-xs uppercase tracking-wider font-bold">Mon compte</span>
+                </Link>
+
                 <button
                     onClick={handleLogout}
                     className="flex items-center gap-3 w-full px-4 py-3 text-slate-500 hover:text-red-400 hover:bg-red-500/10 transition-colors rounded-xl border border-transparent hover:border-red-500/20"

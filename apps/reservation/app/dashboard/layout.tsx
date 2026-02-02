@@ -12,7 +12,7 @@ import { SubscriptionGuard } from '@/components/subscription/subscription-guard'
 import { supabase } from '@/lib/supabase';
 
 // Pages qui ne nécessitent pas un abonnement actif
-const SUBSCRIPTION_EXEMPT_PATHS = ['/dashboard/billing'];
+const SUBSCRIPTION_EXEMPT_PATHS = ['/dashboard/billing', '/dashboard/account'];
 
 // Pages avec accès lecture seule même si expiré
 const READ_ONLY_PATHS = ['/dashboard/reservations', '/dashboard/cahier'];

@@ -1,10 +1,9 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { CalendarRange, Check, X, Loader2, Lock, User } from 'lucide-react';
-import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
 
 interface InvitationData {
@@ -19,7 +18,6 @@ interface InvitationData {
 
 export default function InvitationPage() {
     const params = useParams();
-    const router = useRouter();
     const token = params.token as string;
 
     const [invitation, setInvitation] = useState<InvitationData | null>(null);
@@ -32,6 +30,7 @@ export default function InvitationPage() {
     const [lastName, setLastName] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [success, setSuccess] = useState(false);
 
     useEffect(() => {
         fetchInvitation();
@@ -91,42 +90,31 @@ export default function InvitationPage() {
         setSubmitting(true);
 
         try {
-            // Create user account
-            const { error: signUpError } = await supabase.auth.signUp({
-                email: invitation!.email,
-                password: password,
-                options: {
-                    data: {
-                        first_name: firstName,
-                        last_name: lastName,
-                        role: invitation!.role,
-                        invitation_token: token
-                    },
-                    emailRedirectTo: `${window.location.origin}/dashboard/cahier`
-                }
+            // Call server API to create account (bypasses email confirmation)
+            const response = await fetch('/api/invitations/accept', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    token,
+                    firstName,
+                    lastName,
+                    password,
+                }),
             });
 
-            if (signUpError) {
-                setError(signUpError.message);
+            const data = await response.json();
+
+            if (!response.ok) {
+                setError(data.error || 'Une erreur est survenue');
                 setSubmitting(false);
                 return;
             }
 
-            // Wait a bit for the trigger to create restaurant_member
-            await new Promise(resolve => setTimeout(resolve, 2000));
-
-            // Mark invitation as accepted
-            const { error: updateError } = await supabase
-                .from('invitations')
-                .update({ accepted_at: new Date().toISOString() })
-                .eq('id', invitation!.id);
-
-            if (updateError) {
-                console.error('Error updating invitation:', updateError);
-            }
-
-            // Redirect to login with success message
-            router.push('/login?invitation_accepted=true');
+            // Show success message
+            setSuccess(true);
+            setSubmitting(false);
 
         } catch (err: any) {
             console.error('Error accepting invitation:', err);
@@ -159,6 +147,37 @@ export default function InvitationPage() {
                         Retour à l'accueil
                     </Link>
                 </div>
+            </div>
+        );
+    }
+
+    if (success) {
+        return (
+            <div className="min-h-screen bg-rich-black flex items-center justify-center p-6">
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="max-w-md w-full text-center"
+                >
+                    <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <Check className="h-10 w-10 text-green-500" />
+                    </div>
+                    <h1 className="font-display text-3xl text-white uppercase mb-4">
+                        Compte créé avec succès !
+                    </h1>
+                    <p className="text-slate-400 mb-2">
+                        Bienvenue dans l'équipe de <span className="text-[#ff6b00] font-semibold">{invitation?.restaurant_name}</span>
+                    </p>
+                    <p className="text-slate-500 text-sm mb-8">
+                        Vous pouvez maintenant vous connecter avec votre email et mot de passe.
+                    </p>
+                    <Link
+                        href="/login"
+                        className="inline-block px-8 py-4 bg-gradient-to-r from-[#ff6b00] to-[#ff8533] text-black font-bold text-sm uppercase tracking-widest rounded-lg hover:opacity-90 transition-opacity"
+                    >
+                        Se connecter
+                    </Link>
+                </motion.div>
             </div>
         );
     }

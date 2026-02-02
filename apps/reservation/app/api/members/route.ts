@@ -40,10 +40,10 @@ export async function DELETE(request: NextRequest) {
         const { context, error: authError } = await authenticate(request);
         if (authError) return authError;
 
-        // Get member to delete
+        // Get member to delete (include user_id)
         const { data: memberToDelete, error: memberError } = await supabaseAdmin
             .from('restaurant_members')
-            .select('role, restaurant_id')
+            .select('role, restaurant_id, user_id')
             .eq('id', member_id)
             .single();
 
@@ -90,6 +90,26 @@ export async function DELETE(request: NextRequest) {
                 { error: 'Failed to delete member' },
                 { status: 500 }
             );
+        }
+
+        // Check if user is member of any other restaurant
+        const { data: otherMemberships, error: otherError } = await supabaseAdmin
+            .from('restaurant_members')
+            .select('id')
+            .eq('user_id', memberToDelete.user_id);
+
+        if (!otherError && (!otherMemberships || otherMemberships.length === 0)) {
+            // User is not member of any restaurant anymore, delete their Auth account
+            console.log(`User ${memberToDelete.user_id} has no other memberships, deleting Auth account...`);
+
+            const { error: authDeleteError } = await supabaseAdmin.auth.admin.deleteUser(memberToDelete.user_id);
+
+            if (authDeleteError) {
+                console.error('Error deleting user auth account:', authDeleteError);
+                // Don't fail the request - member was already removed
+            } else {
+                console.log(`Auth account deleted for user ${memberToDelete.user_id}`);
+            }
         }
 
         return NextResponse.json({ success: true });
