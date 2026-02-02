@@ -1,17 +1,27 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { Sidebar } from '@/components/dashboard/sidebar';
 import { TopNav } from '@/components/dashboard/top-nav';
 import { RestaurantProvider, useRestaurant } from '@/contexts/restaurant-context';
 import { PermissionProvider } from '@/contexts/permission-context';
+import { SubscriptionProvider } from '@/contexts/subscription-context';
+import { SubscriptionBanner } from '@/components/subscription/subscription-banner';
+import { SubscriptionGuard } from '@/components/subscription/subscription-guard';
 import { supabase } from '@/lib/supabase';
+
+// Pages qui ne nécessitent pas un abonnement actif
+const SUBSCRIPTION_EXEMPT_PATHS = ['/dashboard/billing'];
+
+// Pages avec accès lecture seule même si expiré
+const READ_ONLY_PATHS = ['/dashboard/reservations', '/dashboard/cahier'];
 
 function DashboardContent({ children }: { children: React.ReactNode }) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const { loading } = useRestaurant();
     const router = useRouter();
+    const pathname = usePathname();
 
     useEffect(() => {
         const checkAuth = async () => {
@@ -36,6 +46,10 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
         );
     }
 
+    // Vérifier si la page actuelle est exemptée de la vérification d'abonnement
+    const isExemptPath = SUBSCRIPTION_EXEMPT_PATHS.some(path => pathname?.startsWith(path));
+    const isReadOnlyPath = READ_ONLY_PATHS.some(path => pathname?.startsWith(path));
+
     return (
         <div className="min-h-screen bg-[#050505]">
             <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
@@ -44,7 +58,14 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
                 <TopNav onMenuClick={() => setSidebarOpen(true)} />
 
                 <main className="flex-1 p-4 md:p-6">
-                    {children}
+                    <SubscriptionBanner />
+                    {isExemptPath ? (
+                        children
+                    ) : (
+                        <SubscriptionGuard requiresFeatureAccess={!isReadOnlyPath}>
+                            {children}
+                        </SubscriptionGuard>
+                    )}
                 </main>
             </div>
         </div>
@@ -59,7 +80,9 @@ export default function DashboardLayout({
     return (
         <RestaurantProvider>
             <PermissionProvider>
-                <DashboardContent>{children}</DashboardContent>
+                <SubscriptionProvider>
+                    <DashboardContent>{children}</DashboardContent>
+                </SubscriptionProvider>
             </PermissionProvider>
         </RestaurantProvider>
     );

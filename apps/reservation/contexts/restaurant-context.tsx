@@ -104,29 +104,23 @@ export function RestaurantProvider({ children }: { children: ReactNode }) {
 
     useEffect(() => {
         let isMounted = true;
-        let fetchPromise: Promise<void> | null = null;
 
-        const safeFetchRestaurants = async () => {
-            // Prevent concurrent fetches
-            if (fetchPromise) {
-                await fetchPromise;
+        fetchRestaurants();
+
+        // Subscribe to auth changes - skip initial SIGNED_IN since we already fetch on mount
+        let isInitialEvent = true;
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event) => {
+            // Skip the initial SIGNED_IN event since we already fetch on mount
+            if (isInitialEvent && event === 'SIGNED_IN') {
+                isInitialEvent = false;
                 return;
             }
+            isInitialEvent = false;
 
-            fetchPromise = fetchRestaurants();
-            await fetchPromise;
-            fetchPromise = null;
-        };
+            if (!isMounted) return;
 
-        // Initial fetch
-        if (isMounted) {
-            safeFetchRestaurants();
-        }
-
-        // Subscribe to auth changes
-        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event) => {
-            if (isMounted && (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED')) {
-                await safeFetchRestaurants();
+            if (event === 'TOKEN_REFRESHED') {
+                await fetchRestaurants();
             } else if (event === 'SIGNED_OUT') {
                 setRestaurants([]);
                 setRestaurant(null);

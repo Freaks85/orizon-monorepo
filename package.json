@@ -17,6 +17,7 @@
     "db:migrate": "supabase db push"
   },
   "devDependencies": {
+    "baseline-browser-mapping": "^2.9.19",
     "turbo": "^2.3.3",
     "typescript": "^5.7.2"
   },

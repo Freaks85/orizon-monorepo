@@ -89,6 +89,16 @@ export default function PublicBookingPage() {
                 return;
             }
 
+            // Vérifier le statut de l'abonnement
+            const subscriptionResponse = await fetch(`/api/subscription?restaurant_id=${settingsData.restaurant_id}`);
+            const subscriptionData = await subscriptionResponse.json();
+
+            if (!subscriptionData.isPublicPageEnabled) {
+                setError('Ce restaurant n\'accepte pas les réservations en ligne pour le moment.');
+                setLoading(false);
+                return;
+            }
+
             setSettings(settingsData);
 
             // Fetch restaurant
@@ -247,11 +257,25 @@ export default function PublicBookingPage() {
     }
 
     if (error || !settings || !restaurant) {
+        const isSubscriptionError = error === 'Ce restaurant n\'accepte pas les réservations en ligne pour le moment.';
         return (
             <div className="min-h-screen bg-[#050505] flex items-center justify-center p-4">
-                <div className="text-center">
-                    <h1 className="text-2xl font-bold text-white mb-2">Page non trouvée</h1>
-                    <p className="text-slate-500">Cette page de réservation n'existe pas ou n'est pas active.</p>
+                <div className="text-center max-w-md">
+                    {isSubscriptionError ? (
+                        <>
+                            <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-slate-800 flex items-center justify-center">
+                                <Clock className="h-8 w-8 text-slate-500" />
+                            </div>
+                            <h1 className="text-2xl font-bold text-white mb-3">Réservations temporairement indisponibles</h1>
+                            <p className="text-slate-400 mb-6">{error}</p>
+                            <p className="text-slate-600 text-sm">Veuillez contacter directement le restaurant pour effectuer une réservation.</p>
+                        </>
+                    ) : (
+                        <>
+                            <h1 className="text-2xl font-bold text-white mb-2">Page non trouvée</h1>
+                            <p className="text-slate-500">Cette page de réservation n'existe pas ou n'est pas active.</p>
+                        </>
+                    )}
                 </div>
             </div>
         );

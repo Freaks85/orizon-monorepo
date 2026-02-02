@@ -14,7 +14,8 @@ import {
     CalendarRange,
     X,
     ChevronRight,
-    Users
+    Users,
+    CreditCard
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '@/lib/supabase';
@@ -28,6 +29,7 @@ const allMenuItems = [
     { icon: Clock, label: 'Services', href: '/dashboard/services', requiresPermission: { module: 'services' as const, action: 'view' as const } },
     { icon: Users, label: 'Équipe', href: '/dashboard/team', requiresPermission: { module: 'team' as const, action: 'view' as const } },
     { icon: Settings, label: 'Paramètres', href: '/dashboard/settings', requiresPermission: { module: 'settings' as const, action: 'view' as const } },
+    { icon: CreditCard, label: 'Facturation', href: '/dashboard/billing', ownerOnly: true },
 ];
 
 interface SidebarProps {
@@ -38,16 +40,20 @@ interface SidebarProps {
 export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
     const pathname = usePathname();
     const [isHovered, setIsHovered] = useState(false);
-    const { hasPermission, loading } = usePermissions();
+    const { hasPermission, loading, role } = usePermissions();
 
     // Filter menu items based on permissions
     const menuItems = useMemo(() => {
         if (loading) return [];
         return allMenuItems.filter(item => {
+            // Check owner-only items
+            if ('ownerOnly' in item && item.ownerOnly) {
+                return role === 'owner';
+            }
             if (!item.requiresPermission) return true;
             return hasPermission(item.requiresPermission.module, item.requiresPermission.action);
         });
-    }, [hasPermission, loading]);
+    }, [hasPermission, loading, role]);
 
     const handleLinkClick = () => {
         if (onClose) {
