@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Calendar, Clock, Users, Phone, Mail, User, Check, MapPin, ChevronLeft, ChevronRight, CalendarDays, X } from 'lucide-react';
+import { Clock, Users, Phone, Mail, User, Check, MapPin, ChevronLeft, ChevronRight, CalendarDays, X } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { format, addDays, isBefore, startOfDay, isToday, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, subMonths, addMonths } from 'date-fns';
 import { fr } from 'date-fns/locale';

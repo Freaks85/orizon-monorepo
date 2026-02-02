@@ -3,6 +3,7 @@ import { Inter, Oswald } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { SmoothScroll } from "@/components/smooth-scroll";
+import { ScrollToTop } from "@/components/scroll-to-top";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -20,8 +21,7 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
   icons: {
     icon: [
-      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-96x96.png", sizes: "96x96", type: "image/png" },
       { url: "/favicon.ico", sizes: "any" }
     ],
     apple: [
@@ -52,6 +52,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <SmoothScroll>
+          <ScrollToTop />
           {children}
         </SmoothScroll>
         <Analytics />

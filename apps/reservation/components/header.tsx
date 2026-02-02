@@ -4,13 +4,14 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
 import { CalendarRange, Menu, X, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import { useLenis } from 'lenis/react';
 
 export function Header() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
-    const [hidden, setHidden] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
     const { scrollY } = useScroll();
+    const lenis = useLenis();
 
     useEffect(() => {
         const check = () => setIsMobile(window.innerWidth < 768);
@@ -19,11 +20,9 @@ export function Header() {
         return () => window.removeEventListener('resize', check);
     }, []);
 
-    // Hide on scroll down, show on scroll up
+    // Track scroll position for background change
     useMotionValueEvent(scrollY, "change", (latest) => {
-        const previous = scrollY.getPrevious() ?? 0;
         setScrolled(latest > 50);
-        setHidden(latest > previous && latest > 300);
     });
 
     // Lock body scroll when mobile menu is open
@@ -34,14 +33,14 @@ export function Header() {
 
     const navLinks = [
         { label: "Fonctionnalités", href: "/features" },
-        { label: "Produit", href: "#comparison" },
-        { label: "Tarifs", href: "#pricing" },
+        { label: "Tarifs", href: "/pricing" },
     ];
 
     return (
+        <>
         <motion.header
             initial={{ y: -100 }}
-            animate={{ y: hidden ? -100 : 0 }}
+            animate={{ y: 0 }}
             transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
             className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
             style={{
@@ -75,21 +74,28 @@ export function Header() {
                         </div>
                     </Link>
 
-                    {/* Navigation Desktop — center */}
-                    <nav className="hidden md:flex items-center gap-1 bg-white/[0.03] backdrop-blur-sm rounded-full px-1.5 py-1 border border-white/[0.06]">
-                        {navLinks.map((link) => (
-                            <a
-                                key={link.label}
-                                href={link.href}
-                                className="nav-link-underline relative px-5 py-2 text-[13px] text-slate-400 hover:text-white transition-colors duration-300 font-medium tracking-wide rounded-full hover:bg-white/[0.04]"
-                            >
-                                {link.label}
-                            </a>
-                        ))}
+                    {/* Navigation Desktop — truly centered */}
+                    <nav className="hidden md:flex flex-1 justify-center">
+                        <div className="flex items-center gap-1 bg-white/[0.03] backdrop-blur-sm rounded-full px-1.5 py-1 border border-white/[0.06]">
+                            {navLinks.map((link) => (
+                                <Link
+                                    key={link.label}
+                                    href={link.href}
+                                    scroll={false}
+                                    onClick={() => {
+                                        if (lenis) lenis.scrollTo(0, { immediate: true });
+                                        else window.scrollTo(0, 0);
+                                    }}
+                                    className="nav-link-underline relative px-5 py-2 text-[13px] text-slate-400 hover:text-white transition-colors duration-300 font-medium tracking-wide rounded-full hover:bg-white/[0.04]"
+                                >
+                                    {link.label}
+                                </Link>
+                            ))}
+                        </div>
                     </nav>
 
                     {/* Auth Buttons Desktop */}
-                    <div className="hidden sm:flex items-center gap-3">
+                    <div className="hidden md:flex items-center gap-3">
                         <Link
                             href="/login"
                             className="px-4 py-2 text-[13px] text-slate-400 hover:text-white transition-colors duration-300 font-medium tracking-wide"
@@ -107,10 +113,10 @@ export function Header() {
                         </motion.div>
                     </div>
 
-                    {/* Mobile Menu Button */}
+                    {/* Mobile Menu Button - positioned right */}
                     <motion.button
                         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                        className="md:hidden p-2.5 text-slate-400 hover:text-white transition-colors rounded-xl hover:bg-white/[0.05]"
+                        className="md:hidden ml-auto p-2.5 text-slate-400 hover:text-white transition-colors rounded-xl hover:bg-white/[0.05]"
                         whileTap={{ scale: 0.9 }}
                     >
                         <AnimatePresence mode="wait">
@@ -128,59 +134,82 @@ export function Header() {
                 </div>
             </div>
 
-            {/* Mobile Menu — full screen overlay */}
+            </motion.header>
+
+            {/* Mobile Menu — dropdown style */}
             <AnimatePresence>
                 {mobileMenuOpen && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                        className="md:hidden fixed inset-0 top-16 z-40"
-                        style={{ background: "rgba(5, 5, 5, 0.98)", backdropFilter: "blur(24px)" }}
-                    >
-                        <nav className="flex flex-col p-6 pt-8 gap-2 h-full">
-                            {navLinks.map((link, i) => (
-                                <motion.a
-                                    key={link.label}
-                                    href={link.href}
-                                    onClick={() => setMobileMenuOpen(false)}
-                                    initial={{ opacity: 0, x: -20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, x: -20 }}
-                                    transition={{ delay: i * 0.08, duration: 0.3 }}
-                                    className="text-2xl font-display text-white uppercase tracking-wider py-4 border-b border-white/[0.06] hover:text-[#ff6b00] transition-colors duration-300"
-                                >
-                                    {link.label}
-                                </motion.a>
-                            ))}
+                    <>
+                        {/* Backdrop overlay */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="md:hidden fixed inset-0 z-[55] bg-black/60"
+                            onClick={() => setMobileMenuOpen(false)}
+                        />
 
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.3 }}
-                                className="mt-auto pb-12 flex flex-col gap-3"
-                            >
-                                <Link
-                                    href="/login"
-                                    onClick={() => setMobileMenuOpen(false)}
-                                    className="text-center py-4 text-sm text-slate-400 hover:text-white transition-colors font-medium border border-white/10 rounded-xl"
+                        {/* Menu panel */}
+                        <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.2 }}
+                            className="md:hidden fixed top-16 left-4 right-4 z-[60] rounded-2xl border border-white/[0.08] overflow-hidden"
+                            style={{ backgroundColor: '#0a0a0a' }}
+                        >
+                            {/* Menu content */}
+                            <nav className="flex flex-col p-4">
+                                {navLinks.map((link, i) => (
+                                    <motion.div
+                                        key={link.label}
+                                        initial={{ opacity: 0, x: -10 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        transition={{ delay: i * 0.05, duration: 0.2 }}
+                                    >
+                                        <Link
+                                            href={link.href}
+                                            scroll={false}
+                                            onClick={() => {
+                                                setMobileMenuOpen(false);
+                                                if (lenis) lenis.scrollTo(0, { immediate: true });
+                                                else window.scrollTo(0, 0);
+                                            }}
+                                            className="block text-lg font-display text-white uppercase tracking-wider py-3 px-2 border-b border-white/[0.06] hover:text-[#ff6b00] transition-colors duration-300"
+                                        >
+                                            {link.label}
+                                        </Link>
+                                    </motion.div>
+                                ))}
+
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ delay: 0.15 }}
+                                    className="pt-4 flex flex-col gap-3"
                                 >
-                                    Connexion
-                                </Link>
-                                <Link
-                                    href="/signup"
-                                    onClick={() => setMobileMenuOpen(false)}
-                                    className="text-center py-4 bg-gradient-to-r from-[#ff6b00] to-[#ff8533] text-black font-bold text-sm uppercase tracking-widest rounded-xl flex items-center justify-center gap-2"
-                                >
-                                    Commencer
-                                    <ArrowRight className="h-4 w-4" />
-                                </Link>
-                            </motion.div>
-                        </nav>
-                    </motion.div>
+                                    <Link
+                                        href="/login"
+                                        onClick={() => setMobileMenuOpen(false)}
+                                        className="text-center py-3 text-sm text-slate-400 hover:text-white transition-colors font-medium border border-white/10 rounded-xl"
+                                    >
+                                        Connexion
+                                    </Link>
+                                    <Link
+                                        href="/signup"
+                                        onClick={() => setMobileMenuOpen(false)}
+                                        className="text-center py-3 bg-gradient-to-r from-[#ff6b00] to-[#ff8533] text-black font-bold text-sm uppercase tracking-widest rounded-xl flex items-center justify-center gap-2"
+                                    >
+                                        Commencer
+                                        <ArrowRight className="h-4 w-4" />
+                                    </Link>
+                                </motion.div>
+                            </nav>
+                        </motion.div>
+                    </>
                 )}
             </AnimatePresence>
-        </motion.header>
+        </>
     );
 }
