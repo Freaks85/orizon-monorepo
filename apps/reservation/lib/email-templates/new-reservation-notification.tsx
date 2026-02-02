@@ -39,7 +39,7 @@ export function NewReservationNotificationEmail({
     notes,
     dashboardUrl,
     primaryColor = '#ff6b00',
-    secondaryColor = '#0a0a0a',
+    secondaryColor: _secondaryColor = '#0a0a0a',
 }: NewReservationNotificationEmailProps) {
     // Styles dynamiques avec les couleurs du restaurant
     const dynamicHeader = {

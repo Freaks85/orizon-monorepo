@@ -4,7 +4,7 @@ import { resend, getFromEmail } from '@/lib/resend';
 import { NewReservationNotificationEmail } from '@/lib/email-templates/new-reservation-notification';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import { reservationSchema, checkRateLimit, sanitizeHtml } from '@/lib/validations';
+import { reservationSchema, checkRateLimit } from '@/lib/validations';
 import { ZodError } from 'zod';
 
 // Validate service role key exists
@@ -21,17 +21,6 @@ const supabaseAdmin = createClient(
 // Delay function for rate limiting (Resend free tier: 1 email/second)
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-interface ReservationRequest {
-    slug: string;
-    reservation_date: string;
-    reservation_time: string;
-    party_size: number;
-    customer_name: string;
-    customer_phone?: string | null;
-    customer_email: string;
-    notes?: string | null;
-    service_id: string;
-}
 
 export async function POST(request: NextRequest) {
     try {
@@ -70,8 +59,8 @@ export async function POST(request: NextRequest) {
                 return NextResponse.json(
                     {
                         error: 'Données invalides',
-                        details: error.errors.map(e => ({
-                            field: e.path.join('.'),
+                        details: error.issues.map((e) => ({
+                            field: e.path.map(String).join('.'),
                             message: e.message
                         }))
                     },

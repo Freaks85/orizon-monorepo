@@ -45,7 +45,7 @@ export const reservationSchema = z.object({
 export const invitationSchema = z.object({
     email: emailSchema,
     role: z.enum(['admin', 'manager', 'staff'], {
-        errorMap: () => ({ message: 'Rôle invalide' })
+        error: 'Rôle invalide'
     }),
     restaurant_id: z.string().uuid('Restaurant ID invalide'),
 });

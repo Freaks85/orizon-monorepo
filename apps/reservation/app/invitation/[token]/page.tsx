@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { CalendarRange, Check, X, Loader2, Mail, Lock, User } from 'lucide-react';
+import { CalendarRange, Check, X, Loader2, Lock, User } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
 
@@ -92,7 +92,7 @@ export default function InvitationPage() {
 
         try {
             // Create user account
-            const { data: authData, error: signUpError } = await supabase.auth.signUp({
+            const { error: signUpError } = await supabase.auth.signUp({
                 email: invitation!.email,
                 password: password,
                 options: {

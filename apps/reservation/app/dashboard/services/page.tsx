@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Clock, Users, Edit2, Trash2, Calendar } from 'lucide-react';
+import { Plus, Clock, Users, Edit2, Trash2 } from 'lucide-react';
 import { useRestaurant } from '@/contexts/restaurant-context';
 import { PermissionGuard } from '@/components/permission-guard';
 import { supabase } from '@/lib/supabase';

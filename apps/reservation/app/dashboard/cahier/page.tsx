@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     Calendar,
     Clock,
-    Users,
     Phone,
     X,
     BookOpen,
@@ -17,7 +16,6 @@ import {
     EyeOff,
     AlertCircle,
     Check,
-    User,
     Mail,
     MessageSquare
 } from 'lucide-react';
@@ -520,7 +518,7 @@ function ReservationCard({
 function ReservationDetailModal({
     reservation,
     rooms,
-    tables,
+    tables: _tables,
     onClose,
     onStatusChange
 }: {

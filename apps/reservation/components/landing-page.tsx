@@ -17,7 +17,7 @@ import {
     Zap,
 } from 'lucide-react';
 import Link from 'next/link';
-import { useRef, useState, useCallback } from 'react';
+import { useRef, useCallback } from 'react';
 import { Header } from './header';
 import { Footer } from './footer';
 

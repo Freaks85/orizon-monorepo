@@ -54,7 +54,7 @@ const wordReveal = {
         transition: {
             duration: 0.8,
             delay: 0.3 + i * 0.08,
-            ease: [0.22, 1, 0.36, 1],
+            ease: [0.22, 1, 0.36, 1] as const,
         }
     })
 };

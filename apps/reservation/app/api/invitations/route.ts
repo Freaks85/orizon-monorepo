@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
                     {
                         error: 'Données invalides',
                         details: error.issues.map(e => ({
-                            field: e.path.join('.'),
+                            field: e.path.map(String).join('.'),
                             message: e.message
                         }))
                     },
@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
         if (authError) return authError;
 
         // Check if email already has a pending invitation
-        const { data: existingInvitation } = await supabase
+        const { data: existingInvitation } = await supabaseAdmin
             .from('invitations')
             .select('id, expires_at')
             .eq('restaurant_id', restaurant_id)
@@ -256,7 +256,7 @@ export async function GET(request: NextRequest) {
         }
 
         // Authenticate and authorize
-        const { context, error: authError } = await authorizeRequest(request, {
+        const { error: authError } = await authorizeRequest(request, {
             restaurantId: restaurant_id,
             module: 'team',
             action: 'view'
@@ -322,7 +322,7 @@ export async function DELETE(request: NextRequest) {
         }
 
         // Authenticate and authorize
-        const { context, error: authError } = await authorizeRequest(request, {
+        const { error: authError } = await authorizeRequest(request, {
             restaurantId: invitation.restaurant_id,
             module: 'team',
             action: 'manage'

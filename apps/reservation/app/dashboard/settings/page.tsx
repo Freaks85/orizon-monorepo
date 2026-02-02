@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Save, Globe, Palette, MessageSquare, Eye, Settings, Users, Clock, Mail, Plus, X } from 'lucide-react';
+import { Save, Globe, Palette, MessageSquare, Eye, Settings, Users, Mail, Plus, X } from 'lucide-react';
 import { useRestaurant } from '@/contexts/restaurant-context';
 import { PermissionGuard } from '@/components/permission-guard';
 import { supabase } from '@/lib/supabase';

@@ -2,11 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, Clock, Users, Phone, Mail, Check, X, Filter, Search, ChevronDown, Table2 } from 'lucide-react';
+import { Calendar, Clock, Users, Check, X, Search, Table2 } from 'lucide-react';
 import { useRestaurant } from '@/contexts/restaurant-context';
 import { supabase } from '@/lib/supabase';
-import { format, subDays, addDays } from 'date-fns';
-import { fr } from 'date-fns/locale';
+import { format } from 'date-fns';
 
 interface Reservation {
     id: string;
@@ -41,7 +40,7 @@ export default function ReservationsListPage() {
     const [loading, setLoading] = useState(true);
     const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
     const [searchQuery, setSearchQuery] = useState('');
-    const [showFilters, setShowFilters] = useState(false);
+    const [_showFilters, _setShowFilters] = useState(false);
     const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null);
     const [showTableModal, setShowTableModal] = useState(false);
 

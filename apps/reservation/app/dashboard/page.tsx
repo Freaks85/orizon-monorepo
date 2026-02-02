@@ -4,20 +4,17 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
     BarChart3,
-    TrendingUp,
     Users,
     Calendar,
     Clock,
     CheckCircle,
     XCircle,
-    AlertCircle,
-    ArrowUp,
-    ArrowDown
+    AlertCircle
 } from 'lucide-react';
 import { useRestaurant } from '@/contexts/restaurant-context';
 import { PermissionGuard } from '@/components/permission-guard';
 import { supabase } from '@/lib/supabase';
-import { format, subDays, startOfWeek, endOfWeek, startOfMonth, endOfMonth, eachDayOfInterval } from 'date-fns';
+import { format, startOfWeek, endOfWeek, startOfMonth, endOfMonth, eachDayOfInterval } from 'date-fns';
 import { fr } from 'date-fns/locale';
 
 interface DayStats {

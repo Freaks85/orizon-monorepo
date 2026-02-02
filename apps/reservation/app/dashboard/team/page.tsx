@@ -12,7 +12,6 @@ import {
     X,
     Loader2,
     Copy,
-    ExternalLink,
     AlertCircle
 } from 'lucide-react';
 import { useRestaurant } from '@/contexts/restaurant-context';

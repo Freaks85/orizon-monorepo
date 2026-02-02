@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useCallback, useRef } from 'react';
-import { Plus, Trash2, GripVertical } from 'lucide-react';
+import { Plus, Trash2 } from 'lucide-react';
 
 interface Table {
     id: string;

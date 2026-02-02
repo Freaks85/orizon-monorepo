@@ -39,8 +39,8 @@ export function ReservationConfirmationEmail({
     restaurantEmail,
     restaurantAddress,
     primaryColor = '#ff6b00',
-    secondaryColor = '#0a0a0a',
-    accentColor = '#ffffff',
+    secondaryColor: _secondaryColor = '#0a0a0a',
+    accentColor: _accentColor = '#ffffff',
 }: ReservationConfirmationEmailProps) {
     // Styles dynamiques avec les couleurs du restaurant
     const dynamicHeader = {
