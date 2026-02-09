@@ -248,12 +248,12 @@ export default function TeamPage() {
 
     if (!hasPermission('team', 'view')) {
         return (
-            <div className="flex flex-col items-center justify-center min-h-[60vh] p-6">
-                <Shield className="h-16 w-16 text-red-500/20 mb-6" />
-                <h1 className="font-display text-3xl text-white uppercase mb-4">
+            <div className="flex flex-col items-center justify-center min-h-[60vh] p-4 sm:p-6">
+                <Shield className="h-12 w-12 sm:h-16 sm:w-16 text-red-500/20 mb-4 sm:mb-6" />
+                <h1 className="font-display text-xl sm:text-3xl text-white uppercase mb-3 sm:mb-4 text-center">
                     Accès Refusé
                 </h1>
-                <p className="text-slate-400 text-center max-w-md">
+                <p className="text-slate-400 text-center max-w-md text-sm sm:text-base">
                     Vous n'avez pas les permissions nécessaires pour accéder à la gestion d'équipe.
                 </p>
             </div>
@@ -269,14 +269,14 @@ export default function TeamPage() {
     }
 
     return (
-        <div className="p-6 space-y-6">
+        <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
             {/* Header */}
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
-                    <h1 className="font-display text-3xl text-white uppercase tracking-wider">
+                    <h1 className="font-display text-xl sm:text-3xl text-white uppercase tracking-wider">
                         Gestion d'équipe
                     </h1>
-                    <p className="text-slate-400 text-sm mt-1">
+                    <p className="text-slate-400 text-xs sm:text-sm mt-1">
                         Gérez les membres de votre équipe et leurs permissions
                     </p>
                 </div>
@@ -284,7 +284,7 @@ export default function TeamPage() {
                 {hasPermission('team', 'invite') && (
                     <button
                         onClick={() => setShowInviteModal(true)}
-                        className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#ff6b00] to-[#ff8533] text-black font-bold text-sm uppercase tracking-wider rounded-lg hover:opacity-90 transition-opacity"
+                        className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-[#ff6b00] to-[#ff8533] text-black font-bold text-xs sm:text-sm uppercase tracking-wider rounded-lg hover:opacity-90 transition-opacity w-full sm:w-auto"
                     >
                         <UserPlus className="h-4 w-4" />
                         Inviter un membre
@@ -308,10 +308,10 @@ export default function TeamPage() {
             )}
 
             {/* Team Members */}
-            <div className="bg-white/5 border border-white/10 rounded-xl p-6">
-                <h2 className="font-display text-xl text-white uppercase mb-4 flex items-center gap-2">
-                    <Users className="h-5 w-5 text-[#ff6b00]" />
-                    Membres de l'équipe ({members.length})
+            <div className="bg-white/5 border border-white/10 rounded-xl p-4 sm:p-6">
+                <h2 className="font-display text-base sm:text-xl text-white uppercase mb-4 flex items-center gap-2">
+                    <Users className="h-5 w-5 text-[#ff6b00] flex-shrink-0" />
+                    Membres ({members.length})
                 </h2>
 
                 <div className="space-y-3">
@@ -327,26 +327,28 @@ export default function TeamPage() {
                         return (
                             <div
                                 key={member.id}
-                                className="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-lg"
+                                className="flex items-center justify-between gap-3 p-3 sm:p-4 bg-white/5 border border-white/10 rounded-lg"
                             >
-                                <div className="flex items-center gap-4">
-                                    <div className="w-10 h-10 rounded-full bg-[#ff6b00]/20 flex items-center justify-center">
-                                        <span className="text-[#ff6b00] font-bold text-sm uppercase">
+                                <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+                                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#ff6b00]/20 flex items-center justify-center flex-shrink-0">
+                                        <span className="text-[#ff6b00] font-bold text-xs sm:text-sm uppercase">
                                             {(fullName || member.user?.email || 'U')[0]}
                                         </span>
                                     </div>
-                                    <div>
-                                        <p className="text-white font-medium">
+                                    <div className="min-w-0">
+                                        <p className="text-white font-medium text-sm sm:text-base truncate">
                                             {fullName || member.user?.email}
                                         </p>
-                                        <p className="text-slate-400 text-sm">
-                                            {member.user?.email}
-                                        </p>
+                                        {fullName && (
+                                            <p className="text-slate-400 text-xs sm:text-sm truncate">
+                                                {member.user?.email}
+                                            </p>
+                                        )}
                                     </div>
                                 </div>
 
-                                <div className="flex items-center gap-3">
-                                    <span className={`px-3 py-1 rounded-full text-xs font-mono uppercase ${
+                                <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+                                    <span className={`px-2 sm:px-3 py-1 rounded-full text-[10px] sm:text-xs font-mono uppercase ${
                                         member.role === 'owner' ? 'bg-purple-500/20 text-purple-400' :
                                         member.role === 'admin' ? 'bg-blue-500/20 text-blue-400' :
                                         member.role === 'manager' ? 'bg-green-500/20 text-green-400' :
@@ -358,7 +360,7 @@ export default function TeamPage() {
                                     {canRemove && (
                                         <button
                                             onClick={() => handleRemoveMember(member.id, member.user?.email)}
-                                            className="p-2 text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
+                                            className="p-1.5 sm:p-2 text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
                                         >
                                             <Trash2 className="h-4 w-4" />
                                         </button>
@@ -372,33 +374,33 @@ export default function TeamPage() {
 
             {/* Pending Invitations */}
             {hasPermission('team', 'invite') && invitations.length > 0 && (
-                <div className="bg-white/5 border border-white/10 rounded-xl p-6">
-                    <h2 className="font-display text-xl text-white uppercase mb-4 flex items-center gap-2">
-                        <Mail className="h-5 w-5 text-[#ff6b00]" />
-                        Invitations en attente ({invitations.length})
+                <div className="bg-white/5 border border-white/10 rounded-xl p-4 sm:p-6">
+                    <h2 className="font-display text-base sm:text-xl text-white uppercase mb-4 flex items-center gap-2">
+                        <Mail className="h-5 w-5 text-[#ff6b00] flex-shrink-0" />
+                        Invitations ({invitations.length})
                     </h2>
 
                     <div className="space-y-3">
                         {invitations.map((invitation) => (
                             <div
                                 key={invitation.id}
-                                className="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-lg"
+                                className="flex items-center justify-between gap-3 p-3 sm:p-4 bg-white/5 border border-white/10 rounded-lg"
                             >
-                                <div>
-                                    <p className="text-white font-medium">{invitation.email}</p>
-                                    <p className="text-slate-400 text-sm">
+                                <div className="min-w-0">
+                                    <p className="text-white font-medium text-sm sm:text-base truncate">{invitation.email}</p>
+                                    <p className="text-slate-400 text-xs sm:text-sm">
                                         Expire le {new Date(invitation.expires_at).toLocaleDateString('fr-FR')}
                                     </p>
                                 </div>
 
-                                <div className="flex items-center gap-3">
-                                    <span className="px-3 py-1 bg-orange-500/20 text-orange-400 rounded-full text-xs font-mono uppercase">
+                                <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+                                    <span className="px-2 sm:px-3 py-1 bg-orange-500/20 text-orange-400 rounded-full text-[10px] sm:text-xs font-mono uppercase">
                                         {invitation.role}
                                     </span>
 
                                     <button
                                         onClick={() => handleCopyInviteLink(invitation.token)}
-                                        className="p-2 text-[#ff6b00] hover:bg-[#ff6b00]/10 rounded-lg transition-colors"
+                                        className="p-1.5 sm:p-2 text-[#ff6b00] hover:bg-[#ff6b00]/10 rounded-lg transition-colors"
                                         title="Copier le lien d'invitation"
                                     >
                                         <Copy className="h-4 w-4" />
@@ -406,7 +408,7 @@ export default function TeamPage() {
 
                                     <button
                                         onClick={() => handleDeleteInvitation(invitation.id)}
-                                        className="p-2 text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
+                                        className="p-1.5 sm:p-2 text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
                                         title="Annuler l'invitation"
                                     >
                                         <X className="h-4 w-4" />
@@ -420,14 +422,14 @@ export default function TeamPage() {
 
             {/* Invite Modal */}
             {showInviteModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/80">
+                <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-6 bg-black/80">
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        className="bg-[#0a0a0a] border border-white/10 rounded-xl p-6 max-w-md w-full"
+                        initial={{ opacity: 0, y: 20, scale: 0.98 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        className="bg-[#0a0a0a] border border-white/10 rounded-t-2xl sm:rounded-xl p-5 sm:p-6 max-w-md w-full max-h-[90vh] overflow-y-auto"
                     >
-                        <div className="flex items-center justify-between mb-6">
-                            <h3 className="font-display text-xl text-white uppercase">
+                        <div className="flex items-center justify-between mb-5 sm:mb-6">
+                            <h3 className="font-display text-lg sm:text-xl text-white uppercase">
                                 Inviter un membre
                             </h3>
                             <button
@@ -448,7 +450,7 @@ export default function TeamPage() {
                                     value={inviteEmail}
                                     onChange={(e) => setInviteEmail(e.target.value)}
                                     required
-                                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#ff6b00] transition-colors"
+                                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:border-[#ff6b00] transition-colors"
                                     placeholder="jean@example.com"
                                 />
                             </div>
@@ -470,15 +472,15 @@ export default function TeamPage() {
                                         appearance: 'none'
                                     }}
                                 >
-                                    <option value="staff" className="bg-[#0a0a0a] text-white py-2">👤 Staff - Accès réservations uniquement</option>
-                                    <option value="manager" className="bg-[#0a0a0a] text-white py-2">📊 Manager - Accès opérationnel complet</option>
-                                    {role === 'owner' && <option value="admin" className="bg-[#0a0a0a] text-white py-2">⚡ Admin - Accès administrateur complet</option>}
+                                    <option value="staff" className="bg-[#0a0a0a] text-white py-2">Staff - Reservations</option>
+                                    <option value="manager" className="bg-[#0a0a0a] text-white py-2">Manager - Acces complet</option>
+                                    {role === 'owner' && <option value="admin" className="bg-[#0a0a0a] text-white py-2">Admin - Administrateur</option>}
                                 </select>
                             </div>
 
                             <div className="bg-[#ff6b00]/10 border border-[#ff6b00]/20 rounded-lg p-3">
-                                <p className="text-[#ff6b00] text-sm font-mono">
-                                    ✉️ Une invitation sera envoyée à cette adresse email avec un lien pour créer un compte.
+                                <p className="text-[#ff6b00] text-xs sm:text-sm font-mono">
+                                    Une invitation sera envoyée avec un lien pour créer un compte.
                                 </p>
                             </div>
 
@@ -486,14 +488,14 @@ export default function TeamPage() {
                                 <button
                                     type="button"
                                     onClick={() => setShowInviteModal(false)}
-                                    className="flex-1 px-4 py-3 bg-white/5 border border-white/10 text-white font-bold text-sm uppercase rounded-lg hover:bg-white/10 transition-colors"
+                                    className="flex-1 px-4 py-3 bg-white/5 border border-white/10 text-white font-bold text-xs sm:text-sm uppercase rounded-lg hover:bg-white/10 transition-colors"
                                 >
                                     Annuler
                                 </button>
                                 <button
                                     type="submit"
                                     disabled={submitting}
-                                    className="flex-1 px-4 py-3 bg-gradient-to-r from-[#ff6b00] to-[#ff8533] text-black font-bold text-sm uppercase rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                                    className="flex-1 px-4 py-3 bg-gradient-to-r from-[#ff6b00] to-[#ff8533] text-black font-bold text-xs sm:text-sm uppercase rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                                 >
                                     {submitting ? (
                                         <>

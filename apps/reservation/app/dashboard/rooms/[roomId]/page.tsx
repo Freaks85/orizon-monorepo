@@ -30,6 +30,7 @@ interface Table {
     width: number;
     height: number;
     shape: 'square' | 'round' | 'rectangle';
+    rotation: number;
     is_active: boolean;
 }
 

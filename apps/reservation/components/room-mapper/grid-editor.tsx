@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
 
 interface Table {
@@ -14,6 +14,7 @@ interface Table {
     width: number;
     height: number;
     shape: 'square' | 'round' | 'rectangle';
+    rotation: number;
     is_active: boolean;
 }
 
@@ -65,8 +66,14 @@ export function GridEditor({
     const [placementMode, setPlacementMode] = useState(false);
     const [draggingId, setDraggingId] = useState<string | null>(null);
     const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+    const [longPressActive, setLongPressActive] = useState(false);
+    const [longPressTableId, setLongPressTableId] = useState<string | null>(null);
+    const longPressTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const touchStartPosRef = useRef<{ x: number; y: number } | null>(null);
     const gridRef = useRef<HTMLDivElement>(null);
     const gridCellSize = typeof window !== 'undefined' && window.innerWidth < 640 ? 50 : 70;
+    const LONG_PRESS_DURATION = 400; // ms
+    const LONG_PRESS_MOVE_THRESHOLD = 10; // px tolerance before cancelling long press
 
     const handleCellClick = useCallback((x: number, y: number) => {
         if (placementMode) {
@@ -148,6 +155,118 @@ export function GridEditor({
         setDraggingId(null);
     }, []);
 
+    // --- Touch event handlers for mobile drag (long-press to drag) ---
+
+    const cancelLongPress = useCallback(() => {
+        if (longPressTimerRef.current) {
+            clearTimeout(longPressTimerRef.current);
+            longPressTimerRef.current = null;
+        }
+        setLongPressTableId(null);
+    }, []);
+
+    const handleTouchStart = useCallback((e: React.TouchEvent, tableId: string) => {
+        e.stopPropagation();
+
+        const touch = e.touches[0];
+        touchStartPosRef.current = { x: touch.clientX, y: touch.clientY };
+        setLongPressTableId(tableId);
+
+        longPressTimerRef.current = setTimeout(() => {
+            // Long press triggered — start dragging
+            const table = tables.find(t => t.id === tableId);
+            if (!table || !gridRef.current) return;
+
+            const gridRect = gridRef.current.getBoundingClientRect();
+            const tableX = table.position_x * gridCellSize;
+            const tableY = table.position_y * gridCellSize;
+
+            setDraggingId(tableId);
+            setLongPressActive(true);
+            setDragOffset({
+                x: touch.clientX - gridRect.left - tableX,
+                y: touch.clientY - gridRect.top - tableY,
+            });
+            onTableSelect(tableId);
+
+            // Vibration feedback if available
+            if (navigator.vibrate) {
+                navigator.vibrate(30);
+            }
+        }, LONG_PRESS_DURATION);
+    }, [tables, gridCellSize, onTableSelect]);
+
+    const handleTouchMove = useCallback((e: React.TouchEvent) => {
+        const touch = e.touches[0];
+
+        // If long press hasn't triggered yet, check movement threshold
+        if (longPressTimerRef.current && touchStartPosRef.current) {
+            const dx = Math.abs(touch.clientX - touchStartPosRef.current.x);
+            const dy = Math.abs(touch.clientY - touchStartPosRef.current.y);
+            if (dx > LONG_PRESS_MOVE_THRESHOLD || dy > LONG_PRESS_MOVE_THRESHOLD) {
+                cancelLongPress();
+                return;
+            }
+        }
+
+        // If dragging, prevent scroll and move the table
+        if (!draggingId || !gridRef.current || !longPressActive) return;
+
+        e.preventDefault(); // Prevent scrolling while dragging
+
+        const gridRect = gridRef.current.getBoundingClientRect();
+        const x = touch.clientX - gridRect.left - dragOffset.x;
+        const y = touch.clientY - gridRect.top - dragOffset.y;
+
+        const gridX = Math.round(x / gridCellSize);
+        const gridY = Math.round(y / gridCellSize);
+
+        const clampedX = Math.max(0, Math.min(gridX, room.grid_width - 1));
+        const clampedY = Math.max(0, Math.min(gridY, room.grid_height - 1));
+
+        const table = tables.find(t => t.id === draggingId);
+        if (table && (table.position_x !== clampedX || table.position_y !== clampedY)) {
+            const isOccupied = tables.some(
+                t => t.id !== draggingId && t.position_x === clampedX && t.position_y === clampedY
+            );
+            if (!isOccupied) {
+                onTableUpdate(draggingId, { position_x: clampedX, position_y: clampedY });
+            }
+        }
+    }, [draggingId, dragOffset, gridCellSize, room, tables, onTableUpdate, longPressActive, cancelLongPress]);
+
+    const handleTouchEnd = useCallback(() => {
+        cancelLongPress();
+        setDraggingId(null);
+        setLongPressActive(false);
+    }, [cancelLongPress]);
+
+    // Prevent default touch behavior on the grid to allow preventDefault in touchmove
+    useEffect(() => {
+        const grid = gridRef.current;
+        if (!grid) return;
+
+        const preventScroll = (e: TouchEvent) => {
+            if (longPressActive && draggingId) {
+                e.preventDefault();
+            }
+        };
+
+        grid.addEventListener('touchmove', preventScroll, { passive: false });
+        return () => {
+            grid.removeEventListener('touchmove', preventScroll);
+        };
+    }, [longPressActive, draggingId]);
+
+    // Cleanup timer on unmount
+    useEffect(() => {
+        return () => {
+            if (longPressTimerRef.current) {
+                clearTimeout(longPressTimerRef.current);
+            }
+        };
+    }, []);
+
     const getShapeClass = (shape: string) => {
         switch (shape) {
             case 'round': return 'rounded-full';
@@ -186,7 +305,7 @@ export function GridEditor({
                 )}
 
                 <div className="ml-auto text-[10px] sm:text-xs text-slate-500 font-mono">
-                    {tables.length} table{tables.length !== 1 ? 's' : ''} <span className="hidden sm:inline">| Glissez pour deplacer</span>
+                    {tables.length} table{tables.length !== 1 ? 's' : ''} <span className="hidden sm:inline">| Glissez pour deplacer</span><span className="inline sm:hidden">| Maintenez pour deplacer</span>
                 </div>
             </div>
 
@@ -202,6 +321,8 @@ export function GridEditor({
                     onMouseMove={handleMouseMove}
                     onMouseUp={handleMouseUp}
                     onMouseLeave={handleMouseLeave}
+                    onTouchMove={handleTouchMove}
+                    onTouchEnd={handleTouchEnd}
                 >
                     {/* Grid cells */}
                     {Array.from({ length: room.grid_width * room.grid_height }).map((_, i) => {
@@ -241,6 +362,7 @@ export function GridEditor({
                             <div
                                 key={table.id}
                                 onMouseDown={(e) => handleMouseDown(e, table.id)}
+                                onTouchStart={(e) => handleTouchStart(e, table.id)}
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     if (!draggingId) onTableSelect(table.id);
@@ -253,7 +375,9 @@ export function GridEditor({
                                         : 'bg-white/10 text-white border-2 border-white/30 hover:border-[#ff6b00]/50'
                                 } ${
                                     isDragging
-                                        ? 'cursor-grabbing z-50 scale-105 shadow-2xl'
+                                        ? 'cursor-grabbing z-50 scale-110 shadow-2xl'
+                                        : longPressTableId === table.id && !longPressActive
+                                        ? 'cursor-grab scale-[1.03] transition-transform duration-300'
                                         : 'cursor-grab hover:scale-102'
                                 }`}
                                 style={{
@@ -261,8 +385,16 @@ export function GridEditor({
                                     top: table.position_y * gridCellSize + (gridCellSize - size.height) / 2,
                                     width: size.width,
                                     height: size.height,
+                                    transform: table.rotation ? `rotate(${table.rotation}deg)` : undefined,
                                 }}
                             >
+                                {/* Long-press visual feedback ring */}
+                                {longPressTableId === table.id && !longPressActive && (
+                                    <div
+                                        className={`absolute inset-0 ${getShapeClass(table.shape)} border-2 border-[#ff6b00] animate-pulse pointer-events-none`}
+                                        style={{ margin: -4 , inset: -4 }}
+                                    />
+                                )}
                                 <div className="text-center select-none pointer-events-none">
                                     <div className="font-mono text-sm font-bold">{table.table_number}</div>
                                     <div className={`text-[10px] ${isSelected ? 'text-black/70' : 'text-white/60'}`}>

@@ -1,13 +1,14 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { Circle, Square, RectangleHorizontal, Users, Hash } from 'lucide-react';
+import { Circle, Square, RectangleHorizontal, Users, Hash, RotateCw } from 'lucide-react';
 
 interface Table {
     id: string;
     table_number: string;
     capacity: number;
     shape: 'square' | 'round' | 'rectangle';
+    rotation: number;
 }
 
 interface TablePropertiesProps {
@@ -19,11 +20,13 @@ export function TableProperties({ table, onUpdate }: TablePropertiesProps) {
     const [tableNumber, setTableNumber] = useState(table.table_number);
     const [capacity, setCapacity] = useState(table.capacity);
     const [shape, setShape] = useState(table.shape);
+    const [rotation, setRotation] = useState(table.rotation ?? 0);
 
     useEffect(() => {
         setTableNumber(table.table_number);
         setCapacity(table.capacity);
         setShape(table.shape);
+        setRotation(table.rotation ?? 0);
     }, [table]);
 
     const handleUpdate = (field: string, value: any) => {
@@ -124,6 +127,51 @@ export function TableProperties({ table, onUpdate }: TablePropertiesProps) {
                     ))}
                 </div>
             </div>
+
+            {/* Rotation */}
+            {shape !== 'round' && (
+                <div>
+                    <label className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-slate-400 mb-2">
+                        <RotateCw className="h-3 w-3" />
+                        Rotation ({rotation}°)
+                    </label>
+
+                    {/* Slider */}
+                    <input
+                        type="range"
+                        min={0}
+                        max={359}
+                        step={1}
+                        value={rotation}
+                        onChange={(e) => {
+                            const val = parseInt(e.target.value);
+                            setRotation(val);
+                            handleUpdate('rotation', val);
+                        }}
+                        className="w-full h-2 bg-white/10 rounded-lg appearance-none cursor-pointer accent-[#ff6b00] mb-3"
+                    />
+
+                    {/* Preset angles */}
+                    <div className="grid grid-cols-4 gap-1.5">
+                        {[0, 45, 90, 135, 180, 225, 270, 315].map((angle) => (
+                            <button
+                                key={angle}
+                                onClick={() => {
+                                    setRotation(angle);
+                                    handleUpdate('rotation', angle);
+                                }}
+                                className={`px-2 py-1.5 rounded-lg border text-[10px] font-mono font-bold transition-all ${
+                                    rotation === angle
+                                        ? 'bg-[#ff6b00]/10 border-[#ff6b00]/50 text-[#ff6b00]'
+                                        : 'bg-white/5 border-white/10 text-slate-400 hover:border-white/20'
+                                }`}
+                            >
+                                {angle}°
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

@@ -240,14 +240,14 @@ export default function SettingsPage() {
 
     return (
         <PermissionGuard module="settings" action="view">
-            <div className="max-w-6xl mx-auto space-y-6">
+            <div className="max-w-6xl mx-auto space-y-4 sm:space-y-6">
             {/* Header */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
                 <div>
-                    <h1 className="font-display text-2xl md:text-3xl font-bold text-white uppercase tracking-wider">
+                    <h1 className="font-display text-xl sm:text-2xl md:text-3xl font-bold text-white uppercase tracking-wider">
                         Page de reservation
                     </h1>
-                    <p className="text-slate-500 text-sm font-mono mt-1">
+                    <p className="text-slate-500 text-xs sm:text-sm font-mono mt-1">
                         Configurez et personnalisez votre page publique
                     </p>
                 </div>
@@ -257,7 +257,7 @@ export default function SettingsPage() {
                         href={`/${slug}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-2 px-4 py-2.5 bg-[#ff6b00] text-black font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-white transition-colors"
+                        className="flex items-center justify-center gap-2 px-4 py-2.5 bg-[#ff6b00] text-black font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-white transition-colors w-full sm:w-auto"
                     >
                         <Eye className="h-4 w-4" />
                         Voir la page
@@ -266,27 +266,27 @@ export default function SettingsPage() {
             </div>
 
             {/* Tabs */}
-            <div className="flex gap-2 bg-[#0a0a0a] border border-white/10 rounded-xl p-1.5">
+            <div className="flex gap-1.5 sm:gap-2 bg-[#0a0a0a] border border-white/10 rounded-xl p-1 sm:p-1.5">
                 <button
                     onClick={() => setActiveTab('general')}
-                    className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${
+                    className={`flex-1 flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-[10px] sm:text-xs font-bold uppercase tracking-widest transition-all ${
                         activeTab === 'general'
                             ? 'bg-[#ff6b00] text-black'
                             : 'text-slate-400 hover:text-white hover:bg-white/5'
                     }`}
                 >
-                    <Settings className="h-4 w-4" />
+                    <Settings className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                     Parametres
                 </button>
                 <button
                     onClick={() => setActiveTab('design')}
-                    className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${
+                    className={`flex-1 flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-[10px] sm:text-xs font-bold uppercase tracking-widest transition-all ${
                         activeTab === 'design'
                             ? 'bg-[#ff6b00] text-black'
                             : 'text-slate-400 hover:text-white hover:bg-white/5'
                     }`}
                 >
-                    <Palette className="h-4 w-4" />
+                    <Palette className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                     Design
                 </button>
             </div>
@@ -298,31 +298,31 @@ export default function SettingsPage() {
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="bg-[#0a0a0a] border border-white/10 rounded-xl p-6"
+                        className="bg-[#0a0a0a] border border-white/10 rounded-xl p-4 sm:p-6"
                     >
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-4">
-                                <div className="p-3 bg-[#ff6b00]/10 rounded-lg">
-                                    <Globe className="h-6 w-6 text-[#ff6b00]" />
+                        <div className="flex items-center justify-between gap-3">
+                            <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+                                <div className="p-2.5 sm:p-3 bg-[#ff6b00]/10 rounded-lg flex-shrink-0">
+                                    <Globe className="h-5 w-5 sm:h-6 sm:w-6 text-[#ff6b00]" />
                                 </div>
-                                <div>
-                                    <h2 className="font-display text-lg font-bold text-white uppercase tracking-wider">
-                                        Page de reservation
+                                <div className="min-w-0">
+                                    <h2 className="font-display text-sm sm:text-lg font-bold text-white uppercase tracking-wider">
+                                        Reservations en ligne
                                     </h2>
-                                    <p className="text-slate-500 text-sm font-mono">
+                                    <p className="text-slate-500 text-xs sm:text-sm font-mono truncate">
                                         Activer les reservations en ligne
                                     </p>
                                 </div>
                             </div>
                             <button
                                 onClick={() => setIsEnabled(!isEnabled)}
-                                className={`relative w-14 h-8 rounded-full transition-colors ${
+                                className={`relative w-12 sm:w-14 h-7 sm:h-8 rounded-full transition-colors flex-shrink-0 ${
                                     isEnabled ? 'bg-[#ff6b00]' : 'bg-white/10'
                                 }`}
                             >
                                 <div
-                                    className={`absolute top-1 w-6 h-6 rounded-full bg-white transition-all ${
-                                        isEnabled ? 'left-7' : 'left-1'
+                                    className={`absolute top-1 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white transition-all ${
+                                        isEnabled ? 'left-6 sm:left-7' : 'left-1'
                                     }`}
                                 />
                             </button>
@@ -350,9 +350,9 @@ export default function SettingsPage() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
-                        className="bg-[#0a0a0a] border border-white/10 rounded-xl p-6"
+                        className="bg-[#0a0a0a] border border-white/10 rounded-xl p-4 sm:p-6"
                     >
-                        <h2 className="font-display text-lg font-bold text-white uppercase tracking-wider mb-4">
+                        <h2 className="font-display text-sm sm:text-lg font-bold text-white uppercase tracking-wider mb-3 sm:mb-4">
                             URL personnalisee
                         </h2>
                         <div>
@@ -377,16 +377,16 @@ export default function SettingsPage() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2 }}
-                        className="bg-[#0a0a0a] border border-white/10 rounded-xl p-6"
+                        className="bg-[#0a0a0a] border border-white/10 rounded-xl p-4 sm:p-6"
                     >
-                        <div className="flex items-center gap-3 mb-4">
-                            <Users className="h-5 w-5 text-[#ff6b00]" />
-                            <h2 className="font-display text-lg font-bold text-white uppercase tracking-wider">
+                        <div className="flex items-center gap-3 mb-3 sm:mb-4">
+                            <Users className="h-5 w-5 text-[#ff6b00] flex-shrink-0" />
+                            <h2 className="font-display text-sm sm:text-lg font-bold text-white uppercase tracking-wider">
                                 Limites de reservation
                             </h2>
                         </div>
 
-                        <div className="grid md:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-2 gap-3 sm:gap-4">
                             <div>
                                 <label className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-2">
                                     Personnes minimum
@@ -421,15 +421,15 @@ export default function SettingsPage() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.3 }}
-                        className="bg-[#0a0a0a] border border-white/10 rounded-xl p-6"
+                        className="bg-[#0a0a0a] border border-white/10 rounded-xl p-4 sm:p-6"
                     >
                         <div className="flex items-center gap-3 mb-2">
-                            <Mail className="h-5 w-5 text-[#ff6b00]" />
-                            <h2 className="font-display text-lg font-bold text-white uppercase tracking-wider">
+                            <Mail className="h-5 w-5 text-[#ff6b00] flex-shrink-0" />
+                            <h2 className="font-display text-sm sm:text-lg font-bold text-white uppercase tracking-wider">
                                 Notifications email
                             </h2>
                         </div>
-                        <p className="text-slate-500 text-sm mb-4">
+                        <p className="text-slate-500 text-xs sm:text-sm mb-3 sm:mb-4">
                             Ces adresses recevront une notification a chaque nouvelle reservation
                         </p>
 
@@ -439,14 +439,14 @@ export default function SettingsPage() {
                                 {notificationEmails.map((email, index) => (
                                     <div
                                         key={index}
-                                        className="flex items-center justify-between bg-white/5 border border-white/10 rounded-lg px-4 py-3"
+                                        className="flex items-center justify-between gap-2 bg-white/5 border border-white/10 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3"
                                     >
-                                        <span className="text-white font-mono text-sm">{email}</span>
+                                        <span className="text-white font-mono text-xs sm:text-sm truncate">{email}</span>
                                         <button
                                             onClick={() => {
                                                 setNotificationEmails(prev => prev.filter((_, i) => i !== index));
                                             }}
-                                            className="p-1 text-slate-400 hover:text-red-400 transition-colors"
+                                            className="p-1 text-slate-400 hover:text-red-400 transition-colors flex-shrink-0"
                                         >
                                             <X className="h-4 w-4" />
                                         </button>
@@ -498,17 +498,17 @@ export default function SettingsPage() {
 
             {/* Design Tab */}
             {activeTab === 'design' && (
-                <div className="grid lg:grid-cols-2 gap-6">
-                    <div className="space-y-6">
+                <div className="grid lg:grid-cols-2 gap-4 sm:gap-6">
+                    <div className="space-y-4 sm:space-y-6">
                         {/* Color Palettes */}
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="bg-[#0a0a0a] border border-white/10 rounded-xl p-6"
+                            className="bg-[#0a0a0a] border border-white/10 rounded-xl p-4 sm:p-6"
                         >
-                            <div className="flex items-center gap-3 mb-4">
-                                <Palette className="h-5 w-5 text-[#ff6b00]" />
-                                <h2 className="font-display text-lg font-bold text-white uppercase tracking-wider">
+                            <div className="flex items-center gap-3 mb-3 sm:mb-4">
+                                <Palette className="h-5 w-5 text-[#ff6b00] flex-shrink-0" />
+                                <h2 className="font-display text-sm sm:text-lg font-bold text-white uppercase tracking-wider">
                                     Palette de couleurs
                                 </h2>
                             </div>
@@ -608,11 +608,11 @@ export default function SettingsPage() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.1 }}
-                            className="bg-[#0a0a0a] border border-white/10 rounded-xl p-6"
+                            className="bg-[#0a0a0a] border border-white/10 rounded-xl p-4 sm:p-6"
                         >
-                            <div className="flex items-center gap-3 mb-4">
-                                <MessageSquare className="h-5 w-5 text-[#ff6b00]" />
-                                <h2 className="font-display text-lg font-bold text-white uppercase tracking-wider">
+                            <div className="flex items-center gap-3 mb-3 sm:mb-4">
+                                <MessageSquare className="h-5 w-5 text-[#ff6b00] flex-shrink-0" />
+                                <h2 className="font-display text-sm sm:text-lg font-bold text-white uppercase tracking-wider">
                                     Messages
                                 </h2>
                             </div>
@@ -650,12 +650,12 @@ export default function SettingsPage() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.2 }}
-                            className="bg-[#0a0a0a] border border-white/10 rounded-xl p-6"
+                            className="bg-[#0a0a0a] border border-white/10 rounded-xl p-4 sm:p-6"
                         >
-                            <h2 className="font-display text-lg font-bold text-white uppercase tracking-wider mb-2">
+                            <h2 className="font-display text-sm sm:text-lg font-bold text-white uppercase tracking-wider mb-2">
                                 Informations affichees
                             </h2>
-                            <p className="text-slate-500 text-sm mb-4">
+                            <p className="text-slate-500 text-xs sm:text-sm mb-3 sm:mb-4">
                                 Laissez vide pour utiliser les informations du restaurant
                             </p>
 
@@ -794,20 +794,20 @@ export default function SettingsPage() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm overflow-hidden"
+                        className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/70 backdrop-blur-sm overflow-hidden"
                         onClick={() => setShowPaletteModal(false)}
                         onWheel={(e) => e.stopPropagation()}
                         onTouchMove={(e) => e.stopPropagation()}
                     >
                         <motion.div
-                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                            animate={{ opacity: 1, scale: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                            className="bg-[#0a0a0a] border border-white/10 rounded-xl w-full max-w-lg max-h-[80vh] overflow-hidden"
+                            initial={{ opacity: 0, y: 40 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 40 }}
+                            className="bg-[#0a0a0a] border border-white/10 rounded-t-2xl sm:rounded-xl w-full max-w-lg max-h-[85vh] sm:max-h-[80vh] overflow-hidden"
                             onClick={(e) => e.stopPropagation()}
                         >
                             <div className="flex items-center justify-between p-4 border-b border-white/10">
-                                <h3 className="font-display text-lg font-bold text-white uppercase tracking-wider">
+                                <h3 className="font-display text-base sm:text-lg font-bold text-white uppercase tracking-wider">
                                     Palettes de couleurs
                                 </h3>
                                 <button
@@ -817,7 +817,7 @@ export default function SettingsPage() {
                                     <X className="h-5 w-5" />
                                 </button>
                             </div>
-                            <div className="overflow-y-auto p-4 space-y-6 max-h-[calc(80vh-64px)] overscroll-contain">
+                            <div className="overflow-y-auto p-4 space-y-6 max-h-[calc(85vh-64px)] sm:max-h-[calc(80vh-64px)] overscroll-contain">
                                 {PALETTE_CATEGORIES.map((category) => (
                                     <div key={category}>
                                         <h4 className="text-xs font-mono uppercase tracking-widest text-slate-500 mb-3">
@@ -860,7 +860,7 @@ export default function SettingsPage() {
             <button
                 onClick={handleSave}
                 disabled={saving}
-                className="w-full flex items-center justify-center gap-2 px-4 py-4 bg-[#ff6b00] text-black font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-white transition-colors disabled:opacity-50"
+                className="w-full flex items-center justify-center gap-2 px-4 py-3.5 sm:py-4 bg-[#ff6b00] text-black font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-white transition-colors disabled:opacity-50"
             >
                 {saving ? (
                     <div className="h-4 w-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
